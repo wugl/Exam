@@ -1,0 +1,4 @@
+.skin-blue-light .sidebar-menu>li:hover>a, .skin-blue-light .sidebar-menu>li.active>a {
+    color: #000;
+    background: #e4e4e5;
+}
