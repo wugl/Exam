@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html>
 <head>
-    <title></title>
+    <name></name>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script type="text/javascript" src="../internal.js"></script>
     <style type="text/css">
@@ -35,7 +35,13 @@
             function clickCallback() {
                 baiduApp.addEventListener( 'getAppHTML', function ( e, data ) {
                     var url = 'http://app.baidu.com/app/enter?appid='+data.data['app_id'] +'&tn=app_canvas&app_spce_id=1&apikey='+apikey+'&api_key=' + apikey;
-                    editor.execCommand( "webapp", {url:url,width:data.uniWidth,height:data.uniHeight+60,logo:data.data['app_logo'],title:data.data['app_name']});
+                    editor.execCommand("webapp", {
+                        url: url,
+                        width: data.uniWidth,
+                        height: data.uniHeight + 60,
+                        logo: data.data['app_logo'],
+                        name: data.data['app_name']
+                    });
                     dialog.close();
                 } );
             }
@@ -45,7 +51,7 @@
             script.src = "http://app.baidu.com/appweb/api/search?auto=yes&container=container&apikey=" + apikey + "&instanceName=baiduApp&callback=clickCallback&config=searchConfig";
             document.body.appendChild( script );
         } else {
-            $G( "appShow" ).innerHTML = "<p class='errorMsg'>"+lang.tip1+"<a title='"+lang.anthorApi+"' href='http://app.baidu.com/static/cms/getapikey.html' target='_blank'>"+lang.applyFor+"</a></p><p class='errorMsg'>"+lang.tip2+"</p>" ;
+            $G("appShow").innerHTML = "<p class='errorMsg'>" + lang.tip1 + "<a name='" + lang.anthorApi + "' href='http://app.baidu.com/static/cms/getapikey.html' target='_blank'>" + lang.applyFor + "</a></p><p class='errorMsg'>" + lang.tip2 + "</p>";
         }
 
     </script>

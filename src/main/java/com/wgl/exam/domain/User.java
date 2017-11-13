@@ -22,14 +22,23 @@ public class User  implements Serializable {
     private String email;
     private String phone;
     @Column(name="reg_time")
-    private Date regTime;
+    private Date regTime = new Date();
     @Column(name="is_delete")
     private Integer isDelete;
 
     public User() {
     }
 
-    public User(UserType type, String name, String password, String email, String phone,Date regTime, Integer isDelete) {
+    public User(UserType type, String name, String password, String email, String phone) {
+        this.type = type;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.isDelete = 0;
+    }
+
+    public User(UserType type, String name, String password, String email, String phone, Date regTime, Integer isDelete) {
         this.type = type;
         this.name = name;
         this.password = password;

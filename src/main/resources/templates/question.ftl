@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Page Header
+        ${title!""}
             <small>Optional description</small>
         </h1>
         <ol class="breadcrumb">
@@ -22,7 +22,7 @@
         <div class="box">
             <div class="box-header">
                 <a class="btn btn-info pull-left margin q_new"><i class="fa fa-plus"></i>新增</a>
-                <a href="/questionType/getExcel" class="btn btn-info  margin"><i class="fa fa-fw fa-file-excel-o"></i>导出excel</a>
+            <#--<a href="/questionType/getExcel" class="btn btn-info  margin"><i class="fa fa-fw fa-file-excel-o"></i>导出excel</a>-->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -31,22 +31,31 @@
                     <tr>
                         <th style="width: 30px;">id</th>
                         <th>类型</th>
-                        <th>名称</th>
+                        <th>标题</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
 
-                    <#if questionTypes?exists>
-                        <#list questionTypes as key>
+                    <#if questions?exists>
+                        <#list questions as key>
                         <tr>
                             <td>${key.id}</td>
-                            <td>类型</td>
-                            <td>${key.name}</td>
                             <td>
-                                <a class="btn q_edit" data-id="${key.id}" data-name="${key.name}"><i
+
+                                <#if questionTypes?exists>
+                                    <#list questionTypes as type>
+                                    <#if type.id==key.typeId>${type.name}</#if>
+                                </#list>
+                                </#if>
+
+                            </td>
+                            <td>${key.title}</td>
+                            <td>
+                                <a class="btn q_edit" data-id="${key.id}" data-type="${key.typeId}"><i
                                         class="fa fa-edit"></i></a>
-                                <a class="btn q_remove" data-id="${key.id}" data-name="${key.name}"><i
+                                <a class="btn q_remove" data-id="${key.id}" data-type="${key.typeId}"
+                                   data-title="${key.title}""><i
                                         class="fa fa-remove"></i></a>
                             </td>
                         </tr>
@@ -58,7 +67,8 @@
                     <tfoot>
                     <tr>
                         <th>id</th>
-                        <th>名称</th>
+                        <th>类型</th>
+                        <th>标题</th>
                         <th>操作</th>
                     </tr>
                     </tfoot>
@@ -76,7 +86,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认</h4>
+                <h4 class="modal-name">确认</h4>
             </div>
             <div class="modal-body">
                 <form id="qDelForm">
@@ -104,17 +114,24 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">新增题型</h4>
+                <h4 class="modal-name">新增题型</h4>
             </div>
             <div class="modal-body">
                 <form id="qForm">
                     <div class="form-group  ">
-                        <label for="q_name" class="control-label">题目名称:</label>
-                        <input type="text" name="name" class="form-control" placeholder="名称" id="q_name">
+                        <label for="q_title" class="control-label">标题:</label>
+                        <input type="text" name="title" class="form-control" placeholder="标题" id="q_title">
+
                         <input type="hidden" name="id" class="form-control" placeholder="" id="q_id">
                     </div>
+                    <div class="form-group  ">
+                        <label for="q_name" class="control-label">内容:</label>
+
+                        <script id="namecontainer" name="name" type="text/plain">内容</script>
+
+                    </div>
                     <div class="form-group ">
-                        <label for="questionType" class="control-label">题目类型:</label>
+                        <label for="questionType" class="control-label">类型:</label>
                         <select class="form-control" name="questionType" id="questionType">
                         <#if questionTypes?exists>
                             <#list questionTypes as key>
@@ -125,8 +142,14 @@
                         </select>
                     </div>
                     <a class="btn btn-info margin" id="btn_new_option"><i class="fa fa-plus"></i>新增选项</a>
+                    <div class="form-group  ">
+                        <label for="q_name" class="control-label">点评:</label>
+
+                        <script id="commentcontainer" name="comment" type="text/plain">点评</script>
+
+                    </div>
                 </form>
-                <div class="info"></div>
+                <div class="info text-red"></div>
             </div>
             <div class="modal-footer">
             <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
@@ -160,6 +183,7 @@
                         </div>
                     </div>
 
+
 </script>
 
 <#include "inc/footer1.ftl"/>
@@ -167,10 +191,12 @@
 <script type="text/javascript">
     $(function () {
 
+        var name = UE.getEditor('namecontainer');
+        var comment = UE.getEditor('commentcontainer');
         var index = 1;
         var tmpl = $.templates("#optionTemplate");
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-            var html = tmpl.render({name: index,type:1,value:""});//1,单选，2，多选
+            var html = tmpl.render({name: index, type: 1, value: ""});//1,单选，2，多选
             //console.log(html);
             index++;
             $(this).before(html);
@@ -182,17 +208,17 @@
             $(this).parent().parent().parent().parent().remove();
 
             $('#modal-edit .option-group').each(function (i, e) {
-                $(this).find('.control-label').text("选项" + (i+1) + ":");
-                $(this).find('.option-name').attr("name", "option" + (i+1));
+                $(this).find('.control-label').text("选项" + (i + 1) + ":");
+                $(this).find('.option-name').attr("name", "option" + (i + 1));
 
-                console.log(i+":"+e)
+                console.log(i + ":" + e)
 
             });
             index--;
 
         });
 
-        var type;
+        var type;//1,新增题目2,编辑题目
 
         var table = $('#example1').DataTable({
             "stateSave": true,
@@ -208,7 +234,8 @@
             type = 1;
             $('#qt_name').val('');
             $('#qt_id').val('');
-            $('#modal-edit .modal-title').text("新增题目");
+            $('#modal-edit .modal-name').text("新增题目");
+            $('#modal-edit .modal-body .info').text("");
             $('#modal-edit').modal('show');
 
 
@@ -217,33 +244,65 @@
             type = 2;
             console.log(this.dataset.id);
             console.log(this.dataset.name);
-            $('#modal-edit .modal-title').text("编辑题目");
-            $('#q_name').val(this.dataset.name);
-            $('#q_id').val(this.dataset.id);
+            $('#modal-edit .modal-name').text("编辑题目");
+//            $('#q_name').val(this.dataset.name);
+//            $('#q_id').val(this.dataset.id);
+//            $('#questionType').val(this.dataset.type);
+            $.ajax({
+                type: 'GET',
+                url: '/question/getById',
+                data: 'id=' + this.dataset.id,
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == '100') {
+                        name.setContent(data.data.name);
+                        $('#q_title').val(data.data.title);
+                        $('#q_id').val(data.data.id);
+                        $('#questionType').val(data.data.typeId);
+                        comment.setContent(data.data.comment);
+                    }
+                    else {
+                        $('#modal-edit .modal-body .info').text(data.msg);
+                    }
+                }
+
+            })
+            $('#modal-edit .modal-body .info').text("");
             $('#modal-edit').modal('show');
 
 
         });
         $('.q_remove').on('click', function (e) {
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.title);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
-            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
+            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.title + "?");
+            $('#modal-ensure .modal-body .info').text("");
             $('#modal-ensure').modal('show');
         });
         $('.btn-q-add-submit').on('click', function (e) {
-            if ($('#q_name').val().trim() == '') return;
+            if (name.getContent().trim() == '') {
+                $('#modal-edit .modal-body .info').text("请填写完整");
+                return;
+            }
             console.log(type);
-            var url;
-            if (type == 1)
+            var url, data;
+            if (type == 1) {
                 url = '/question/add';
-            if (type == 2)
+                data = 'title=' + $('#q_title').val() + '&comment=' + comment.getContent().trim() + '&name=' + name.getContent().trim() + '&type=' + $('#questionType').val();
+            }
+
+            if (type == 2) {
                 url = "/question/update";
+                data = 'title=' + $('#q_title').val() + '&comment=' + comment.getContent().trim() + '&name=' + name.getContent().trim() + "&type=" + $('#questionType').val() + "&id=" + $('#q_id').val();
+            }
             // $('#qt_id').val('111');
+            console.log('name=' + name.getContent().trim() + "&type=" + $('#questionType').val());
+            //return;
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: $('#qForm').serialize(),
+                data: data,
                 success: function (data) {
                     console.log(data);
                     if (data.code == '100') {

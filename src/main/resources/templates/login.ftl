@@ -122,6 +122,8 @@
 <#include "inc/footer1.ftl"/>
 <script>
     $(function () {
+
+
         $('#userName').val(_store.get('userName'));
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
@@ -225,8 +227,7 @@
                 $(' .login-box').slideDown();
             });
         });
-    })
-    ;
+    });
 
     //  $(document).attr("title", "${title}");
 </script>

@@ -8,6 +8,7 @@ import com.wgl.exam.bean.ReturnWithData;
 import com.wgl.exam.bean.ReturnWithoutData;
 import com.wgl.exam.domain.QuestionType;
 import com.wgl.exam.domain.User;
+import com.wgl.exam.uti.UserType;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,15 @@ public class QuestionTypeController {
     UserRepository userRepository;
 
     @GetMapping(value = "")
-    public String getAll(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id) {
+    public String getAll(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.TEACHER.getIndex())
+
+            return "redirect:/";
+
         map.put("title", "题目类型");
         List<QuestionType> questionTypes = questionTypeRepository.findAll();
 
-        System.out.println(questionTypes.size());
+        //System.out.println(questionTypes.size());
 
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         map.put("questionTypes", questionTypes);
@@ -142,7 +147,7 @@ public class QuestionTypeController {
 //http://www.cnblogs.com/LiZhiW/p/4313789.html?utm_source=tuicool&utm_medium=referral
         response.setHeader("content-Type", "application/vnd.ms-excel");
         // 下载文件的默认名称
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("用户数据表", "UTF-8") + ".xls");
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("题目类型表", "UTF-8") + ".xls");
         //编码
         response.setCharacterEncoding("UTF-8");
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -170,7 +175,7 @@ public class QuestionTypeController {
         workbook.write(response.getOutputStream());
     }
 
-    @PostMapping(value = "/del")
+    @PostMapping(value = "del")
     @ResponseBody
     @Transactional
     public ReturnWithoutData del(@RequestParam("id") Long id) {

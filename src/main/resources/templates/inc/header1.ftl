@@ -7,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <#--<title>AdminLTE 2 | Starter</title>-->
+<#--<name>AdminLTE 2 | Starter</name>-->
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
@@ -59,5 +59,5 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue-light sidebar-collapse">
+<body class="hold-transition skin-blue-light  sidebar-collapse">
 <div class="wrapper">

@@ -15,7 +15,7 @@
     <!--[if lt IE 9]>
     <script src=/js/html5shiv.min.js></script>
     <script src=/js/respond.min.js></script> <![endif]-->
-    <title>title</title>
+    <name>name</name>
 </head>
 <body>
 <div class="container">

@@ -29063,8 +29063,24 @@ UE.ui = baidu.editor.ui = {};
                     while (container.tagName != "BODY") {
                         var position = baidu.editor.dom.domUtils.getComputedStyle(container, "position");
                         nodeStack.push(position);
-                        container.style.position = "static";
+                        // container.style.position = "static";
+                        var isModal = false;
+                        //判断该dom是否为modal
+                        var classes = $(container).attr('class');
+                        if (classes !== undefined) {
+                            classes = classes.split(' ');
+                            for (var i = 0; i < classes.length; i++) {
+                                if (classes[i] == "modal") {
+                                    isModal = true;
+                                }
+                            }
+                        }
+                        //如果是modal,则不设置position为static
+                        if (!isModal) {
+                            container.style.position = "static";
+                        }
                         container = container.parentNode;
+
                     }
                     this._bakHtmlOverflow = document.documentElement.style.overflow;
                     this._bakBodyOverflow = document.body.style.overflow;
@@ -29090,6 +29106,8 @@ UE.ui = baidu.editor.ui = {};
                     while (container.tagName != "BODY") {
                         container.style.position = nodeStack.shift();
                         container = container.parentNode;
+
+
                     }
                     this.getDom().style.cssText = this._bakCssText;
                     this.getDom('iframeholder').style.cssText = this._bakCssText1;

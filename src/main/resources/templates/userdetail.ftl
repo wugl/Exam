@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Page Header
+        ${title!""}
             <small>Optional description</small>
         </h1>
         <ol class="breadcrumb">
@@ -21,7 +21,7 @@
 
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">用户信息</h3>
+                <h3 class="box-name">用户信息</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">

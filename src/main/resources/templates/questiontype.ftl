@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Page Header
+        ${title!""}
             <small>Optional description</small>
         </h1>
         <ol class="breadcrumb">
@@ -74,7 +74,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">确认</h4>
+                <h4 class="modal-name">确认</h4>
             </div>
             <div class="modal-body">
                 <form id="qtDelForm">
@@ -103,7 +103,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">新增题型</h4>
+                <h4 class="modal-name">新增题型</h4>
             </div>
             <div class="modal-body">
                 <form id="qtForm">
@@ -113,7 +113,7 @@
                         <input type="hidden" name="id" class="form-control" placeholder="" id="qt_id">
                     </div>
                 </form>
-                <div class="info"></div>
+                <div class="info text-red"></div>
             </div>
             <div class="modal-footer">
             <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
@@ -129,7 +129,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var type;
+
 
         var table = $('#example1').DataTable({
             "stateSave": true,
@@ -141,11 +141,13 @@
 //        $('#example1 tbody').on( 'click', 'tr', function () {
 //            console.log( table.row( this ).data() );
 //        } );
+
+        var type;
         $('.qt_new').on('click', function (e) {
             type = 1;
             $('#qt_name').val('');
             $('#qt_id').val('');
-            $('#modal-edit .modal-title').text("新增题型");
+            $('#modal-edit .modal-name').text("新增题型");
             $('#modal-edit').modal('show');
 
 
@@ -154,7 +156,7 @@
             type = 2;
             console.log(this.dataset.id);
             console.log(this.dataset.name);
-            $('#modal-edit .modal-title').text("编辑题型");
+            $('#modal-edit .modal-name').text("编辑题型");
             $('#qt_name').val(this.dataset.name);
             $('#qt_id').val(this.dataset.id);
             $('#modal-edit').modal('show');
@@ -169,7 +171,10 @@
             $('#modal-ensure').modal('show');
         });
         $('.btn-qt-add-submit').on('click', function (e) {
-            if ($('#qt_name').val().trim() == '') return;
+            if ($('#qt_name').val().trim() == '') {
+                $('#modal-edit .modal-body .info').text("请填写完整");
+                return;
+            }
             console.log(type);
             var url;
             if (type == 1)

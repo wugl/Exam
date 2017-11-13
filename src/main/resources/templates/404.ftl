@@ -41,7 +41,9 @@
 <#include "inc/footer1.ftl"/>
 
 <script>
+    $(function () {
 
+    })
 </script>
 </body>
 </html>

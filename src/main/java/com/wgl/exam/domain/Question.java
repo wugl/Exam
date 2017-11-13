@@ -10,15 +10,21 @@ import java.util.List;
 @Table(name = "rz_question")
 public class Question implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = 1000)
     private String title;
 
+    @Column(length = 1000)
+    private String name;
+
+    @Column(length = 1000)
+    private String comment;
+
     @Column(name = "type_id")
-    private long typeId;
+    private Long typeId;
 
 
     @Column(name = "answer")
@@ -30,21 +36,43 @@ public class Question implements Serializable {
 
 
     @OneToMany(cascade = CascadeType.ALL)
+    private List<Option> answers = new ArrayList<Option>();
 
-       private List<Option> answers = new ArrayList<Option>();
-
-    public List<Option> getQuestionAnswers() {
+    public List<Option> getAnswers() {
 //        for (QuestionAnswer add : questionAnswers)
 //            add.setQuestionId(id);
         return answers;
     }
 
-    public void setQuestionAnswers(List<Option> questionAnswers) {
-        this.answers = questionAnswers;
+    public void setAnswers(List<Option> answers) {
+        this.answers = answers;
 
     }
 
+    public Question(String title, String name, String comment, Long typeId, String answer) {
+        this.title = title;
+        this.name = name;
+        this.comment = comment;
+        this.typeId = typeId;
+        this.answer = answer;
+        this.isDelete = 0;
+    }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "question_id")
@@ -64,22 +92,25 @@ public class Question implements Serializable {
     }
 
 
-    public Question(String title, String answer, long typeId, Integer isDelete) {
-        this.title = title;
+    public Question(String name, String answer, Long typeId, Integer isDelete) {
+        this.name = name;
         this.answer = answer;
         this.typeId = typeId;
 
         this.isDelete = isDelete;
     }
 
-    public Question(String title, String answer, long typeId) {
-        this(title, answer, typeId, 0);
+    public Question(String name, String answer, Long typeId) {
+        this(name, answer, typeId, 0);
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public Long getId() {
+        return id;
+    }
     public String getAnswer() {
         return answer;
     }
@@ -88,27 +119,20 @@ public class Question implements Serializable {
         this.answer = answer;
     }
 
-    public long getId() {
-        return id;
+
+    public String getName() {
+        return name;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(long typeId) {
+    public void setTypeId(Long typeId) {
         this.typeId = typeId;
     }
 

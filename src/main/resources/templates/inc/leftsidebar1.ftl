@@ -20,10 +20,15 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header"></li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="##"><i class="fa fa-circle-o text-aqua"></i></i> <span>用户管理</span></a></li>
+        <#if user.type=='MANAGER'>
+            <li class="active"><a href="/usermanager"><i class="fa fa-circle-o text-aqua"></i></i> <span>用户管理</span></a>
+            </li>
+        </#if>
+        <#if user.type=='TEACHER'>
             <li><a href="/questionType"><i class="fa fa-circle-o text-aqua"></i> <span>题型管理</span></a></li>
             <li><a href="/question"><i class="fa fa-circle-o text-aqua"></i> <span>题目管理</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
+        </#if>
             <li class="treeview">
                 <a href="#"><i class="fa fa-circle-o text-aqua"></i></i> <span>Multilevel</span>
                     <span class="pull-right-container">

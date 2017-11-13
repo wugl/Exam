@@ -7,7 +7,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Page Header
+        ${title!""}
             <small>Optional description</small>
         </h1>
         <ol class="breadcrumb">
@@ -23,8 +23,8 @@
           | Your Page Content Here |
           -------------------------->
 
-        <h1>Hello.v.2</h1>
-        <p >${hello}</p>
+        <h1>Hello ${hello}</h1>
+        <p></p>
 
         <!-- 加载编辑器的容器 -->
         <script id="container" name="content" type="text/plain">这里写你的初始化内容</script>

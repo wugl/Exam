@@ -53,7 +53,9 @@
 <#include "inc/footer1.ftl"/>
 
 <script>
-
+    $(function () {
+        //$('body').removeClass("sidebar-mini").addClass("sidebar-collapse");
+    })
 </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>chart</title>
+        <name>chart</name>
         <meta chartset="utf-8">
         <link rel="stylesheet" type="text/css" href="charts.css">
         <script type="text/javascript" src="../internal.js"></script>
@@ -32,16 +32,20 @@
                             <legend><var id="lang_chart_title"></var></legend>
                             <div class="format-item-container">
                                 <label>
-                                    <var id="lang_chart_main_title"></var><input type="text" name="title" class="data-item">
+                                    <var id="lang_chart_main_title"></var><input type="text" name="name"
+                                                                                 class="data-item">
                                 </label>
                                 <label>
-                                    <var id="lang_chart_sub_title"></var><input type="text" name="sub-title" class="data-item not-pie-item">
+                                    <var id="lang_chart_sub_title"></var><input type="text" name="sub-name"
+                                                                                class="data-item not-pie-item">
                                 </label>
                                 <label>
-                                    <var id="lang_chart_x_title"></var><input type="text" name="x-title" class="data-item not-pie-item">
+                                    <var id="lang_chart_x_title"></var><input type="text" name="x-name"
+                                                                              class="data-item not-pie-item">
                                 </label>
                                 <label>
-                                    <var id="lang_chart_y_title"></var><input type="text" name="y-title" class="data-item not-pie-item">
+                                    <var id="lang_chart_y_title"></var><input type="text" name="y-name"
+                                                                              class="data-item not-pie-item">
                                 </label>
                             </div>
                         </fieldset>
@@ -74,8 +78,8 @@
                             <div id="scrollBed" class="scroll-bed"></div>
                         </div>
                         <div id="buttonContainer" class="button-container">
-                            <a href="#" data-title="prev"><var id="lang_prev_btn"></var></a>
-                            <a href="#" data-title="next"><var id="lang_next_btn"></var></a>
+                            <a href="#" data-name="prev"><var id="lang_prev_btn"></var></a>
+                            <a href="#" data-name="next"><var id="lang_next_btn"></var></a>
                         </div>
                     </div>
                 </div>

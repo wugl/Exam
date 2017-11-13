@@ -30,8 +30,8 @@
 
 <script src="/js/fastclick.js"></script>
 <script src="/js/all.js"></script>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
-
+<#--<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>-->
+<script src="/js/md5.min.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.js"></script>

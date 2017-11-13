@@ -21,6 +21,15 @@ public enum UserType {
         return null;
     }
 
+    public static UserType getByIndex(int index) {
+        for (UserType c : UserType.values()) {
+            if (c.getIndex() == index) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     // get set 方法
     public String getName() {
         return name;
