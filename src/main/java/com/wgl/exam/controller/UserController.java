@@ -178,7 +178,10 @@ public class UserController {
         HSSFRow row = sheet.createRow(0);
         //设置列宽，setColumnWidth的第二个参数要乘以256，这个参数的单位是1/256个字符宽度
         sheet.setColumnWidth(0, 12 * 256);
-        sheet.setColumnWidth(1, 40 * 256);
+        sheet.setColumnWidth(1, 30 * 256);
+
+        sheet.setColumnWidth(3, 30 * 256);
+        sheet.setColumnWidth(4, 30 * 256);
 
         //设置为居中加粗
         HSSFCellStyle style = workbook.createCellStyle();
@@ -198,6 +201,14 @@ public class UserController {
 
         cell = row.createCell(2);
         cell.setCellValue("类型");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(3);
+        cell.setCellValue("邮箱");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(4);
+        cell.setCellValue("手机");
         cell.setCellStyle(style);
 
 
@@ -234,6 +245,14 @@ public class UserController {
             cell = row.createCell(2);
             cell.setCellStyle(style);
             cell.setCellValue(entity.getType().getName());
+
+            cell = row.createCell(3);
+            cell.setCellStyle(style);
+            cell.setCellValue(entity.getEmail());
+
+            cell = row.createCell(4);
+            cell.setCellStyle(style);
+            cell.setCellValue(entity.getPhone());
 
             rowNum++;
         }
