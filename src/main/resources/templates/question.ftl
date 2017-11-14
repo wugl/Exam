@@ -39,7 +39,7 @@
 
                     <#if questions?exists>
                         <#list questions as key>
-                        <tr>
+                        <tr class="row-item" data-id="${key.id}">
                             <td>${key.id}</td>
                             <td>
 
@@ -52,11 +52,11 @@
                             </td>
                             <td>${key.title}</td>
                             <td>
-                                <a class="btn q_edit" data-id="${key.id}" data-type="${key.typeId}"><i
+                                <a class="btn-sm q_edit" data-id="${key.id}" data-type="${key.typeId}"><i
                                         class="fa fa-edit"></i></a>
-                                <a class="btn q_remove" data-id="${key.id}" data-type="${key.typeId}"
+                                <a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"
                                    data-title="${key.title}""><i
-                                        class="fa fa-remove"></i></a>
+                                    class="fa fa-remove"></i></a>
                             </td>
                         </tr>
                         </#list>
@@ -95,7 +95,7 @@
                         <input type="hidden" name="id" class="form-control" placeholder="" id="">
                     </div>
                 </form>
-                <p style="text-align: center;">One fine body&hellip;</p>
+                <p style="text-align: center;"></p>
                 <div class="info"></div>
             </div>
             <div class="modal-footer">
@@ -114,15 +114,20 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-name">新增题型</h4>
+                <h4 class="modal-name">新增题目</h4>
             </div>
             <div class="modal-body">
                 <form id="qForm">
-                    <div class="form-group  ">
+                    <div class="form-group">
                         <label for="q_title" class="control-label">标题:</label>
                         <input type="text" name="title" class="form-control" placeholder="标题" id="q_title">
 
                         <input type="hidden" name="id" class="form-control" placeholder="" id="q_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="q_score" class="control-label">分数:</label>
+                        <input type="number" name="score" class="form-control" placeholder="分数" id="q_score">
+
                     </div>
                     <div class="form-group  ">
                         <label for="q_name" class="control-label">内容:</label>
@@ -162,6 +167,33 @@
 </div>
 
 
+<div class="modal  fade" id="modal-preview">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-name">题目预览</h4>
+            </div>
+            <div class="modal-body" style="line-height:30px;">
+                <div class="title" style="display: none;"></div>
+                <div class="name" style="font-weight: bold;"></div>
+                <div class="options"></div>
+                <div class="answer text-red""></div>
+                <div class="comment"></div>
+                <div class="info text-red"></div>
+
+            </div>
+            <div class="modal-footer">
+            <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
+                <#--<button type="button" class="btn btn-primary btn-q-add-submit">确认</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <script id="optionTemplate" type="text/x-jsrender">
 
                      <div class="form-group option-group">
@@ -170,7 +202,7 @@
                             <div class="input-group" style="padding-left:0;">
                                 <span class="input-group-addon">
                                 {{if type==1}}
-                                    <input type="radio" name="option">
+                                    <input   type="radio" name="option" value="{{:name}}">
                                 {{else type==2}}
                                     <input type="checkbox"  >
                                 {{/if}}
@@ -184,6 +216,8 @@
                     </div>
 
 
+
+
 </script>
 
 <#include "inc/footer1.ftl"/>
@@ -193,10 +227,10 @@
 
         var name = UE.getEditor('namecontainer');
         var comment = UE.getEditor('commentcontainer');
-        var index = 1;
+        var index = 0;
         var tmpl = $.templates("#optionTemplate");
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-            var html = tmpl.render({name: index, type: 1, value: ""});//1,单选，2，多选
+            var html = tmpl.render({name: String.fromCharCode((65+index)), type: 1, value: ""});//1,单选，2，多选
             //console.log(html);
             index++;
             $(this).before(html);
@@ -232,18 +266,59 @@
 //        } );
         $('.q_new').on('click', function (e) {
             type = 1;
-            $('#qt_name').val('');
-            $('#qt_id').val('');
+            $('#q_title').val('');
+            $('#q_id').val('');
             $('#modal-edit .modal-name').text("新增题目");
             $('#modal-edit .modal-body .info').text("");
+            $('#modal-edit .option-group').remove();
+            comment.setContent('');
+            name.setContent('');
+            $('#q_score').val('');
             $('#modal-edit').modal('show');
 
 
         });
+
+        $('.row-item').on('click',function(e){
+            console.log('row');
+
+            $.ajax({
+                type: 'GET',
+                url: '/question/getById',
+                data: 'id=' + this.dataset.id,
+                success: function (data) {
+                    //console.log(data);
+                    if (data.code == '100') {
+                        $('#modal-preview .modal-body .name').html('（'+data.data.question.score+'分）'+data.data.question.name);
+                        $('#modal-preview .modal-body .title').html(data.data.question.title);
+                        $('#modal-preview .modal-body .answer').html("答案："+data.data.question.answer);
+                        $('#modal-preview .modal-body .comment').html("点评："+data.data.question.comment);
+                        var answers = data.data.question.answer.split('|');
+                        //console.log(answers.length);
+                        $('#modal-preview .modal-body .options').html('');
+                        $.each(data.data.options, function(i, obj) {
+
+                            var html = "<div>"+String.fromCharCode((65+i))+"、"+obj.content+"</div>";
+                            $('#modal-preview .modal-body .options').append(html);
+
+                        });
+                    }
+                    else {
+                        $('#modal-preview .modal-body .info').text(data.msg);
+                    }
+                }
+
+            })
+            $('#modal-preview .modal-body .info').text("");
+            $('#modal-preview').modal('show');
+
+        })
         $('.q_edit').on('click', function (e) {
+            console.log('edit');
             type = 2;
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            e.stopPropagation();
+
             $('#modal-edit .modal-name').text("编辑题目");
 //            $('#q_name').val(this.dataset.name);
 //            $('#q_id').val(this.dataset.id);
@@ -253,13 +328,31 @@
                 url: '/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
-                        name.setContent(data.data.name);
-                        $('#q_title').val(data.data.title);
-                        $('#q_id').val(data.data.id);
-                        $('#questionType').val(data.data.typeId);
-                        comment.setContent(data.data.comment);
+                        name.setContent(data.data.question.name);
+                        $('#q_title').val(data.data.question.title);
+                        $('#q_id').val(data.data.question.id);
+                        $('#q_score').val(data.data.question.score);
+                        $('#questionType').val(data.data.question.typeId);
+                        comment.setContent(data.data.question.comment);
+                        //console.log(data.data.question.answer);
+                        var answers = data.data.question.answer.split('|');
+                        //console.log(answers.length);
+                        $('#qForm .option-group').remove();
+                        $.each(data.data.options, function(i, obj) {
+                            //console.log(obj);
+                            var isChecked = $.inArray(String.fromCharCode((65+i)), answers)>-1;
+                            //console.log(isChecked);
+
+                            var html = tmpl.render({name: String.fromCharCode((65+i)), type: 1, value: obj.content });
+                            $('#btn_new_option').before(html);
+                            if(isChecked){
+                                //console.log($('#btn_new_option').prev().find("input[name='option']"));
+                                $('#btn_new_option').prev().find("input[name='option']").attr('checked','true');
+                            }
+
+                        });
                     }
                     else {
                         $('#modal-edit .modal-body .info').text(data.msg);
@@ -273,6 +366,7 @@
 
         });
         $('.q_remove').on('click', function (e) {
+            e.stopPropagation();
             //console.log(this.dataset.id);
             //console.log(this.dataset.title);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
@@ -281,23 +375,78 @@
             $('#modal-ensure').modal('show');
         });
         $('.btn-q-add-submit').on('click', function (e) {
-            if (name.getContent().trim() == '') {
-                $('#modal-edit .modal-body .info').text("请填写完整");
+
+            var $options = $('#qForm .option-name');
+            var optionsContent = '';
+            var isValidate = true;
+            var errorMsg='';
+            $options.each(function (i, e) {
+                if ($(this).val() == '') {
+
+                    isValidate = false;
+                    errorMsg='选项名称不能为空';
+                    return;
+                }
+                if (i == $options.length - 1)
+                    optionsContent += $(this).val();
+                else
+                    optionsContent += $(this).val() + '|||';
+
+
+            });
+            if ($options.length > 0 && $('#qForm [name="option"]:checked').length == 0) {
+                isValidate = false;
+                errorMsg='请勾选正确答案';
+            }
+
+
+            //console.log($('#qForm [name="option"]:checked')[0]);
+            //return;
+
+            if(!checkNum($('#q_score').val()) || $('#q_score').val()>100){
+                isValidate=false;
+                errorMsg='分数请填写数字，不能大于100';
+            }
+            if ($('#q_title').val() == '' || name.getContent() == '' ){
+                isValidate=false;
+                errorMsg='请填写标题和内容';
+            }
+
+            if ( !isValidate) {
+                $('#modal-edit .modal-body .info').text(errorMsg);
                 return;
             }
+            var optionAnswer = '';
+            $('#qForm [name="option"]:checked').each(function (i, e) {
+                var optionItem = $(this).val();
+                if (i == $('#qForm [name="option"]:checked').length - 1)
+                    optionAnswer += $(this).val();
+                else
+                    optionAnswer += $(this).val() + '|';
+
+            });
+            console.log(optionsContent);
+            console.log(optionAnswer);
             console.log(type);
+
             var url, data;
+            var fname = name.getContent().replace(/\+/g, "%2B").replace(/\&/g,"%26");
+            var fcomment = comment.getContent().replace(/\+/g, "%2B").replace(/\&/g,"%26");
+
             if (type == 1) {
                 url = '/question/add';
-                data = 'title=' + $('#q_title').val() + '&comment=' + comment.getContent().trim() + '&name=' + name.getContent().trim() + '&type=' + $('#questionType').val();
+                //data = data.replace(/\&/g,"%26");
+                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment  + '&name=' + fname + '&type=' + $('#questionType').val()
+                +'&optionsContent='+optionsContent+'&answer='+optionAnswer+'&score='+$('#q_score').val();
             }
 
             if (type == 2) {
                 url = "/question/update";
-                data = 'title=' + $('#q_title').val() + '&comment=' + comment.getContent().trim() + '&name=' + name.getContent().trim() + "&type=" + $('#questionType').val() + "&id=" + $('#q_id').val();
+                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment  + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val()+
+                        '&optionsContent='+optionsContent+'&answer='+optionAnswer+'&score='+$('#q_score').val();
             }
             // $('#qt_id').val('111');
-            console.log('name=' + name.getContent().trim() + "&type=" + $('#questionType').val());
+            console.log(data);
             //return;
             $.ajax({
                 type: 'POST',
@@ -314,6 +463,7 @@
                 }
             })
         });
+
         $('.btn-q-del-submit').on('click', function (e) {
             $.ajax({
                 type: 'POST',

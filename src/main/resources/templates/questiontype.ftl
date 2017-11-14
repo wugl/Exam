@@ -42,9 +42,9 @@
                             <td>${key.id}</td>
                             <td>${key.name}</td>
                             <td>
-                                <a class="btn qt_edit" data-id="${key.id}" data-name="${key.name}"><i
+                                <a class="btn-sm qt_edit" data-id="${key.id}" data-name="${key.name}"><i
                                         class="fa fa-edit"></i></a>
-                                <a class="btn qt_remove" data-id="${key.id}" data-name="${key.name}"><i
+                                <a class="btn-sm qt_remove" data-id="${key.id}" data-name="${key.name}"><i
                                         class="fa fa-remove"></i></a>
                             </td>
                         </tr>

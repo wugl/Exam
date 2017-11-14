@@ -17,10 +17,12 @@ public class Question implements Serializable {
 
     private String title;
 
-    @Column(length = 1000)
+    @Column(length = 10000)
     private String name;
 
-    @Column(length = 1000)
+    private Integer score;
+
+    @Column(length = 10000)
     private String comment;
 
     @Column(name = "type_id")
@@ -35,18 +37,36 @@ public class Question implements Serializable {
     private Integer isDelete;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Option> answers = new ArrayList<Option>();
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<Option> answers = new ArrayList<Option>();
+//
+//    public List<Option> getAnswers() {
+////        for (QuestionAnswer add : questionAnswers)
+////            add.setQuestionId(id);
+//        return answers;
+//    }
+//
+//    public void setAnswers(List<Option> answers) {
+//        this.answers = answers;
+//
+//    }
 
-    public List<Option> getAnswers() {
-//        for (QuestionAnswer add : questionAnswers)
-//            add.setQuestionId(id);
-        return answers;
+    public Integer getScore() {
+        return score;
     }
 
-    public void setAnswers(List<Option> answers) {
-        this.answers = answers;
+    public void setScore(int score) {
+        this.score = score;
+    }
 
+    public Question(String title, String name, Integer score, String comment, Long typeId, String answer) {
+        this.title = title;
+        this.name = name;
+        this.score = score;
+        this.comment = comment;
+        this.typeId = typeId;
+        this.answer = answer;
+        this.isDelete = 0;
     }
 
     public Question(String title, String name, String comment, Long typeId, String answer) {
@@ -79,9 +99,14 @@ public class Question implements Serializable {
     private List<Option> options = new ArrayList<Option>();
 
     public List<Option> getOptions() {
-//        for (Option add : options)
-//            add.setQuestionId(id);
-        return options;
+        List<Option> newOptions = new ArrayList<Option>();
+
+        for (Option add : options) {
+            if (add.getIsDelete() == 0)
+                newOptions.add(add);
+        }
+
+        return newOptions;
     }
 
     public void setOptions(List<Option> options) {
@@ -111,6 +136,7 @@ public class Question implements Serializable {
     public Long getId() {
         return id;
     }
+
     public String getAnswer() {
         return answer;
     }

@@ -2,3 +2,7 @@
     color: #000;
     background: #e4e4e5;
 }
+
+.btn-sm{
+    cursor: pointer;
+}

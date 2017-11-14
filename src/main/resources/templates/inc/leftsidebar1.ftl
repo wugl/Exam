@@ -27,7 +27,7 @@
         <#if user.type=='TEACHER'>
             <li><a href="/questionType"><i class="fa fa-circle-o text-aqua"></i> <span>题型管理</span></a></li>
             <li><a href="/question"><i class="fa fa-circle-o text-aqua"></i> <span>题目管理</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
+            <li><a href="/exam"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
         </#if>
             <li class="treeview">
                 <a href="#"><i class="fa fa-circle-o text-aqua"></i></i> <span>Multilevel</span>

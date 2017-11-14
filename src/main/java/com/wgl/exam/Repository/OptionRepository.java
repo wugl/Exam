@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface OptionRepository extends JpaRepository<Option, Long> {
 
     @Modifying
-    @Query("update Option o set o.isDelete=1 where o.id=:id")
+    @Query("update Option o set o.isDelete=1 where o.questionId=:id")
     int del(@Param("id") Long id);
 
 }

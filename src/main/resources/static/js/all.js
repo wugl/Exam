@@ -1,6 +1,6 @@
 $(function () {
 
-    _store = {
+    var _store = {
         /**
          * Get a prestored setting
          *
@@ -45,6 +45,13 @@ $(function () {
         }
     };
     window._store = _store;
+
+    var checkNum = function (input) {
+        var re = /^[1-9]+[0-9]*]*$/; ///^[0-9]+.?[0-9]*$/; //判断字符串是否为数字 //判断正整数 /^[1-9]+[0-9]*]*$/
+
+        return re.test(input);
+    }
+    window.checkNum = checkNum;
 
     $('#logout').on('click', function (e) {
 

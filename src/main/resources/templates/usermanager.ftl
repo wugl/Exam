@@ -54,11 +54,11 @@
                             <td>${key.email}</td>
                             <td>${key.phone}</td>
                             <td>
-                                <a class="btn u_edit" data-id="${key.id}" data-name="${key.name}"
+                                <a class="btn-sm u_edit" data-id="${key.id}" data-name="${key.name}"
                                    data-type="${key.type}"
                                    data-email="${key.email}" data-phone="${key.phone}"><i
                                         class="fa fa-edit"></i></a>
-                                <a class="btn u_remove" data-id="${key.id}" data-name="${key.name}"
+                                <a class="btn-sm u_remove" data-id="${key.id}" data-name="${key.name}"
                                    data-type="${key.type}"
                                    data-email="${key.email}" data-phone="${key.phone}"><i
                                         class="fa fa-remove"></i></a>

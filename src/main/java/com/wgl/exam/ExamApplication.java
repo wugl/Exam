@@ -1,7 +1,11 @@
 package com.wgl.exam;
 
+import com.wgl.exam.Repository.OptionRepository;
+import com.wgl.exam.Repository.QuestionRepository;
 import com.wgl.exam.Repository.QuestionTypeRepository;
 import com.wgl.exam.Repository.UserRepository;
+import com.wgl.exam.domain.Option;
+import com.wgl.exam.domain.Question;
 import com.wgl.exam.domain.QuestionType;
 import com.wgl.exam.domain.User;
 import com.wgl.exam.uti.Common;
@@ -37,6 +41,12 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 	@Autowired
 	QuestionTypeRepository questionTypeRepository;
 
+	@Autowired
+	QuestionRepository questionRepository;
+
+	@Autowired
+	OptionRepository optionRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ExamApplication.class, args);
 	}
@@ -67,7 +77,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 	public void run(String... strings) throws Exception {
 	    if(profile.equals("prod")) return;
 
-		User user = new User(UserType.MANAGER,"admin",Common.EncoderByMd5("111"),"","",new Date());
+		User user = new User(UserType.MANAGER,"admin",Common.EncoderByMd5("111"),"xxx@xxx.com","123456789",new Date());
 		userRepository.save(user);
 		user = new User(UserType.STUDENT,"student",Common.EncoderByMd5("111"),"","",new Date());
 		userRepository.save(user);
@@ -101,6 +111,75 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		questionTypeRepository.save(questionType);
 		questionType = new QuestionType("选择题12");
 		questionTypeRepository.save(questionType);
+
+
+		Question question = new Question("选择题一","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		Question q = questionRepository.save(question);
+		Option option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		 option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		 option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		 option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+		 question = new Question("选择题二","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		 q = questionRepository.save(question);
+		 option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+		question = new Question("选择题三","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		q = questionRepository.save(question);
+		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+		question = new Question("选择题四","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		q = questionRepository.save(question);
+		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+		question = new Question("选择题五","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		q = questionRepository.save(question);
+		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+		question = new Question("选择题六","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		q = questionRepository.save(question);
+		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+		optionRepository.save(option);
+		option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+		optionRepository.save(option);
+		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+		optionRepository.save(option);
+
+
 
 
 	}

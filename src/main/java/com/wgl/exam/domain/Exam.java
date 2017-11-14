@@ -1,10 +1,15 @@
 package com.wgl.exam.domain;
 
+
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+
 @Table(name = "rz_exam")
 public class Exam implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -26,6 +31,29 @@ public class Exam implements Serializable {
 
     @Column(name = "is_delete")
     private Integer isDelete;
+
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(
+            name="rz_exam_question",
+            joinColumns=@JoinColumn(name="exam_id", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="question_id", referencedColumnName="id"))
+    private List<Question> questions = new ArrayList<>();
+
+
+    public List<Question> getQuestions() {
+        List<Question> result = new ArrayList<>();
+        for(Question q:questions){
+            if(q.getIsDelete()==0){
+                result.add(q);
+            }
+        }
+        return result;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
 
     public Long getId() {
         return id;

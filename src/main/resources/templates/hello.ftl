@@ -38,7 +38,7 @@
 <#include "inc/footer1.ftl"/>
 <!-- 实例化编辑器 -->
 <script type="text/javascript">
-    var ue = UE.getEditor('container');
+    //var ue = UE.getEditor('container');
     //$(document).attr("title","${title}");
 </script>
 </body>
