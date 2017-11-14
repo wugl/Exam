@@ -8,11 +8,11 @@
     <section class="content-header">
         <h1>
         ${title!""}
-            <small>Optional description</small>
+            <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
+            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active"> ${title!""}</li>
         </ol>
     </section>
 
@@ -85,7 +85,7 @@
                     </div>
                 </form>
                 <p style="text-align: center;">One fine body&hellip;</p>
-                <div class="info"></div>
+                <div class="info text"></div>
             </div>
             <div class="modal-footer">
             <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
@@ -182,34 +182,47 @@
             if (type == 2)
                 url = "/questionType/update";
            // $('#qt_id').val('111');
+            $('.btn-qt-add-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: $('#qtForm').serialize(),
                 success: function (data) {
                     console.log(data);
+                    $('.btn-qt-add-submit').prop("disabled", false);
                     if (data.code == '100') {
                         window.location.reload();
                     }
                     else{
                         $('#modal-edit .modal-body .info').text(data.msg);
                     }
+                },
+                error:function (e) {
+                    $('.btn-qt-add-submit').prop("disabled", false);
+                    $('#modal-edit .modal-body .info').text(e);
                 }
             })
         });
         $('.btn-qt-del-submit').on('click', function (e) {
+            $('.btn-qt-del-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
                 url: '/questionType/del',
                 data: $('#qtDelForm').serialize(),
                 success: function (data) {
+                    $('.btn-qt-del-submit').prop("disabled", false);
                     if (data.code == '100') {
 
                         window.location.reload();
                     }else {
                         $('#modal-ensure .modal-body .info').text(data.msg);
                     }
+                },
+                error:function (e) {
+                    $('.btn-qt-del-submit').prop("disabled", false);
+                    $('#modal-ensure .modal-body .info').text(e);
                 }
+
             })
         })
 

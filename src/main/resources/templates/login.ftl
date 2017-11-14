@@ -150,7 +150,7 @@
 
                 $("#msg-error-p").html("用户名不能为空");
 
-                $("#email").focus();
+                $("#loginForm input[name='name']").focus();
 
                 return false;
 
@@ -164,7 +164,7 @@
 
                 $("#msg-error-p").html("密码不能为空");
 
-                $("#passwd").focus();
+                $("#loginForm input[name='password']").focus();
 
                 return false;
 

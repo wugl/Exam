@@ -9,10 +9,10 @@
             <div class="pull-left image">
                 <img src="/img/avatar04.png" class="img-circle" alt="User Image">
             </div>
-            <div class="pull-left info">
+            <div class="pull-left info" style="line-height: 35px;">
                 <p>${user.name}</p>
                 <!-- Status -->
-                <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                <#--<a href="#"><i class="fa fa-circle text-success"></i> 在线</a>-->
             </div>
         </div>
 

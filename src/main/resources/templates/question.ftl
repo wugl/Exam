@@ -8,11 +8,11 @@
     <section class="content-header">
         <h1>
         ${title!""}
-            <small>Optional description</small>
+            <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
+            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">${title!""}</li>
         </ol>
     </section>
 
@@ -96,7 +96,7 @@
                     </div>
                 </form>
                 <p style="text-align: center;"></p>
-                <div class="info"></div>
+                <div class="info text-red"></div>
             </div>
             <div class="modal-footer">
             <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
@@ -448,34 +448,46 @@
             // $('#qt_id').val('111');
             console.log(data);
             //return;
+            $('.btn-q-add-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: data,
                 success: function (data) {
                     console.log(data);
+                    $('.btn-q-add-submit').prop("disabled", false);
                     if (data.code == '100') {
                         window.location.reload();
                     }
                     else {
                         $('#modal-edit .modal-body .info').text(data.msg);
                     }
+                },
+                error:function (e) {
+                    $('.btn-q-add-submit').prop("disabled", false);
+                    $('#modal-edit .modal-body .info').text(e);
                 }
             })
         });
 
         $('.btn-q-del-submit').on('click', function (e) {
+            $('.btn-q-del-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
                 url: '/question/del',
                 data: $('#qDelForm').serialize(),
                 success: function (data) {
+                    $('.btn-q-del-submit').prop("disabled", false);
                     if (data.code == '100') {
 
                         window.location.reload();
                     } else {
                         $('#modal-ensure .modal-body .info').text(data.msg);
                     }
+                },
+                error:function (e) {
+                    $('.btn-q-del-submit').prop("disabled", false);
+                    $('#modal-ensure .modal-body .info').text(e);
                 }
             })
         })

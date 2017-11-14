@@ -51,8 +51,8 @@ public class WebSecurityConfig  extends WebMvcConfigurerAdapter {
 
 
             if (session.getAttribute(SESSION_KEY_USER_ID) != null) {
-                logger.error("session:"+session.getAttribute(SESSION_KEY_USER_ID).toString());
-                System.out.println("session:"+session.getAttribute(SESSION_KEY_USER_ID).toString());
+               // logger.error("session:"+session.getAttribute(SESSION_KEY_USER_ID).toString());
+               // System.out.println("session:"+session.getAttribute(SESSION_KEY_USER_ID).toString());
                 return true;
             }
 

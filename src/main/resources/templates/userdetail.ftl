@@ -8,11 +8,11 @@
     <section class="content-header">
         <h1>
         ${title!""}
-            <small>Optional description</small>
+            <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
+            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">${title!""}</li>
         </ol>
     </section>
 
@@ -21,7 +21,7 @@
 
         <div class="box">
             <div class="box-header">
-                <h3 class="box-name">用户信息</h3>
+                <#--<h3 class="box-name">用户信息</h3>-->
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding">

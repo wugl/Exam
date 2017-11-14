@@ -8,11 +8,12 @@
     <section class="content-header">
         <h1>
         ${title!""}
-            <small>Optional description</small>
+            <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
+            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <#--<li><a href="/exam">试卷管理</a></li>-->
+            <li class="active">${title!""}</li>
         </ol>
     </section>
 
@@ -60,10 +61,9 @@
                             ${key.passScore}
                             </td>
                             <td>
-                                <a class="btn-sm q_edit" data-id="${key.id}" data-type="${key.typeId}"><i
+                                <a class="btn-sm e_edit" data-id="${key.id}" href="/exam/edit?id=${key.id}"><i
                                         class="fa fa-edit"></i></a>
-                                <a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"
-                                   data-title="${key.title}""><i
+                                <a class="btn-sm e_remove" data-id="${key.id}" data-name="${key.name}"><i
                                     class="fa fa-remove"></i></a>
                             </td>
                         </tr>
@@ -107,67 +107,19 @@
                     </div>
                 </form>
                 <p style="text-align: center;"></p>
-                <div class="info"></div>
-            </div>
-            <div class="modal-footer">
-            <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
-                <button type="button" class="btn btn-primary btn-q-del-submit">确认</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-<div class="modal  fade" id="modal-edit">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-name">新增题目</h4>
-            </div>
-            <div class="modal-body">
-                <form id="eForm">
-                    <div class="form-group">
-                        <label for="e_name" class="control-label">标题:</label>
-                        <input type="text" name="name" class="form-control" placeholder="标题" id="e_name">
-
-                        <input type="hidden" name="id" class="form-control" placeholder="" id="e_id">
-                    </div>
-                    <div class="form-group">
-                        <label for="e_exam_date" class="control-label">考试日期:</label>
-                        <input type="text" name="score" class="form-control" placeholder="考试日期" id="e_exam_date">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="e_total_score" class="control-label">总分数:</label>
-                        <input type="number" name="score" class="form-control" placeholder="分数" id="e_total_score">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="e_pass_score" class="control-label">及格分数:</label>
-                        <input type="number" name="score" class="form-control" placeholder="分数" id="e_pass_score">
-
-                    </div>
-                    <div class="form-group">
-                        <label for="e_exam_time" class="control-label">考试时长:</label>
-                        <input type="number" name="score" class="form-control" placeholder="考试时长" id="e_exam_time">
-
-                    </div>
-
-                </form>
                 <div class="info text-red"></div>
             </div>
             <div class="modal-footer">
             <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
-                <button type="button" class="btn btn-primary btn-q-add-submit">确认</button>
+                <button type="button" class="btn btn-primary btn-e-del-submit">确认</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+
 
 
 <div class="modal  fade" id="modal-preview">
@@ -209,11 +161,37 @@
             }
         });
 
+        $('.e_remove').on('click', function (e) {
+            e.stopPropagation();
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.title);
+            $("#modal-ensure input[name='id']").val(this.dataset.id);
+            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
+            $('#modal-ensure .modal-body .info').text("");
+            $('#modal-ensure').modal('show');
+        });
 
-//        $('.e_new').on('click',function () {
-//            $('#modal-edit').modal('show');
-//        })
+        $('.btn-e-del-submit').on('click', function (e) {
+            $('.btn-q-del-submit').prop("disabled", true);
+            $.ajax({
+                type: 'POST',
+                url: '/exam/del',
+                data: $('#eDelForm').serialize(),
+                success: function (data) {
+                    $('.btn-q-del-submit').prop("disabled", false);
+                    if (data.code == '100') {
 
+                        window.location.reload();
+                    } else {
+                        $('#modal-ensure .modal-body .info').text(data.msg);
+                    }
+                },
+                error:function (e) {
+                    $('.btn-q-del-submit').prop("disabled", false);
+                    $('#modal-ensure .modal-body .info').text(e);
+                }
+            })
+        });
 
     })
 

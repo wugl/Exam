@@ -86,7 +86,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 
 
 		QuestionType questionType = new QuestionType("选择题");
-		questionTypeRepository.save(questionType);
+		QuestionType qt =  questionTypeRepository.save(questionType);
 		questionType = new QuestionType("选择题1");
 		questionTypeRepository.save(questionType);
 		questionType = new QuestionType("选择题2");
@@ -113,7 +113,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		questionTypeRepository.save(questionType);
 
 
-		Question question = new Question("选择题一","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		Question question = new Question("选择题一","下列句子中不该用问号的一项是____",5,"",qt.getId(),"D");
 		Question q = questionRepository.save(question);
 		Option option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
