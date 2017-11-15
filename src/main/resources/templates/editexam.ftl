@@ -44,7 +44,7 @@
                         <label for="e_exam_date" class="col-sm-2 control-label">考试日期:</label>
                         <div class="col-sm-10">
                             <input type="text" name="examDate" class="form-control" placeholder="考试日期" id="e_exam_date"
-                                   value="<#if exam??>${exam.examDate}</#if>">
+                                   value="<#if exam??>${exam.examDate?string('yyyy-MM-dd HH:mm')}</#if>">
                         </div>
                     </div>
                     <div class="form-group">

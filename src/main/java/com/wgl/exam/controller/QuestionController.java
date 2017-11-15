@@ -101,6 +101,7 @@ public class QuestionController {
 
         List<Option> options = question.getOptions();
         Map<String, Object> data = new HashMap<>();
+        question.setType(questionTypeRepository.findByIdAndIsDelete(question.getTypeId(),0).getName());
         data.put("question", question);
         data.put("options", options);
 

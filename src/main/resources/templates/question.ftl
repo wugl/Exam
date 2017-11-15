@@ -202,9 +202,9 @@
                             <div class="input-group" style="padding-left:0;">
                                 <span class="input-group-addon">
                                 {{if type==1}}
-                                    <input   type="radio" name="option" value="{{:name}}">
+                                    <input   type="radio"  name="option" value="{{:name}}">
                                 {{else type==2}}
-                                    <input type="checkbox"  >
+                                    <input type="checkbox"   name="option" value="{{:name}}">
                                 {{/if}}
                                 </span>
                                 <input type="text" class="form-control option-name" placeholder="选项名称" name="option{{:name}}" value="{{:value}}">
@@ -233,12 +233,37 @@
         var comment = UE.getEditor('commentcontainer');
         var index = 0;
         var tmpl = $.templates("#optionTemplate");
+        var qType = 1;
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-            var html = tmpl.render({name: String.fromCharCode((65 + index)), type: 1, value: ""});//1,单选，2，多选
+
+
+
+            var html = tmpl.render({name: String.fromCharCode((65 + index)), type: qType, value: ""});//1,单选，2，多选
             //console.log(html);
             index++;
             $(this).before(html);
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue',
+                increaseArea: '20%' // optional
+            });
 
+
+        });
+
+
+
+        $('#questionType').on('change',function(e){
+            index = 0;
+            $('#qForm .option-group').remove();
+            console.log($(this).val());
+            console.log($(this).find("option:selected").text());
+            if($(this).find("option:selected").text()=='单选题'){
+                qType = 1;
+            }
+            if($(this).find("option:selected").text()=='多选题'){
+                qType = 2;
+            }
 
         });
         $('#modal-edit').on('click', '.remove_option', function (e) {
@@ -332,7 +357,7 @@
                 url: '/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
-                    //console.log(data);
+                    console.log(data);
                     if (data.code == '100') {
                         name.setContent(data.data.question.name);
                         $('#q_title').val(data.data.question.title);
@@ -348,13 +373,20 @@
                             //console.log(obj);
                             var isChecked = $.inArray(String.fromCharCode((65 + i)), answers) > -1;
                             //console.log(isChecked);
+                            if(data.data.question.type=='单选题') qType=1;
+                            if(data.data.question.type=='多选题') qType=2;
 
-                            var html = tmpl.render({name: String.fromCharCode((65 + i)), type: 1, value: obj.content});
+                            var html = tmpl.render({name: String.fromCharCode((65 + i)), type: qType, value: obj.content});
                             $('#btn_new_option').before(html);
                             if (isChecked) {
                                 //console.log($('#btn_new_option').prev().find("input[name='option']"));
                                 $('#btn_new_option').prev().find("input[name='option']").attr('checked', 'true');
                             }
+                            $('input').iCheck({
+                                checkboxClass: 'icheckbox_minimal-blue',
+                                radioClass: 'iradio_minimal-blue',
+                                increaseArea: '20%' // optional
+                            });
 
                         });
                     }
@@ -374,7 +406,7 @@
             //console.log(this.dataset.id);
             //console.log(this.dataset.title);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
-            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.title + "?");
+            $('#modal-ensure .modal-body p').html("确认删除<span style='color:red;'>" + this.dataset.title + "</span>?");
             $('#modal-ensure .modal-body .info').text("");
             $('#modal-ensure').modal('show');
         });

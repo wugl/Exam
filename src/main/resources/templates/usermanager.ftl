@@ -228,7 +228,7 @@
             console.log(this.dataset.id);
             console.log(this.dataset.name);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
-            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
+            $('#modal-ensure .modal-body p').html("确认删除<span style='color:red;'>" + this.dataset.name + "</span>?");
             $('#modal-ensure .modal-body .info').text("");
             $('#modal-ensure').modal('show');
         });

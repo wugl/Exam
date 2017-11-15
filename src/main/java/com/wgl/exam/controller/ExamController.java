@@ -52,6 +52,7 @@ public class ExamController {
         return "exam";
 
     }
+
     @GetMapping("myexam")
     public String studentExam(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.STUDENT.getIndex())
@@ -62,8 +63,8 @@ public class ExamController {
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         List<Exam> exams = examRepository.findAll();
         List<Exam> es = new ArrayList<>();
-        for(Exam item :exams){
-            if(item.getExamDate().after(new Date())){
+        for (Exam item : exams) {
+            if (item.getExamDate().after(new Date())) {
                 es.add(item);
             }
         }
@@ -72,19 +73,43 @@ public class ExamController {
         return "myexam";
 
     }
+
+    @GetMapping("startexam")
+    public String studentStartExam(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.STUDENT.getIndex())
+
+            return "redirect:/";
+
+        map.put("title", "开始测试");
+        //map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+        Exam exam = examRepository.findExamByIdAndIsDelete(id, 0);
+
+        for (Question item : exam.getQuestions()) {
+            item.setAnswer("");
+            item.setComment("");
+            item.setType(questionTypeRepository.findByIdAndIsDelete(item.getTypeId(), 0).getName());
+        }
+
+        map.put("exam", new Gson().toJson(exam));
+
+        return "startexam";
+
+    }
+
     @GetMapping("myexamhistory")
-    public String studentExamHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+    public String studentExamHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type, @RequestParam("examId") Long examId) {
         if (type != UserType.STUDENT.getIndex())
 
             return "redirect:/";
 
         map.put("title", "考试记录");
-        map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+        map.put("user", userRepository.findUserByIdAndIsDelete(examId, 0));
 
 
         return "myexamhistory";
 
     }
+
     @GetMapping("examhistory")
     public String examHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.TEACHER.getIndex())
@@ -104,7 +129,6 @@ public class ExamController {
     public ReturnWithData getById(@RequestParam("id") Long id) {
 
         Exam exam = examRepository.findExamByIdAndIsDelete(id, 0);
-
 
 
         return new ReturnWithData("成功", "100", exam);
@@ -127,7 +151,7 @@ public class ExamController {
 
     @PostMapping("exam/add")
     @ResponseBody
-    public ReturnWithData addPost(@RequestParam("name") String name,@RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
+    public ReturnWithData addPost(@RequestParam("name") String name, @RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -140,13 +164,13 @@ public class ExamController {
             Exam e = examRepository.save(exam);
 
 
-            for(String item:questions.split("\\|")){
+            for (String item : questions.split("\\|")) {
                 //System.out.println(item);
-                examQuestionRepository.save(new ExamQuestion(e.getId(),Long.parseLong(item)));
+                examQuestionRepository.save(new ExamQuestion(e.getId(), Long.parseLong(item)));
 
             }
             return new ReturnWithData("成功", "100", e);
-        } catch ( Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ReturnWithData("日期格式不对", "101", null);
         }
@@ -158,14 +182,14 @@ public class ExamController {
     public String edit(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @RequestParam("id") Long examId) {
 
         Exam exam = examRepository.findExamByIdAndIsDelete(examId, 0);
-        map.put("exam",exam);
-        List<Question>  questions = exam.getQuestions();
+        map.put("exam", exam);
+        List<Question> questions = exam.getQuestions();
 
         for (Question q : questions) {
             q.setType(questionTypeRepository.findByIdAndIsDelete(q.getTypeId(), 0).getName());
         }
 
-        map.put("questions",new Gson().toJson(exam.getQuestions()));
+        map.put("questions", new Gson().toJson(exam.getQuestions()));
         System.out.println(new Gson().toJson(exam.getQuestions()));
         System.out.println(examRepository.findExamByIdAndIsDelete(examId, 0).getName());
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
@@ -179,7 +203,7 @@ public class ExamController {
     @PostMapping("exam/update")
     @ResponseBody
     @Transactional
-    public ReturnWithoutData editPost(@RequestParam("id") Long id,@RequestParam("name") String name,@RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
+    public ReturnWithoutData editPost(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -191,24 +215,24 @@ public class ExamController {
             Date d = sdf.parse(date);
             //Exam exam = new Exam(name, totalScore, passScore, time, sdf.parse(date));
             //System.out.println(sdf.parse(date).getTime());
-            int row = examRepository.update(id,d,name,time,totalScore,passScore);
+            int row = examRepository.update(id, d, name, time, totalScore, passScore);
 
-            if(row>0){
+            if (row > 0) {
                 examQuestionRepository.delByExamId(id);
-                for(String item:questions.split("\\|")){
+                for (String item : questions.split("\\|")) {
                     //System.out.println(item);
 
-                    examQuestionRepository.save(new ExamQuestion(id,Long.parseLong(item)));
+                    examQuestionRepository.save(new ExamQuestion(id, Long.parseLong(item)));
 
                 }
-                return new ReturnWithoutData("成功", "100" );
-            }else{
-                return new ReturnWithoutData("更新失败", "101" );
+                return new ReturnWithoutData("成功", "100");
+            } else {
+                return new ReturnWithoutData("更新失败", "101");
             }
 
-        } catch ( Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ReturnWithoutData("日期格式不对", "101" );
+            return new ReturnWithoutData("日期格式不对", "101");
         }
 
     }

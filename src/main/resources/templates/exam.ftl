@@ -180,14 +180,14 @@
                             $.each(data.data.questions, function (i, obj) {
 
 
-                                var html = "<div><div>"+(i+1)+"、（" + obj.score + '分）' + obj.name+"（"+obj.answer+"）" +"</div>";
+                                var html = "<div class='box box-default'><div  class='box-header with-border'>"+(i+1)+"、（" + obj.score + '分）' + obj.name+"（"+obj.answer+"）" +"</div><div class='box-body'>";
                                 //;
                                 $.each(obj.options,function(index,ele){
                                     html+="<div>"+String.fromCharCode((65 + index)) + "、" + ele.content + "</div>"
 
                                 });
 
-                                html+="</div>"
+                                html+="</div></div>"
                                 $('#modal-preview .modal-body .questions').append(html);
 
                             });
@@ -208,7 +208,7 @@
                 //console.log(this.dataset.id);
                 //console.log(this.dataset.title);
                 $("#modal-ensure input[name='id']").val(this.dataset.id);
-                $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
+                $('#modal-ensure .modal-body p').html("确认删除<span style='color:red;'>" + this.dataset.name + "</span>?");
                 $('#modal-ensure .modal-body .info').text("");
                 $('#modal-ensure').modal('show');
             });
