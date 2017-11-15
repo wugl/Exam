@@ -21,7 +21,7 @@
             <h2 class="headline text-yellow"> 404</h2>
 
             <div class="error-content" style="padding-top: 30px;">
-                <h3><i class="fa fa-warning text-yellow"></i> 页面没有找到.</h3>
+                <h3><i class="fa fa-warning text-yellow"></i> 页面没有找到！</h3>
 
                 <p>
                      <a href="/">返回首页</a>

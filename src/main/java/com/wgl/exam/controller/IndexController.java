@@ -25,7 +25,7 @@ public class IndexController {
         User user = userRepository.findUserByIdAndIsDelete(id,0);
         map.put("user",user);
         map.put("hello", name);
-        map.put("title", "manager | index");
+        map.put("title", "首页");
         return "hello";
     }
 //    @GetMapping("/teacher")

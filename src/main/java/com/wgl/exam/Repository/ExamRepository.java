@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ExamRepository extends JpaRepository<Exam, Long> {
@@ -19,6 +20,13 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update Exam e set e.isDelete = 1 where e.id = :id")
     int del(@Param("id") Long id);
+
+
+
+    @Modifying(clearAutomatically = true)
+    @Query("update Exam e set e.name = :name,e.examDate=:date,e.totalTime =:time,e.totalScore=:totalScore,e.passScore=:passScore  where e.id = :id")
+    int update(@Param("id") Long id, @Param("date") Date date, @Param("name") String name, @Param("time") Integer time, @Param("totalScore") Float totalScore, @Param("passScore") Float passScore );
+
 
     Exam findExamByIdAndIsDelete(Long id, int isDelete);
 }

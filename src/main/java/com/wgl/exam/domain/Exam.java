@@ -2,6 +2,8 @@ package com.wgl.exam.domain;
 
 
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,7 +40,9 @@ public class Exam implements Serializable {
             name="rz_exam_question",
             joinColumns=@JoinColumn(name="exam_id", referencedColumnName="id"),
             inverseJoinColumns=@JoinColumn(name="question_id", referencedColumnName="id"))
+    @Where(clause="is_delete=0")
     private List<Question> questions = new ArrayList<>();
+
 
 
     public List<Question> getQuestions() {

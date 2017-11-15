@@ -1,12 +1,17 @@
 package com.wgl.exam.controller;
 
 
+import com.google.gson.Gson;
+import com.wgl.exam.Repository.ExamQuestionRepository;
 import com.wgl.exam.Repository.ExamRepository;
+import com.wgl.exam.Repository.QuestionTypeRepository;
 import com.wgl.exam.Repository.UserRepository;
 import com.wgl.exam.WebSecurityConfig;
 import com.wgl.exam.bean.ReturnWithData;
 import com.wgl.exam.bean.ReturnWithoutData;
 import com.wgl.exam.domain.Exam;
+import com.wgl.exam.domain.ExamQuestion;
+import com.wgl.exam.domain.Question;
 import com.wgl.exam.uti.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +21,10 @@ import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
-@RequestMapping("exam")
+@RequestMapping("")
 public class ExamController {
 
     @Autowired
@@ -29,7 +33,13 @@ public class ExamController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping("")
+    @Autowired
+    QuestionTypeRepository questionTypeRepository;
+
+    @Autowired
+    ExamQuestionRepository examQuestionRepository;
+
+    @GetMapping("exam")
     public String index(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.TEACHER.getIndex())
 
@@ -42,21 +52,66 @@ public class ExamController {
         return "exam";
 
     }
+    @GetMapping("myexam")
+    public String studentExam(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.STUDENT.getIndex())
 
-    @GetMapping("getById")
+            return "redirect:/";
+
+        map.put("title", "试卷列表");
+        map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+        List<Exam> exams = examRepository.findAll();
+        List<Exam> es = new ArrayList<>();
+        for(Exam item :exams){
+            if(item.getExamDate().after(new Date())){
+                es.add(item);
+            }
+        }
+        map.put("exams", es);
+
+        return "myexam";
+
+    }
+    @GetMapping("myexamhistory")
+    public String studentExamHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.STUDENT.getIndex())
+
+            return "redirect:/";
+
+        map.put("title", "考试记录");
+        map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+
+
+        return "myexamhistory";
+
+    }
+    @GetMapping("examhistory")
+    public String examHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.TEACHER.getIndex())
+
+            return "redirect:/";
+
+        map.put("title", "考试记录");
+        map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+
+
+        return "myexamhistory";
+
+    }
+
+    @GetMapping("exam/getById")
     @ResponseBody
     public ReturnWithData getById(@RequestParam("id") Long id) {
 
         Exam exam = examRepository.findExamByIdAndIsDelete(id, 0);
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("exam", exam);
 
-        return new ReturnWithData("成功", "100", data);
+
+        return new ReturnWithData("成功", "100", exam);
 
     }
 
-    @GetMapping("new")
+    @GetMapping("exam/new")
     public String add(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.TEACHER.getIndex())
 
@@ -70,19 +125,28 @@ public class ExamController {
 
     }
 
-    @PostMapping("add")
+    @PostMapping("exam/add")
     @ResponseBody
-    public ReturnWithData addPost(@RequestParam("name") String name, @RequestParam("date") String date, @RequestParam("time") Integer time, @RequestParam("totalscore") Float totalscore, @RequestParam("passscore") Float passscore) {
+    public ReturnWithData addPost(@RequestParam("name") String name,@RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
+
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         //System.out.println(date);
 
         try {
-            Exam exam = new Exam(name, totalscore, passscore, time, sdf.parse(date));
-            System.out.println(sdf.parse(date).getTime());
+            Exam exam = new Exam(name, totalScore, passScore, time, sdf.parse(date));
+            //System.out.println(sdf.parse(date).getTime());
             Exam e = examRepository.save(exam);
+
+
+            for(String item:questions.split("\\|")){
+                //System.out.println(item);
+                examQuestionRepository.save(new ExamQuestion(e.getId(),Long.parseLong(item)));
+
+            }
             return new ReturnWithData("成功", "100", e);
-        } catch (ParseException e) {
+        } catch ( Exception e) {
             e.printStackTrace();
             return new ReturnWithData("日期格式不对", "101", null);
         }
@@ -90,11 +154,19 @@ public class ExamController {
 
     }
 
-    @GetMapping("edit")
+    @GetMapping("exam/edit")
     public String edit(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @RequestParam("id") Long examId) {
 
+        Exam exam = examRepository.findExamByIdAndIsDelete(examId, 0);
+        map.put("exam",exam);
+        List<Question>  questions = exam.getQuestions();
 
-        map.put("exam", examRepository.findExamByIdAndIsDelete(examId, 0));
+        for (Question q : questions) {
+            q.setType(questionTypeRepository.findByIdAndIsDelete(q.getTypeId(), 0).getName());
+        }
+
+        map.put("questions",new Gson().toJson(exam.getQuestions()));
+        System.out.println(new Gson().toJson(exam.getQuestions()));
         System.out.println(examRepository.findExamByIdAndIsDelete(examId, 0).getName());
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         map.put("title", "编辑试卷");
@@ -104,16 +176,44 @@ public class ExamController {
 
     }
 
-    @PostMapping("update")
+    @PostMapping("exam/update")
     @ResponseBody
     @Transactional
-    public ReturnWithData editPost() {
+    public ReturnWithoutData editPost(@RequestParam("id") Long id,@RequestParam("name") String name,@RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
 
-        return null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        //System.out.println(date);
+
+
+        try {
+            Date d = sdf.parse(date);
+            //Exam exam = new Exam(name, totalScore, passScore, time, sdf.parse(date));
+            //System.out.println(sdf.parse(date).getTime());
+            int row = examRepository.update(id,d,name,time,totalScore,passScore);
+
+            if(row>0){
+                examQuestionRepository.delByExamId(id);
+                for(String item:questions.split("\\|")){
+                    //System.out.println(item);
+
+                    examQuestionRepository.save(new ExamQuestion(id,Long.parseLong(item)));
+
+                }
+                return new ReturnWithoutData("成功", "100" );
+            }else{
+                return new ReturnWithoutData("更新失败", "101" );
+            }
+
+        } catch ( Exception e) {
+            e.printStackTrace();
+            return new ReturnWithoutData("日期格式不对", "101" );
+        }
 
     }
 
-    @PostMapping(value = "del")
+    @PostMapping(value = "exam/del")
     @ResponseBody
     @Transactional
     public ReturnWithoutData del(@RequestParam("id") Long id) {

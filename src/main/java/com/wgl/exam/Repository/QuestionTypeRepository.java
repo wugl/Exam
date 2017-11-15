@@ -18,6 +18,8 @@ public interface QuestionTypeRepository extends JpaRepository<QuestionType, Long
     @Query("select qt from QuestionType qt where qt.isDelete=0")
     List<QuestionType> findAll();
 
+    QuestionType findByIdAndIsDelete(Long id,Integer isDelete);
+
 
     @Modifying(clearAutomatically = true)
     @Query("update QuestionType qt set qt.name = :name where qt.id = :id")

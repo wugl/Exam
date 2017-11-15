@@ -12,7 +12,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
-            <#--<li><a href="/exam">试卷管理</a></li>-->
+        <#--<li><a href="/exam">试卷管理</a></li>-->
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -49,7 +49,7 @@
                             ${key.name}
                             </td>
                             <td>
-                            ${key.examDate}
+                            ${key.examDate?string('yyyy-MM-dd HH:mm')}
                             </td>
                             <td>
                             ${key.totalTime}
@@ -64,7 +64,7 @@
                                 <a class="btn-sm e_edit" data-id="${key.id}" href="/exam/edit?id=${key.id}"><i
                                         class="fa fa-edit"></i></a>
                                 <a class="btn-sm e_remove" data-id="${key.id}" data-name="${key.name}"><i
-                                    class="fa fa-remove"></i></a>
+                                        class="fa fa-remove"></i></a>
                             </td>
                         </tr>
                         </#list>
@@ -120,81 +120,123 @@
 </div>
 
 
-
-
 <div class="modal  fade" id="modal-preview">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-name">题目预览</h4>
+                <h4 class="modal-name">试卷预览</h4>
             </div>
             <div class="modal-body" style="line-height:30px;">
                 <div class="title" style="display: none;"></div>
-                <div class="name" style="font-weight: bold;"></div>
-                <div class="options"></div>
-                <div class="answer text-red""></div>
-            <div class="comment"></div>
-            <div class="info text-red"></div>
+                <h3 class="name" style="font-weight: bold;text-align: center;"></h3>
+                <div class="sub" style="text-align: center;"></div>
+                <div class="questions"></div>
+                <#--<div class="answer text-red"></div>-->
 
-        </div>
-        <div class="modal-footer">
-        <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
+                <div class="info text-red"></div>
+
+            </div>
+            <div class="modal-footer">
+            <#--<button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>-->
                 <#--<button type="button" class="btn btn-primary btn-q-add-submit">确认</button>-->
+            </div>
         </div>
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-content -->
-</div>
-<!-- /.modal-dialog -->
+    <!-- /.modal-dialog -->
 </div>
 
 <#include "inc/footer1.ftl"/>
 
-<script type="text/javascript">
-    $(function () {
-        var table = $('#example1').DataTable({
-            "stateSave": true,
-            "language": {
-                "url": " dataTables.Chinese.lang.json"
-                // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
-            }
-        });
-
-        $('.e_remove').on('click', function (e) {
-            e.stopPropagation();
-            //console.log(this.dataset.id);
-            //console.log(this.dataset.title);
-            $("#modal-ensure input[name='id']").val(this.dataset.id);
-            $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
-            $('#modal-ensure .modal-body .info').text("");
-            $('#modal-ensure').modal('show');
-        });
-
-        $('.btn-e-del-submit').on('click', function (e) {
-            $('.btn-q-del-submit').prop("disabled", true);
-            $.ajax({
-                type: 'POST',
-                url: '/exam/del',
-                data: $('#eDelForm').serialize(),
-                success: function (data) {
-                    $('.btn-q-del-submit').prop("disabled", false);
-                    if (data.code == '100') {
-
-                        window.location.reload();
-                    } else {
-                        $('#modal-ensure .modal-body .info').text(data.msg);
-                    }
-                },
-                error:function (e) {
-                    $('.btn-q-del-submit').prop("disabled", false);
-                    $('#modal-ensure .modal-body .info').text(e);
+    <script type="text/javascript">
+        $(function () {
+            var table = $('#example1').DataTable({
+                "stateSave": true,
+                "language": {
+                    "url": " dataTables.Chinese.lang.json"
+                    // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
                 }
-            })
-        });
+            });
 
-    })
+            $('.row-item').on('click', function (e) {
+                console.log('row');
 
-</script>
-</body>
-</html>
+                $.ajax({
+                    type: 'GET',
+                    url: '/exam/getById',
+                    data: 'id=' + this.dataset.id,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code == '100') {
+                           $('#modal-preview .modal-body .name').html( data.data.name);
+                            $('#modal-preview .modal-body .sub').html("考试时间："+new Date(data.data.examDate).Format("yyyy-MM-dd hh:mm")+"，考试时长："+data.data.totalTime+'分钟，总分：' + data.data.totalScore + "，通过："+data.data.passScore);
+//                            $('#modal-preview .modal-body .answer').html("答案：" + data.data.question.answer);
+//                            $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
+//                            var answers = data.data.question.answer.split('|');
+//                            //console.log(answers.length);
+                            $('#modal-preview .modal-body .questions').html('');
+                            $.each(data.data.questions, function (i, obj) {
+
+
+                                var html = "<div><div>"+(i+1)+"、（" + obj.score + '分）' + obj.name+"（"+obj.answer+"）" +"</div>";
+                                //;
+                                $.each(obj.options,function(index,ele){
+                                    html+="<div>"+String.fromCharCode((65 + index)) + "、" + ele.content + "</div>"
+
+                                });
+
+                                html+="</div>"
+                                $('#modal-preview .modal-body .questions').append(html);
+
+                            });
+                        }
+                        else {
+                            $('#modal-preview .modal-body .info').text(data.msg);
+                        }
+                    }
+
+                })
+                $('#modal-preview .modal-body .info').text("");
+                $('#modal-preview').modal('show');
+
+            });
+
+            $('.e_remove').on('click', function (e) {
+                e.stopPropagation();
+                //console.log(this.dataset.id);
+                //console.log(this.dataset.title);
+                $("#modal-ensure input[name='id']").val(this.dataset.id);
+                $('#modal-ensure .modal-body p').text("确认删除" + this.dataset.name + "?");
+                $('#modal-ensure .modal-body .info').text("");
+                $('#modal-ensure').modal('show');
+            });
+
+            $('.btn-e-del-submit').on('click', function (e) {
+                $('.btn-q-del-submit').prop("disabled", true);
+                $.ajax({
+                    type: 'POST',
+                    url: '/exam/del',
+                    data: $('#eDelForm').serialize(),
+                    success: function (data) {
+                        $('.btn-q-del-submit').prop("disabled", false);
+                        if (data.code == '100') {
+
+                            window.location.reload();
+                        } else {
+                            $('#modal-ensure .modal-body .info').text(data.msg);
+                        }
+                    },
+                    error: function (e) {
+                        $('.btn-q-del-submit').prop("disabled", false);
+                        $('#modal-ensure .modal-body .info').text(e);
+                    }
+                })
+            });
+
+        })
+
+    </script>
+    </body>
+    </html>

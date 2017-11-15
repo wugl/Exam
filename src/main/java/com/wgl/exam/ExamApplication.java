@@ -1,13 +1,7 @@
 package com.wgl.exam;
 
-import com.wgl.exam.Repository.OptionRepository;
-import com.wgl.exam.Repository.QuestionRepository;
-import com.wgl.exam.Repository.QuestionTypeRepository;
-import com.wgl.exam.Repository.UserRepository;
-import com.wgl.exam.domain.Option;
-import com.wgl.exam.domain.Question;
-import com.wgl.exam.domain.QuestionType;
-import com.wgl.exam.domain.User;
+import com.wgl.exam.Repository.*;
+import com.wgl.exam.domain.*;
 import com.wgl.exam.uti.Common;
 import com.wgl.exam.uti.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +40,12 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 
 	@Autowired
 	OptionRepository optionRepository;
+
+	@Autowired
+	ExamRepository examRepository;
+
+	@Autowired
+	ExamQuestionRepository examQuestionRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExamApplication.class, args);
@@ -113,7 +113,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		questionTypeRepository.save(questionType);
 
 
-		Question question = new Question("选择题一","下列句子中不该用问号的一项是____",5,"",qt.getId(),"D");
+		Question question = new Question("选择题一","1下列句子中不该用问号的一项是____",5f,"",qt.getId(),"D");
 		Question q = questionRepository.save(question);
 		Option option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -124,7 +124,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		 option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
-		 question = new Question("选择题二","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		 question = new Question("选择题二","2下列句子中不该用问号的一项是____",5f,"",1l,"D");
 		 q = questionRepository.save(question);
 		 option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -135,7 +135,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
-		question = new Question("选择题三","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		question = new Question("选择题三","3下列句子中不该用问号的一项是____",5f,"",1l,"D");
 		q = questionRepository.save(question);
 		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -146,7 +146,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
-		question = new Question("选择题四","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		question = new Question("选择题四","4下列句子中不该用问号的一项是____",5f,"",1l,"D");
 		q = questionRepository.save(question);
 		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -157,7 +157,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
-		question = new Question("选择题五","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		question = new Question("选择题五","5下列句子中不该用问号的一项是____",5f,"",1l,"D");
 		q = questionRepository.save(question);
 		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -168,7 +168,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
-		question = new Question("选择题六","下列句子中不该用问号的一项是____",5,"",1l,"D");
+		question = new Question("选择题六","6下列句子中不该用问号的一项是____",5f,"",1l,"D");
 		q = questionRepository.save(question);
 		option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
 		optionRepository.save(option);
@@ -178,6 +178,20 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		optionRepository.save(option);
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
+
+		Exam exam = new Exam("title1",100f,60f,90,new Date());
+
+		Exam e = examRepository.save(exam);
+
+		ExamQuestion eq = new ExamQuestion(e.getId(),question.getId());
+
+		examQuestionRepository.save(eq);
+
+		exam = new Exam("title2",150f,90f,90,new Date(System.currentTimeMillis()+100000L));
+		e = examRepository.save(exam);
+		eq = new ExamQuestion(e.getId(),question.getId());
+
+		examQuestionRepository.save(eq);
 
 
 

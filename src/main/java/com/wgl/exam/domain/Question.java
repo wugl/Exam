@@ -1,8 +1,11 @@
 package com.wgl.exam.domain;
 
 
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class Question implements Serializable {
     @Column(length = 10000)
     private String name;
 
-    private Integer score;
+    private Float score;
 
     @Column(length = 10000)
     private String comment;
@@ -28,6 +31,19 @@ public class Question implements Serializable {
     @Column(name = "type_id")
     private Long typeId;
 
+    private @CreatedDate
+    LocalDateTime createdDate;
+
+    @Transient
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Column(name = "answer")
     private String answer;
@@ -35,6 +51,7 @@ public class Question implements Serializable {
 
     @Column(name = "is_delete")
     private Integer isDelete;
+
 
 
 //    @OneToMany(cascade = CascadeType.ALL)
@@ -51,15 +68,15 @@ public class Question implements Serializable {
 //
 //    }
 
-    public Integer getScore() {
+    public Float getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Float score) {
         this.score = score;
     }
 
-    public Question(String title, String name, Integer score, String comment, Long typeId, String answer) {
+    public Question(String title, String name, Float score, String comment, Long typeId, String answer) {
         this.title = title;
         this.name = name;
         this.score = score;

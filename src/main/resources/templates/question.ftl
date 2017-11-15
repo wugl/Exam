@@ -179,7 +179,7 @@
                 <div class="title" style="display: none;"></div>
                 <div class="name" style="font-weight: bold;"></div>
                 <div class="options"></div>
-                <div class="answer text-red""></div>
+                <div class="answer text-red"></div>
                 <div class="comment"></div>
                 <div class="info text-red"></div>
 
@@ -218,6 +218,10 @@
 
 
 
+
+
+
+
 </script>
 
 <#include "inc/footer1.ftl"/>
@@ -230,7 +234,7 @@
         var index = 0;
         var tmpl = $.templates("#optionTemplate");
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-            var html = tmpl.render({name: String.fromCharCode((65+index)), type: 1, value: ""});//1,单选，2，多选
+            var html = tmpl.render({name: String.fromCharCode((65 + index)), type: 1, value: ""});//1,单选，2，多选
             //console.log(html);
             index++;
             $(this).before(html);
@@ -279,7 +283,7 @@
 
         });
 
-        $('.row-item').on('click',function(e){
+        $('.row-item').on('click', function (e) {
             console.log('row');
 
             $.ajax({
@@ -289,16 +293,16 @@
                 success: function (data) {
                     //console.log(data);
                     if (data.code == '100') {
-                        $('#modal-preview .modal-body .name').html('（'+data.data.question.score+'分）'+data.data.question.name);
+                        $('#modal-preview .modal-body .name').html('（' + data.data.question.score + '分）' + data.data.question.name);
                         $('#modal-preview .modal-body .title').html(data.data.question.title);
-                        $('#modal-preview .modal-body .answer').html("答案："+data.data.question.answer);
-                        $('#modal-preview .modal-body .comment').html("点评："+data.data.question.comment);
+                        $('#modal-preview .modal-body .answer').html("答案：" + data.data.question.answer);
+                        $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
                         var answers = data.data.question.answer.split('|');
                         //console.log(answers.length);
                         $('#modal-preview .modal-body .options').html('');
-                        $.each(data.data.options, function(i, obj) {
+                        $.each(data.data.options, function (i, obj) {
 
-                            var html = "<div>"+String.fromCharCode((65+i))+"、"+obj.content+"</div>";
+                            var html = "<div>" + String.fromCharCode((65 + i)) + "、" + obj.content + "</div>";
                             $('#modal-preview .modal-body .options').append(html);
 
                         });
@@ -312,7 +316,7 @@
             $('#modal-preview .modal-body .info').text("");
             $('#modal-preview').modal('show');
 
-        })
+        });
         $('.q_edit').on('click', function (e) {
             console.log('edit');
             type = 2;
@@ -340,16 +344,16 @@
                         var answers = data.data.question.answer.split('|');
                         //console.log(answers.length);
                         $('#qForm .option-group').remove();
-                        $.each(data.data.options, function(i, obj) {
+                        $.each(data.data.options, function (i, obj) {
                             //console.log(obj);
-                            var isChecked = $.inArray(String.fromCharCode((65+i)), answers)>-1;
+                            var isChecked = $.inArray(String.fromCharCode((65 + i)), answers) > -1;
                             //console.log(isChecked);
 
-                            var html = tmpl.render({name: String.fromCharCode((65+i)), type: 1, value: obj.content });
+                            var html = tmpl.render({name: String.fromCharCode((65 + i)), type: 1, value: obj.content});
                             $('#btn_new_option').before(html);
-                            if(isChecked){
+                            if (isChecked) {
                                 //console.log($('#btn_new_option').prev().find("input[name='option']"));
-                                $('#btn_new_option').prev().find("input[name='option']").attr('checked','true');
+                                $('#btn_new_option').prev().find("input[name='option']").attr('checked', 'true');
                             }
 
                         });
@@ -379,12 +383,12 @@
             var $options = $('#qForm .option-name');
             var optionsContent = '';
             var isValidate = true;
-            var errorMsg='';
+            var errorMsg = '';
             $options.each(function (i, e) {
                 if ($(this).val() == '') {
 
                     isValidate = false;
-                    errorMsg='选项名称不能为空';
+                    errorMsg = '选项名称不能为空';
                     return;
                 }
                 if (i == $options.length - 1)
@@ -396,23 +400,23 @@
             });
             if ($options.length > 0 && $('#qForm [name="option"]:checked').length == 0) {
                 isValidate = false;
-                errorMsg='请勾选正确答案';
+                errorMsg = '请勾选正确答案';
             }
 
 
             //console.log($('#qForm [name="option"]:checked')[0]);
             //return;
 
-            if(!checkNum($('#q_score').val()) || $('#q_score').val()>100){
-                isValidate=false;
-                errorMsg='分数请填写数字，不能大于100';
+            if (!checkNum($('#q_score').val()) || $('#q_score').val() > 100) {
+                isValidate = false;
+                errorMsg = '分数请填写数字，不能大于100';
             }
-            if ($('#q_title').val() == '' || name.getContent() == '' ){
-                isValidate=false;
-                errorMsg='请填写标题和内容';
+            if ($('#q_title').val() == '' || name.getContent() == '') {
+                isValidate = false;
+                errorMsg = '请填写标题和内容';
             }
 
-            if ( !isValidate) {
+            if (!isValidate) {
                 $('#modal-edit .modal-body .info').text(errorMsg);
                 return;
             }
@@ -430,20 +434,20 @@
             console.log(type);
 
             var url, data;
-            var fname = name.getContent().replace(/\+/g, "%2B").replace(/\&/g,"%26");
-            var fcomment = comment.getContent().replace(/\+/g, "%2B").replace(/\&/g,"%26");
+            var fname = name.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
+            var fcomment = comment.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
 
             if (type == 1) {
                 url = '/question/add';
                 //data = data.replace(/\&/g,"%26");
-                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment  + '&name=' + fname + '&type=' + $('#questionType').val()
-                +'&optionsContent='+optionsContent+'&answer='+optionAnswer+'&score='+$('#q_score').val();
+                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val()
+                        + '&optionsContent=' + optionsContent + '&answer=' + optionAnswer + '&score=' + $('#q_score').val();
             }
 
             if (type == 2) {
                 url = "/question/update";
-                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment  + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val()+
-                        '&optionsContent='+optionsContent+'&answer='+optionAnswer+'&score='+$('#q_score').val();
+                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val() +
+                        '&optionsContent=' + optionsContent + '&answer=' + optionAnswer + '&score=' + $('#q_score').val();
             }
             // $('#qt_id').val('111');
             console.log(data);
@@ -463,7 +467,7 @@
                         $('#modal-edit .modal-body .info').text(data.msg);
                     }
                 },
-                error:function (e) {
+                error: function (e) {
                     $('.btn-q-add-submit').prop("disabled", false);
                     $('#modal-edit .modal-body .info').text(e);
                 }
@@ -485,7 +489,7 @@
                         $('#modal-ensure .modal-body .info').text(data.msg);
                     }
                 },
-                error:function (e) {
+                error: function (e) {
                     $('.btn-q-del-submit').prop("disabled", false);
                     $('#modal-ensure .modal-body .info').text(e);
                 }

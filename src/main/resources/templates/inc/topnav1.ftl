@@ -8,7 +8,7 @@
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
             <#--<b>Admin</b>LTE-->
-            后台管理
+            考试系统
         </span>
     </a>
 

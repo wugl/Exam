@@ -163,7 +163,7 @@
                         <input type="hidden" name="id" class="form-control" placeholder="" id="">
                     </div>
                 </form>
-                <p style="text-align: center;">One fine body&hellip;</p>
+                <p style="text-align: center;"></p>
                 <div class="info"></div>
             </div>
             <div class="modal-footer">
