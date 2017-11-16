@@ -26,10 +26,53 @@ public class Exam implements Serializable {
     @Column(name = "total_time")
     private Integer totalTime;
 
+    @Transient
+    private Float studentScore;
+
+    @Transient
+    private String answerName;
+
+    public String getAnswerName() {
+        return answerName;
+    }
+
+    public void setAnswerName(String answerName) {
+        this.answerName = answerName;
+    }
+
+    @Transient
+    private Date answerDate = new Date();
+    public Date getAnswerDate() {
+        return answerDate;
+    }
+
+    public void setAnswerDate(Date answerDate) {
+        this.answerDate = answerDate;
+    }
+
+    public Float getStudentScore() {
+        return studentScore;
+    }
+
+    public void setStudentScore(Float studentScore) {
+        this.studentScore = studentScore;
+    }
+
     //@Temporal(TemporalType.DATE)
     @Column(name = "exam_date")
     private Date examDate;
 
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinColumn(name="exam_id")
+//    private List<StudentAnswer> studentAnswers;
+//
+//    public List<StudentAnswer> getStudentAnswers() {
+//        return studentAnswers;
+//    }
+//
+//    public void setStudentAnswers(List<StudentAnswer> studentAnswers) {
+//        this.studentAnswers = studentAnswers;
+//    }
 
     @Column(name = "is_delete")
     private Integer isDelete;
@@ -44,6 +87,22 @@ public class Exam implements Serializable {
     private List<Question> questions = new ArrayList<>();
 
 
+
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(
+//            name="rz_student_answer",
+//            joinColumns=@JoinColumn(name="exam_id", referencedColumnName="id"),
+//            inverseJoinColumns=@JoinColumn(name="student_id", referencedColumnName="id"))
+//    @Where(clause="is_delete=0")
+//    private List<User> students = new ArrayList<>();
+//
+//    public List<User> getStudents() {
+//        return students;
+//    }
+//
+//    public void setStudents(List<User> students) {
+//        this.students = students;
+//    }
 
     public List<Question> getQuestions() {
         List<Question> result = new ArrayList<>();

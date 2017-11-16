@@ -180,8 +180,11 @@
                             $.each(data.data.questions, function (i, obj) {
 
 
-                                var html = "<div class='box box-default'><div  class='box-header with-border'>"+(i+1)+"、（" + obj.score + '分）' + obj.name+"（"+obj.answer+"）" +"</div><div class='box-body'>";
+                                var html = "<div class='box box-default'><div  class='box-header with-border'>"+(i+1)+"、（" + obj.score + '分）' + obj.name+(obj.type=="问答题"?"":("（"+obj.answer+"）")) +"</div><div class='box-body'>";
                                 //;
+                                if(obj.type=="问答题"){
+                                    html+="<div>参考答案："+obj.answer+"</div>"
+                                }
                                 $.each(obj.options,function(index,ele){
                                     html+="<div>"+String.fromCharCode((65 + index)) + "、" + ele.content + "</div>"
 

@@ -2,10 +2,13 @@ package com.wgl.exam.domain;
 
 
 import com.wgl.exam.uti.UserType;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "rz_user")
@@ -25,6 +28,35 @@ public class User  implements Serializable {
     private Date regTime = new Date();
     @Column(name="is_delete")
     private Integer isDelete;
+
+    @Transient
+    private String answer;
+
+
+
+//    @ManyToMany(fetch=FetchType.LAZY)
+//    @JoinTable(
+//            name="rz_student_answer",
+//            joinColumns=@JoinColumn(name="student_id", referencedColumnName="id"),
+//            inverseJoinColumns=@JoinColumn(name="exam_id", referencedColumnName="id"))
+//    @Where(clause="is_delete=0")
+//    private List<Exam> exams = new ArrayList<>();
+//
+//    public List<Exam> getExams() {
+//        return exams;
+//    }
+//
+//    public void setExams(List<Exam> exams) {
+//        this.exams = exams;
+//    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
     public User() {
     }

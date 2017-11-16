@@ -48,7 +48,7 @@
                     <td>
 
 
-                    <a class="btn-sm q_edit" data-id="${key.id}" href="/startexam?examId=${key.id}"><span class="glyphicon glyphicon-pencil"></span> 开始答题</a>
+                    <a class="btn-sm q_edit" data-id="${key.id}" target="_blank" href="/startexam?examId=${key.id}"><span class="glyphicon glyphicon-pencil"></span> 开始答题</a>
                         <#--<a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"-->
                            <#--data-title="${key.title}""><i-->
                             <#--class="fa fa-remove"></i></a>-->

@@ -137,7 +137,7 @@
             $("#msg-error").hide(100);
         });
         $('#loginBtn').on('click', function (e) {
-            console.log($('#loginForm').serialize());
+            //console.log($('#loginForm').serialize());
             var name = $.trim($("#loginForm input[name='name']").val());
             var password = $.trim($("#loginForm input[name='password']").val());
             var type = $('#userType').val();

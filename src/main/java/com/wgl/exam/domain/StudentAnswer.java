@@ -3,6 +3,7 @@ package com.wgl.exam.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "rz_student_answer")
@@ -22,10 +23,33 @@ public class StudentAnswer implements Serializable {
     @Column(name = "question_id")
     private Long questionId;
 
-    private Long answer;
+    private String answer;
 
     @Column(name="is_delete")
     private Integer isDelete;
+
+    public Date getAnswerDate() {
+        return answerDate;
+    }
+
+    public void setAnswerDate(Date answerDate) {
+        this.answerDate = answerDate;
+    }
+
+    @Column(name="answer_date")
+    private Date answerDate = new Date();
+
+    @ManyToOne(cascade = { CascadeType.ALL })
+    @JoinColumn(name="question_id",insertable = false,updatable = false)
+    private Question question;
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 
     public Long getId() {
         return id;
@@ -67,11 +91,11 @@ public class StudentAnswer implements Serializable {
         this.questionId = questionId;
     }
 
-    public Long getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(Long answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
 
@@ -83,11 +107,15 @@ public class StudentAnswer implements Serializable {
         this.isDelete = isDelete;
     }
 
-    public StudentAnswer(String name, Long examId, Long studentId, Long questionId, Long answer) {
+
+    public StudentAnswer( Long examId, Long studentId, Long questionId, String answer) {
+        this("",examId,studentId,questionId,answer,0);
+    }
+    public StudentAnswer(String name, Long examId, Long studentId, Long questionId, String answer) {
         this(name,examId,studentId,questionId,answer,0);
     }
 
-    public StudentAnswer(String name, Long examId, Long studentId, Long questionId, Long answer, Integer isDelete) {
+    public StudentAnswer(String name, Long examId, Long studentId, Long questionId, String answer, Integer isDelete) {
         this.name = name;
         this.examId = examId;
         this.studentId = studentId;

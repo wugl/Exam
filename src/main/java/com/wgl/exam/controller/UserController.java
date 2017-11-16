@@ -1,6 +1,7 @@
 package com.wgl.exam.controller;
 
 
+import com.google.gson.Gson;
 import com.wgl.exam.Repository.UserRepository;
 import com.wgl.exam.WebSecurityConfig;
 import com.wgl.exam.bean.ReturnWithData;
@@ -43,7 +44,7 @@ public class UserController {
 
             return new ReturnWithData(name + "已存在", "101", null);
 
-        User user = new User(UserType.getByIndex(type), name, Common.EncoderByMd5(password), email, phone);
+        User user = new User(UserType.getByIndex(type), name, password, email, phone);
 
 
         return new ReturnWithData("成功", "100", userRepository.save(user));
@@ -72,7 +73,7 @@ public class UserController {
             return new ReturnWithoutData(name + "已存在", "101");
 
 
-        int row = userRepository.update(id, name, Common.EncoderByMd5(password), UserType.getByIndex(type), email, phone);
+        int row = userRepository.update(id, name, password, UserType.getByIndex(type), email, phone);
         System.out.println("------------------row:" + id + ":" + name);
         System.out.println("------------------row:" + row);
         if (row == 1)
@@ -99,6 +100,8 @@ public class UserController {
         map.put("title", "用户简介");
         User user = userRepository.findUserByIdAndIsDelete(id, 0);
         map.put("user", user);
+        map.put("userJson", new Gson().toJson(user));
+
         return "userdetail";
     }
 

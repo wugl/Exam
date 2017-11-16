@@ -245,11 +245,13 @@
             if (type == 2)
                 url = "/user/update";
             // $('#qt_id').val('111');
-            console.log($('#uForm').serialize());
+            //console.log($('#uForm').serialize());
+            var data = 'name='+$('#u_name').val().trim()+'&id='+ $('#u_id').val()+'&type='+$('#u_type').val()+'&password='+md5($('#u_password').val().trim())+'&email='+$('#u_email').val()+'&phone='+$('#u_phone').val();
+
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: $('#uForm').serialize(),
+                data: data,
                 success: function (data) {
                     console.log(data);
                     if (data.code == '100') {

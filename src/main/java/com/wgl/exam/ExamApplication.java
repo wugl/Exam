@@ -99,20 +99,31 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
 		optionRepository.save(option);
 
+        question = new Question("选择题五","5下列句子中不该用问号的一项是____",5f,"",1L,"D");
+        q = questionRepository.save(question);
+        option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
+        optionRepository.save(option);
+        option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
+        optionRepository.save(option);
+        option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
+        optionRepository.save(option);
+        option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
+        optionRepository.save(option);
+
 		questionType = new QuestionType("多选题");
 		qt = questionTypeRepository.save(questionType);
 
         question = new Question("多选题","下列正确的选项有____",5f,"",qt.getId(),"A|D");
         q = questionRepository.save(question);
-        option = new Option("11111",q.getId());
+        option = new Option("3*5=15",q.getId());
         optionRepository.save(option);
-        option = new Option("2222",q.getId());
+        option = new Option("2+2=3",q.getId());
         optionRepository.save(option);
-        option = new Option("333",q.getId());
+        option = new Option("3*3=8",q.getId());
         optionRepository.save(option);
-        option = new Option("444",q.getId());
+        option = new Option("3+1=4",q.getId());
         optionRepository.save(option);
-        option = new Option("555",q.getId());
+        option = new Option("5+9=15",q.getId());
         optionRepository.save(option);
 
 
@@ -127,22 +138,6 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
         option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
         optionRepository.save(option);
 
-		questionType = new QuestionType("选择题2");
-        qt = questionTypeRepository.save(questionType);
-
-        question = new Question("选择题三","3下列句子中不该用问号的一项是____",5f,"",qt.getId(),"D");
-        q = questionRepository.save(question);
-        option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
-        optionRepository.save(option);
-        option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
-        optionRepository.save(option);
-        option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
-        optionRepository.save(option);
-        option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
-        optionRepository.save(option);
-
-		questionType = new QuestionType("选择题3");
-        qt = questionTypeRepository.save(questionType);
 
         question = new Question("选择题四","4下列句子中不该用问号的一项是____",5f,"",qt.getId(),"D");
         q = questionRepository.save(question);
@@ -155,24 +150,6 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
         option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
         optionRepository.save(option);
 
-
-		questionType = new QuestionType("选择题4");
-        qt = questionTypeRepository.save(questionType);
-
-        question = new Question("选择题五","5下列句子中不该用问号的一项是____",5f,"",1L,"D");
-        q = questionRepository.save(question);
-        option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
-        optionRepository.save(option);
-        option = new Option("难道你认为一场考试的失误就意味着输掉了整个人生吗？",q.getId());
-        optionRepository.save(option);
-        option = new Option("生活因有音乐而变得更美好，不是吗？",q.getId());
-        optionRepository.save(option);
-        option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
-        optionRepository.save(option);
-
-		questionType = new QuestionType("选择题5");
-        qt = questionTypeRepository.save(questionType);
-
         question = new Question("选择题六","6下列句子中不该用问号的一项是____",5f,"",1L,"D");
         q = questionRepository.save(question);
         option = new Option("为什么我的眼里常含泪水？因为我对这土地爱得深沉……",q.getId());
@@ -184,41 +161,64 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
         option = new Option("我们要思考怎样才能做一个对社会有用的人？",q.getId());
         optionRepository.save(option);
 
-
-		questionType = new QuestionType("选择题6");
+		questionType = new QuestionType("问答题");
         qt = questionTypeRepository.save(questionType);
 
+        question = new Question("问答题一","请用“一边..一边..”造句",15f,"点评",qt.getId(),"我一边走路，一边听音乐。");
+        q = questionRepository.save(question);
 
 
-
-
-		questionType = new QuestionType("选择题7");
-        qt = questionTypeRepository.save(questionType);
-
-
-
-		questionType = new QuestionType("选择题8");
-        qt = questionTypeRepository.save(questionType);
-
-
-
-		questionType = new QuestionType("选择题9");
-        qt = questionTypeRepository.save(questionType);
-
-
-
-		questionType = new QuestionType("选择题10");
-        qt = questionTypeRepository.save(questionType);
-
-
-
-		questionType = new QuestionType("选择题11");
-        qt = questionTypeRepository.save(questionType);
-
-
-
-		questionType = new QuestionType("选择题12");
-        qt = questionTypeRepository.save(questionType);
+//		questionType = new QuestionType("选择题3");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//
+//		questionType = new QuestionType("选择题4");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题5");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//
+//		questionType = new QuestionType("选择题6");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//
+//
+//		questionType = new QuestionType("选择题7");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题8");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题9");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题10");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题11");
+//        qt = questionTypeRepository.save(questionType);
+//
+//
+//
+//		questionType = new QuestionType("选择题12");
+//        qt = questionTypeRepository.save(questionType);
 
 
 		Exam exam = new Exam("期中测试卷",100f,60f,90,new Date());

@@ -46,7 +46,7 @@
                             <p>
                                 ${user.name}
                                     <#--- Web Developer-->
-                                <small>加入时间：${user.regTime}</small>
+                                <small>加入时间：${user.regTime?string('yyyy-MM-dd HH:mm:ss')}</small>
                             </p>
                         </li>
 

@@ -196,7 +196,7 @@
             ],
             "createdRow": function (row, data, index) {
                 //  console.log(data);
-                console.log(row);
+               // console.log(row);
                 if (selectedData.length > 0)
                     $.each(selectedData, function (i,e){
                         if(e.id==data.id){
@@ -369,6 +369,12 @@
 
             var isValidate = true;
             var errorMsg = '';
+            var currentTotalScore = 0;
+            $.each(selectedData,function(i,e){
+                //console.log(e);
+                currentTotalScore+=e.score;
+
+            });
 
 
             if ($('#e_name').val() == '' || $('#e_exam_date').val() == '') {
@@ -382,7 +388,12 @@
             else if (selectedData.length == 0) {
                 isValidate = false;
                 errorMsg = '请选择题目';
+            }else if(currentTotalScore!=$('#e_total_score').val()){
+                isValidate = false;
+                errorMsg = '总分值不对';
             }
+
+
             if (!isValidate) {
 
                 $("#msg-error").hide(10);
@@ -435,6 +446,12 @@
                         $("#msg-error").hide(10);
                         $("#msg-error").show(100);
                         $("#msg-error-p").html(data.msg);
+                    },
+                    error: function (e) {
+                        $('.btn-e-submit').prop("disabled", false);
+                        $("#msg-error").hide(10);
+                        $("#msg-error").show(100);
+                        $("#msg-error-p").html(e);
                     }
                 }
             })

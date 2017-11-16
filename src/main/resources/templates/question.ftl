@@ -149,9 +149,7 @@
                     <a class="btn btn-info margin" id="btn_new_option"><i class="fa fa-plus"></i>新增选项</a>
                     <div class="form-group  ">
                         <label for="q_name" class="control-label">点评:</label>
-
                         <script id="commentcontainer" name="comment" type="text/plain">点评</script>
-
                     </div>
                 </form>
                 <div class="info text-red"></div>
@@ -221,8 +219,15 @@
 
 
 
-
 </script>
+
+<div class="template-answer" style="display: none;">
+    <div class="form-group answer-group">
+        <label class="control-label">答题:</label>
+        <script name="answer" type="text/plain"></script>
+    </div>
+</div>
+
 
 <#include "inc/footer1.ftl"/>
 
@@ -235,7 +240,6 @@
         var tmpl = $.templates("#optionTemplate");
         var qType = 1;
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-
 
 
             var html = tmpl.render({name: String.fromCharCode((65 + index)), type: qType, value: ""});//1,单选，2，多选
@@ -251,18 +255,39 @@
 
         });
 
-
-
-        $('#questionType').on('change',function(e){
+        var answerContainer;
+        $('#questionType').on('change', function (e) {
             index = 0;
+            console.log(answerContainer);
+            if (answerContainer) {
+                $('#qForm .answer-group').hide();
+                //answerContainer.destroy();
+                console.log(answerContainer);
+            }
             $('#qForm .option-group').remove();
+            $('#btn_new_option').hide();
             console.log($(this).val());
             console.log($(this).find("option:selected").text());
-            if($(this).find("option:selected").text()=='单选题'){
+            if ($(this).find("option:selected").text() == '单选题') {
+                $('#btn_new_option').show();
                 qType = 1;
             }
-            if($(this).find("option:selected").text()=='多选题'){
+            if ($(this).find("option:selected").text() == '多选题') {
+                $('#btn_new_option').show();
                 qType = 2;
+            }
+            if ($(this).find("option:selected").text() == '问答题') {
+                qType = 3;
+                if (answerContainer) {
+                    $('#qForm .answer-group').show();
+                } else {
+                    var $answer = $('.template-answer').clone();
+                    $answer.find('script').attr('id', 'answercontainer');
+                    var myhtml = $answer.html();
+                    $('#btn_new_option').after(myhtml);
+                    answerContainer = UE.getEditor('answercontainer');
+                }
+
             }
 
         });
@@ -316,7 +341,7 @@
                 url: '/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
-                    //console.log(data);
+                    console.log(data);
                     if (data.code == '100') {
                         $('#modal-preview .modal-body .name').html('（' + data.data.question.score + '分）' + data.data.question.name);
                         $('#modal-preview .modal-body .title').html(data.data.question.title);
@@ -324,13 +349,20 @@
                         $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
                         var answers = data.data.question.answer.split('|');
                         //console.log(answers.length);
-                        $('#modal-preview .modal-body .options').html('');
-                        $.each(data.data.options, function (i, obj) {
+                        if (data.data.question.type == '问答题') {
+                            $('#modal-preview .modal-body .options').hide();
+                        }
+                        //if (data.data.question=='单选题' || data.data.question=='多选题')
+                        else {
+                            $('#modal-preview .modal-body .options').show();
+                            $('#modal-preview .modal-body .options').html('');
+                            $.each(data.data.options, function (i, obj) {
 
-                            var html = "<div>" + String.fromCharCode((65 + i)) + "、" + obj.content + "</div>";
-                            $('#modal-preview .modal-body .options').append(html);
+                                var html = "<div>" + String.fromCharCode((65 + i)) + "、" + obj.content + "</div>";
+                                $('#modal-preview .modal-body .options').append(html);
 
-                        });
+                            });
+                        }
                     }
                     else {
                         $('#modal-preview .modal-body .info').text(data.msg);
@@ -366,29 +398,52 @@
                         $('#questionType').val(data.data.question.typeId);
                         comment.setContent(data.data.question.comment);
                         //console.log(data.data.question.answer);
-                        var answers = data.data.question.answer.split('|');
+
                         //console.log(answers.length);
                         $('#qForm .option-group').remove();
-                        $.each(data.data.options, function (i, obj) {
-                            //console.log(obj);
-                            var isChecked = $.inArray(String.fromCharCode((65 + i)), answers) > -1;
-                            //console.log(isChecked);
-                            if(data.data.question.type=='单选题') qType=1;
-                            if(data.data.question.type=='多选题') qType=2;
+                        if (data.data.question.type == '单选题') qType = 1;
+                        if (data.data.question.type == '多选题') qType = 2;
+                        if (data.data.question.type == '问答题') qType = 3;
+                        if (qType == 1 || qType == 2) {
+                            $('#btn_new_option').show();
+                            $('#qForm .answer-group').hide();
+                            var answers = data.data.question.answer.split('|');
+                            $.each(data.data.options, function (i, obj) {
 
-                            var html = tmpl.render({name: String.fromCharCode((65 + i)), type: qType, value: obj.content});
-                            $('#btn_new_option').before(html);
-                            if (isChecked) {
-                                //console.log($('#btn_new_option').prev().find("input[name='option']"));
-                                $('#btn_new_option').prev().find("input[name='option']").attr('checked', 'true');
+                                var html = tmpl.render({
+                                    name: String.fromCharCode((65 + i)),
+                                    type: qType,
+                                    value: obj.content
+                                });
+                                $('#btn_new_option').before(html);
+
+                                var isChecked = $.inArray(String.fromCharCode((65 + i)), answers) > -1;
+                                if (isChecked) {
+                                    //console.log($('#btn_new_option').prev().find("input[name='option']"));
+                                    $('#btn_new_option').prev().find("input[name='option']").attr('checked', 'true');
+                                }
+                                $('input').iCheck({
+                                    checkboxClass: 'icheckbox_minimal-blue',
+                                    radioClass: 'iradio_minimal-blue',
+                                    increaseArea: '20%' // optional
+                                });
+                            })
+                        }
+                        if (qType == 3) {
+                            $('#btn_new_option').hide();
+                            console.log(answerContainer);
+
+                            if (!answerContainer) {
+                                var $answer = $('.template-answer').clone();
+                                $answer.find('script').attr('id', 'answercontainer');
+                                var myhtml = $answer.html();
+                                $('#btn_new_option').after(myhtml);
+                                answerContainer = UE.getEditor('answercontainer');
                             }
-                            $('input').iCheck({
-                                checkboxClass: 'icheckbox_minimal-blue',
-                                radioClass: 'iradio_minimal-blue',
-                                increaseArea: '20%' // optional
-                            });
-
-                        });
+                            $('#qForm .answer-group').show();
+                            console.log(answerContainer);
+                            answerContainer.setContent(data.data.question.answer);
+                        }
                     }
                     else {
                         $('#modal-edit .modal-body .info').text(data.msg);
@@ -438,6 +493,10 @@
 
             //console.log($('#qForm [name="option"]:checked')[0]);
             //return;
+            if (qType == 3 && answerContainer.getContent() == '') {
+                isValidate = false;
+                errorMsg = '请填写答案';
+            }
 
             if (!checkNum($('#q_score').val()) || $('#q_score').val() > 100) {
                 isValidate = false;
@@ -468,18 +527,19 @@
             var url, data;
             var fname = name.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
             var fcomment = comment.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
+            var fanswer = answerContainer.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
 
             if (type == 1) {
                 url = '/question/add';
                 //data = data.replace(/\&/g,"%26");
                 data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val()
-                        + '&optionsContent=' + optionsContent + '&answer=' + optionAnswer + '&score=' + $('#q_score').val();
+                        + '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
             }
 
             if (type == 2) {
                 url = "/question/update";
                 data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val() +
-                        '&optionsContent=' + optionsContent + '&answer=' + optionAnswer + '&score=' + $('#q_score').val();
+                        '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
             }
             // $('#qt_id').val('111');
             console.log(data);

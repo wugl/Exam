@@ -37,6 +37,17 @@ public class Question implements Serializable {
     @Transient
     private String type;
 
+    @Transient
+    private String studentAnswer;
+
+    public String getStudentAnswer() {
+        return studentAnswer;
+    }
+
+    public void setStudentAnswer(String studentAnswer) {
+        this.studentAnswer = studentAnswer;
+    }
+
     public String getType() {
         return type;
     }
