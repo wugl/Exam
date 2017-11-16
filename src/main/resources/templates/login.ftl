@@ -16,7 +16,7 @@
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <#--<p class="login-box-msg">Sign in to start your session</p>-->
 
                 <form id="loginForm">
                     <div class="form-group has-feedback">
@@ -74,7 +74,7 @@
             </div>
 
             <div class="register-box-body">
-                <p class="login-box-msg">Register a new membership</p>
+                <#--<p class="login-box-msg">Register a new membership</p>-->
 
                 <form id="regForm">
                     <div class="form-group has-feedback">

@@ -221,7 +221,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 //        qt = questionTypeRepository.save(questionType);
 
 
-		Exam exam = new Exam("期中测试卷",100f,60f,90,new Date());
+		Exam exam = new Exam("期中测试卷",15f,5f,90,new Date());
 
 		Exam e = examRepository.save(exam);
 
@@ -229,7 +229,7 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 
 		examQuestionRepository.save(eq);
 
-		exam = new Exam("期末测试卷",150f,90f,90,new Date(System.currentTimeMillis()+1000000000L));
+		exam = new Exam("期末测试卷",25f,10f,90,new Date(System.currentTimeMillis()+1000000000L));
 		e = examRepository.save(exam);
 		eq = new ExamQuestion(e.getId(),question.getId());
 

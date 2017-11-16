@@ -196,10 +196,10 @@
             ],
             "createdRow": function (row, data, index) {
                 //  console.log(data);
-               // console.log(row);
+                // console.log(row);
                 if (selectedData.length > 0)
-                    $.each(selectedData, function (i,e){
-                        if(e.id==data.id){
+                    $.each(selectedData, function (i, e) {
+                        if (e.id == data.id) {
                             $(row).find('input').iCheck('check');
                         }
                     });
@@ -344,7 +344,8 @@
             todayHighlight: 1,
             startView: 2,
             forceParse: 0,
-            showMeridian: 1
+            showMeridian: 1,
+            startDate: new Date().Format("yyyy-MM-dd hh:mm:ss")
         });
         $('#btn_add_question').on('click', function () {
             //console.log(questionList.data());
@@ -370,9 +371,9 @@
             var isValidate = true;
             var errorMsg = '';
             var currentTotalScore = 0;
-            $.each(selectedData,function(i,e){
+            $.each(selectedData, function (i, e) {
                 //console.log(e);
-                currentTotalScore+=e.score;
+                currentTotalScore += e.score;
 
             });
 
@@ -388,9 +389,12 @@
             else if (selectedData.length == 0) {
                 isValidate = false;
                 errorMsg = '请选择题目';
-            }else if(currentTotalScore!=$('#e_total_score').val()){
+            } else if (currentTotalScore != $('#e_total_score').val()) {
                 isValidate = false;
                 errorMsg = '总分值不对';
+            } else if ($('#e_total_score').val() < $('#e_pass_score').val()) {
+                isValidate = false;
+                errorMsg = '总分值要大于通过分数';
             }
 
 
@@ -446,13 +450,14 @@
                         $("#msg-error").hide(10);
                         $("#msg-error").show(100);
                         $("#msg-error-p").html(data.msg);
-                    },
-                    error: function (e) {
-                        $('.btn-e-submit').prop("disabled", false);
-                        $("#msg-error").hide(10);
-                        $("#msg-error").show(100);
-                        $("#msg-error-p").html(e);
                     }
+                },
+                error: function (e) {
+                    $('.btn-e-submit').prop("disabled", false);
+                    $("#msg-error").hide(10);
+                    $("#msg-error").show(100);
+                    $("#msg-error-p").html(e);
+
                 }
             })
         });

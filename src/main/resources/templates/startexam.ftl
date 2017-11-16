@@ -8,13 +8,14 @@
         color: white;
         z-index: 10000000;
         width: 120px;
-        height: 90px;
+
         background-color: red;
         position: fixed;
         top: 40px;
         right: 10px;
         padding: 5px;
         border-radius: 3px;
+        box-shadow: 1px 8px 17px #333333;
     }
 </style>
 
@@ -26,6 +27,7 @@
         <div class="eclipse"></div>
         还剩时间：
         <div class="left"></div>
+        <div class="info"></div>
 
     </div>
     <!-- Main content -->
@@ -159,6 +161,8 @@
             pass++;
             if (totalTime == 0) {
                 clearInterval(timeInterval);
+                $('.btn-e-submit').trigger('click');
+                $('#timecount .info').html('时间已到，自动提交！');
             }
             $('#timecount .left').html(formatTime(totalTime))
             $('#timecount .eclipse').html(formatTime(pass))
@@ -192,7 +196,7 @@
 
             });
             console.log(isValidate);
-            if (!isValidate) {
+            if (!isValidate && totalTime>0) {
                 $("#msg-error").hide(10);
                 $("#msg-error").show(100);
                 $("#msg-error-p").html("还有题没有做完！");
@@ -226,7 +230,12 @@
                         $("#msg-error").hide(100);
                         $("#msg-success").show(100);
                         $("#msg-success-p").html(data.msg);
+
+                        setTimeout(function(){
+                            location.href='/';
+                        },1000);
                     } else {
+                        $("#msg-success").hide(10);
                         $("#msg-error").hide(10);
                         $("#msg-error").show(100);
 

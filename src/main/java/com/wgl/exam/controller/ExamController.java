@@ -88,6 +88,13 @@ public class ExamController {
 
             return "redirect:/";
 
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndAndIsDelete(id,0);
+        for (StudentAnswer sa: studentAnswers){
+            if(sa.getExamId().equals(examId)){
+                return "redirect:/";
+            }
+        }
+
         map.put("title", "开始测试");
         //map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         Exam exam = examRepository.findExamByIdAndIsDelete(examId, 0);
