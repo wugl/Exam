@@ -81,6 +81,10 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		userRepository.save(user);
 		user = new User(UserType.STUDENT,"student",Common.EncoderByMd5("111"),"","",new Date());
 		userRepository.save(user);
+
+		user = new User(UserType.STUDENT,"test",Common.EncoderByMd5("111"),"","",new Date());
+		userRepository.save(user);
+
 		user = new User(UserType.TEACHER,"teacher",Common.EncoderByMd5("111"),"","",new Date());
 		userRepository.save(user);
 

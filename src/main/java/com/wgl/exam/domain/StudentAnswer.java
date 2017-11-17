@@ -43,6 +43,18 @@ public class StudentAnswer implements Serializable {
     @JoinColumn(name="question_id",insertable = false,updatable = false)
     private Question question;
 
+    @ManyToOne(cascade = { CascadeType.ALL })
+    @JoinColumn(name="exam_id",insertable = false,updatable = false)
+    private Exam exam;
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
+
     public Question getQuestion() {
         return question;
     }

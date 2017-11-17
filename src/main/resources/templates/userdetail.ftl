@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -86,7 +86,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-name">新增用户</h4>
+                <h4 class="modal-name">修改信息</h4>
             </div>
             <div class="modal-body">
                 <form id="uForm" class="form-horizontal">
@@ -151,7 +151,7 @@
         $('.u-edit').on('click', function (e) {
           //  console.log(userType);
             var userType = user.type == 'STUDENT' ? 1 : user.type == 'TEACHER' ? 2 : 3;
-            $('#modal-edit .modal-name').text("编辑用户");
+           // $('#modal-edit .modal-name').text("修改信息");
             $('#u_name').val(user.name);
             $('#u_id').val(user.id);
             $('#u_email').val(user.email);

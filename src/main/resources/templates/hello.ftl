@@ -11,8 +11,8 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">${title!""}</li>
+
+            <li class="active"><i class="fa fa-home"></i>${title!""}</li>
         </ol>
     </section>
 
@@ -22,9 +22,15 @@
         <!--------------------------
           | Your Page Content Here |
           -------------------------->
+        <div class="box">
+            <div class="box-header">
 
-        <h1>Hello ${hello}</h1>
-        <p></p>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <h3>您好， ${hello}，欢迎使用考试系统！</h3>
+            </div>
+        </div>
 
         <!-- 加载编辑器的容器 -->
         <script id="container" name="content" type="text/plain">这里写你的初始化内容</script>

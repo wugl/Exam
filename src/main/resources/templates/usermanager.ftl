@@ -106,7 +106,7 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="questionType" class="col-sm-2 control-label">类型:</label>
+                        <label for="u_type" class="col-sm-2 control-label">类型:</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="type" id="u_type">
                                 <option value="1">学生</option>
@@ -207,8 +207,8 @@
         });
         $('.u_edit').on('click', function (e) {
             type = 2;
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.name);
 
             var userType = this.dataset.type == 'STUDENT' ? 1 : this.dataset.type == 'TEACHER' ? 2 : 3;
 

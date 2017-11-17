@@ -16,7 +16,7 @@
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <#--<p class="login-box-msg">Sign in to start your session</p>-->
+            <#--<p class="login-box-msg">Sign in to start your session</p>-->
 
                 <form id="loginForm">
                     <div class="form-group has-feedback">
@@ -48,15 +48,15 @@
                         </div>
                         <!-- /.col -->
                     </div>
-                    <div id="msg-success" class="alert alert-info alert-dismissable" style="display: none;">
+                    <div class="msg-success alert alert-info alert-dismissable" style="display: none;">
                         <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-info"></i> 登录成功!</h4>
-                        <p id="msg-success-p"></p>
+                        <p class="msg-success-p"></p>
                     </div>
-                    <div id="msg-error" class="alert alert-warning alert-dismissable" style="display: none;">
+                    <div class="msg-error alert alert-warning alert-dismissable" style="display: none;">
                         <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
-                        <p id="msg-error-p"></p>
+                        <p class="msg-error-p"></p>
                     </div>
                 </form>
 
@@ -74,16 +74,12 @@
             </div>
 
             <div class="register-box-body">
-                <#--<p class="login-box-msg">Register a new membership</p>-->
+            <#--<p class="login-box-msg">Register a new membership</p>-->
 
                 <form id="regForm">
                     <div class="form-group has-feedback">
                         <input type="text" class="form-control" placeholder="用户名" name="name">
                         <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <input type="email" class="form-control" placeholder="邮件" name="email">
-                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
                         <input type="password" class="form-control" placeholder="密码" name="password">
@@ -93,11 +89,20 @@
                         <input type="password" class="form-control" placeholder="重输密码" name="repassword">
                         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                     </div>
+                    <div class="form-group has-feedback">
+                        <input type="email" class="form-control" placeholder="邮件" name="email">
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" placeholder="电话" name="phone">
+                        <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                    </div>
+
                     <div class="row">
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox"> 我同意 <a href="#">条款</a>
+                                    <input type="checkbox" id="agree"> 我同意 <a href="#">条款</a>
                                 </label>
                             </div>
                         </div>
@@ -106,6 +111,17 @@
                             <button type="submit" class="btn btn-primary btn-block btn-flat" id="regBtn">注册</button>
                         </div>
                         <!-- /.col -->
+                    </div>
+
+                    <div class="msg-success alert alert-info alert-dismissable" style="display: none;">
+                        <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
+                        <h4><i class="icon fa fa-info"></i> 注册成功!</h4>
+                        <p class="msg-success-p"></p>
+                    </div>
+                    <div class="msg-error alert alert-warning alert-dismissable" style="display: none;">
+                        <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
+                        <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
+                        <p class="msg-error-p"></p>
                     </div>
                 </form>
 
@@ -130,25 +146,26 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
-        $("#ok-close").click(function(){
+        $("#ok-close").click(function () {
             $("#msg-success").hide(100);
         });
-        $("#error-close").click(function(){
+        $("#error-close").click(function () {
             $("#msg-error").hide(100);
         });
         $('#loginBtn').on('click', function (e) {
+            e.preventDefault();
             //console.log($('#loginForm').serialize());
             var name = $.trim($("#loginForm input[name='name']").val());
             var password = $.trim($("#loginForm input[name='password']").val());
             var type = $('#userType').val();
 
-            if ( name == '') {
+            if (name == '') {
 
-                $("#msg-error").hide(10);
+                $("#loginForm .msg-error").hide(10);
 
-                $("#msg-error").show(100);
+                $("#loginForm .msg-error").show(100);
 
-                $("#msg-error-p").html("用户名不能为空");
+                $("#loginForm .msg-error-p").html("用户名不能为空");
 
                 $("#loginForm input[name='name']").focus();
 
@@ -158,11 +175,11 @@
 
             if (password == '') {
 
-                $("#msg-error").hide(10);
+                $("#loginForm .msg-error").hide(10);
 
-                $("#msg-error").show(100);
+                $("#loginForm .msg-error").show(100);
 
-                $("#msg-error-p").html("密码不能为空");
+                $("#loginForm .msg-error-p").html("密码不能为空");
 
                 $("#loginForm input[name='password']").focus();
 
@@ -171,13 +188,13 @@
             }
 
             $("#loginBtn").prop("disabled", true);
-            //e.preventDefault();
-           // console.log($('#loginForm').serialize());
+
+            // console.log($('#loginForm').serialize());
 
             $.ajax({
                 type: 'POST',
                 url: '/login',
-                data: 'name='+name+'&password='+md5(password)+'&userType='+type,
+                data: 'name=' + name + '&password=' + md5(password) + '&userType=' + type,
                 success: function (data) {
                     console.log(data);
                     if (data.code == '100') {
@@ -188,31 +205,117 @@
                             _store.set('userName', '');
                         }
                         var redirect_url = '/';
-                        $("#msg-error").hide(100);
-                        $("#msg-success").show(100);
-                        $("#msg-success-p").html(data.msg);
+                        $("#loginForm .msg-error").hide(100);
+                        $("#loginForm .msg-success").show(100);
+                        $("#loginForm .msg-success-p").html(data.msg);
                         window.setTimeout(function () {
-                            location.href='/';
-                        },2000);
+                            location.href = '/';
+                        }, 2000);
 
-                       // location.href = redirect_url;
+                        // location.href = redirect_url;
                     } else {
-                        $("#msg-error").hide(10);
-                        $("#msg-error").show(100);
-                        $("#msg-error-p").html(data.msg);
+                        $("#loginForm .msg-error").hide(10);
+                        $("#loginForm .msg-error").show(100);
+                        $("#loginForm .msg-error-p").html(data.msg);
                         $("#loginBtn").prop("disabled", false);
                     }
                 },
-                error:function(jqXHR){
-                    $("#msg-error").hide(10);
-                    $("#msg-error").show(100);
-                    $("#msg-error-p").html("发生错误："+jqXHR.status);
+                error: function (jqXHR) {
+                    $("#loginForm .msg-error").hide(10);
+                    $("#loginForm .msg-error").show(100);
+                    $("#loginForm .msg-error-p").html("发生错误：" + jqXHR.status);
                     $("#loginBtn").prop("disabled", false);
                 }
             });
         });
+
+
         $('#regBtn').on('click', function (e) {
             e.preventDefault();
+            var name = $.trim($("#regForm input[name='name']").val());
+            var password = $.trim($("#regForm input[name='password']").val());
+            var phone = $.trim($("#regForm input[name='phone']").val());
+            var email = $.trim($("#regForm input[name='email']").val());
+            var repassword = $.trim($("#regForm input[name='repassword']").val());
+            var type = 1;//只能注册为学生
+            var isValidate = true;
+            var errorMsg = '';
+            console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
+
+            var phoneRe = /^1\d{10}$/;
+            var mailRe = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+            if (!$('#agree').prop("checked")) {
+                errorMsg = '请同意条款';
+                isValidate = false;
+            }
+            else if (name == '' || password == '') {
+                errorMsg = '用户名、密码不能为空';
+                isValidate = false;
+            }
+            else if (password != repassword) {
+                errorMsg = '密码不一致';
+                isValidate = false;
+            }else if (email != '' && !(mailRe.test(email))) {
+                errorMsg = '邮件格式不对';
+                isValidate = false;
+            }
+            else if (phone != '' && !(phoneRe.test(phone))) {
+                errorMsg = '手机格式不对';
+                isValidate = false;
+            }
+            if (!isValidate) {
+
+                $("#regForm .msg-error").hide(10);
+
+                $("#regForm .msg-error").show(100);
+
+                $("#regForm .msg-error-p").html(errorMsg);
+
+                //$("#regForm input[name='name']").focus();
+
+                return;
+
+            }
+
+            console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
+
+
+            $("#regBtn").prop("disabled", true);
+            //e.preventDefault();
+            // console.log($('#loginForm').serialize());
+
+            $.ajax({
+                type: 'POST',
+                url: '/reg',
+                data: 'name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + md5(password) + '&type=' + type,
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == '100') {
+                        _store.set('user', JSON.stringify(data.data));
+
+                        //var redirect_url = '/';
+                        $("#regForm .msg-error").hide(100);
+                        $("#regForm .msg-success").show(100);
+                        $("#regForm .msg-success-p").html(data.msg);
+                        window.setTimeout(function () {
+                            location.href = '/';
+                        }, 2000);
+
+                        // location.href = redirect_url;
+                    } else {
+                        $("#regForm .msg-error").hide(10);
+                        $("#regForm .msg-error").show(100);
+                        $("#regForm .msg-error-p").html(data.msg);
+                        $("#regBtn").prop("disabled", false);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#regForm .msg-error").hide(10);
+                    $("#regForm .msg-error").show(100);
+                    $("#regForm .msg-error-p").html("发生错误：" + jqXHR.status);
+                    $("#regBtn").prop("disabled", false);
+                }
+            });
 
 
         });

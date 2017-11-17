@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface StudentAnswerRepository extends JpaRepository<StudentAnswer, Long> {
 
-    List<StudentAnswer> findByStudentIdAndAndIsDelete(Long studentId, Integer isDelete);
+    List<StudentAnswer> findByStudentIdAndIsDelete(Long studentId, Integer isDelete);
 
-    List<StudentAnswer> findByExamIdAndAndIsDelete(Long examId, Integer isDelete);
+    List<StudentAnswer> findByExamIdAndIsDelete(Long examId, Integer isDelete);
+
+    List<StudentAnswer> findByStudentIdAndExamIdAndIsDelete(Long studentId, Long examId, Integer isDelete);
 
 }

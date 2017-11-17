@@ -31,6 +31,8 @@
 <script src="/js/fastclick.js"></script>
 <script src="/js/all.js"></script>
 <#--<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>-->
+
+<script src="/js/Chart.min.js"></script>
 <script src="/js/md5.min.js"></script>
 <script src="/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/js/bootstrap-datetimepicker.zh-CN.js"></script>

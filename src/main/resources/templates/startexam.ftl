@@ -7,7 +7,8 @@
     #timecount {
         color: white;
         z-index: 10000000;
-        width: 120px;
+        width: 160px;
+        line-height: 30px;
 
         background-color: red;
         position: fixed;
@@ -17,6 +18,7 @@
         border-radius: 3px;
         box-shadow: 1px 8px 17px #333333;
     }
+
 </style>
 
 <!-- Content Wrapper. Contains page content -->
@@ -233,7 +235,7 @@
 
                         setTimeout(function(){
                             location.href='/';
-                        },1000);
+                        },2000);
                     } else {
                         $("#msg-success").hide(10);
                         $("#msg-error").hide(10);

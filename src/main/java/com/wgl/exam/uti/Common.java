@@ -1,12 +1,13 @@
 package com.wgl.exam.uti;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+
 import java.security.MessageDigest;
 
 public class Common {
 
     private static Common instance;
-
-
 
     public static Common getInstance() {
         if (instance == null) {
@@ -16,6 +17,35 @@ public class Common {
     }
 
     private Common() {
+
+    }
+    public static void createTitle(HSSFWorkbook workbook, HSSFSheet sheet,String[] titles) {
+        HSSFRow row = sheet.createRow(0);
+        //设置列宽，setColumnWidth的第二个参数要乘以256，这个参数的单位是1/256个字符宽度
+
+        sheet.setColumnWidth(0, 10 * 256);
+        for(int index=1;index<titles.length;index++) {
+            sheet.setColumnWidth(index, 40 * 256);
+           // sheet.setColumnWidth(1, 40 * 256);
+        }
+
+        //设置为居中加粗
+        HSSFCellStyle style = workbook.createCellStyle();
+        HSSFFont font = workbook.createFont();
+        font.setBold(true);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setFont(font);
+
+        HSSFCell cell;
+        int i=0;
+        for(String item:titles){
+            cell = row.createCell(i);
+            cell.setCellValue(item);
+            cell.setCellStyle(style);
+            i++;
+        }
+
+
 
     }
 

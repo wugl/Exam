@@ -32,6 +32,18 @@ public class Exam implements Serializable {
     @Transient
     private String answerName;
 
+
+    @Transient
+    private Long answerId;
+
+    public Long getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Long answerId) {
+        this.answerId = answerId;
+    }
+
     public String getAnswerName() {
         return answerName;
     }

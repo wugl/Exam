@@ -159,7 +159,7 @@
         var selectedData = ${questions!"[]"};
         var type =${type};
         var questionList = $('#example1').on('init.dt', function () {
-            console.log("initailze complete");
+
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
                 radioClass: 'iradio_square-blue',
@@ -301,14 +301,14 @@
 
             //console.log(e.target.checked);
             var checked = e.target.checked;
-            console.log(checked);
+            //console.log(checked);
             //$(this).toggleClass('selected');
             //console.log('tr');
             //var that = this;
             var id = $(this).val();
 
             $.each(originalData, function (i, e) {
-                console.log(id);
+                //console.log(id);
                 if (e.id == id) {
                     if (!checked) {
                         selectedData.push(e);
@@ -327,7 +327,7 @@
                 }
 
             });
-            console.log(selectedData);
+           // console.log(selectedData);
         });
 
 
@@ -425,14 +425,14 @@
             var qs = $.map(selectedData, function (e, i) {
                 return e.id;
             }).join('|');
-            console.log(qs);
+            //console.log(qs);
             //return;
             $('.btn-e-add-submit').prop("disabled", true);
 
 
             //return;
 
-            console.log($('#eForm').serialize());
+            //console.log($('#eForm').serialize());
             $.ajax({
                 type: 'POST',
                 url: url,

@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
         <#--<li><a href="/exam">试卷管理</a></li>-->
             <li class="active">${title!""}</li>
         </ol>
@@ -161,17 +161,17 @@
             });
 
             $('.row-item').on('click', function (e) {
-                console.log('row');
+                //console.log('row');
 
                 $.ajax({
                     type: 'GET',
                     url: '/exam/getById',
                     data: 'id=' + this.dataset.id,
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.code == '100') {
                            $('#modal-preview .modal-body .name').html( data.data.name);
-                            $('#modal-preview .modal-body .sub').html("考试时间："+new Date(data.data.examDate).Format("yyyy-MM-dd hh:mm")+"，考试时长："+data.data.totalTime+'分钟，总分：' + data.data.totalScore + "，通过："+data.data.passScore);
+                            $('#modal-preview .modal-body .sub').html("考试时间："+new Date(data.data.examDate).Format("yyyy-MM-dd hh:mm")+"，考试时长："+data.data.totalTime+'分钟，总分：' + data.data.totalScore + "，及格："+data.data.passScore);
 //                            $('#modal-preview .modal-body .answer').html("答案：" + data.data.question.answer);
 //                            $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
 //                            var answers = data.data.question.answer.split('|');
@@ -189,7 +189,7 @@
                                     html+="<div>"+String.fromCharCode((65 + index)) + "、" + ele.content + "</div>"
 
                                 });
-
+                                html+="<div>点评："+obj.comment+"</div>"
                                 html+="</div></div>"
                                 $('#modal-preview .modal-body .questions').append(html);
 

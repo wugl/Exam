@@ -38,7 +38,9 @@ public class UserController {
 
     @PostMapping(value = "/user/add")
     @ResponseBody
-    public ReturnWithData add(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") int type) {
+    public ReturnWithData add(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") Integer type) {
+
+        System.out.println(name);
 
         if (userRepository.findUserByNameAndIsDelete(name, 0) != null)
 
@@ -50,6 +52,40 @@ public class UserController {
         return new ReturnWithData("成功", "100", userRepository.save(user));
     }
 
+    @PostMapping(value = "/reg")
+    @ResponseBody
+    public ReturnWithData reg( HttpSession session,@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") Integer type) {
+
+        if(!type.equals(1)){
+            return new ReturnWithData("只允许学生注册", "101", null);
+        }
+
+        if (userRepository.findUserByNameAndIsDelete(name, 0) != null)
+
+            return new ReturnWithData(name + "已存在", "101", null);
+
+        User user = new User(UserType.getByIndex(type), name, password, email, phone);
+        User u =  userRepository.save(user);
+
+        if (u != null) {
+            session.setAttribute(WebSecurityConfig.SESSION_KEY_USER_ID, user.getId());
+            session.setAttribute(WebSecurityConfig.SESSION_KEY_USER_NAME, user.getName());
+            session.setAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE, 1);
+
+            Map result = new HashMap<String, Object>();
+            result.put("name", user.getName());
+            result.put("type", 1);
+            result.put("phone", user.getPhone());
+            result.put("email", user.getEmail());
+            result.put("id", user.getId());
+            result.put("time", new Date().getTime());
+            result.put("regTime", user.getRegTime());
+            return new ReturnWithData("成功", "100",result);
+        }
+
+
+        return new ReturnWithData("失败", "101", null);
+    }
     @PostMapping(value = "user/del")
     @ResponseBody
     @Transactional
@@ -65,7 +101,7 @@ public class UserController {
     @PostMapping(value = "user/update")
     @ResponseBody
     @Transactional
-    public ReturnWithoutData update(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") int type) {
+    public ReturnWithoutData update(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") Integer type) {
 
         User user = userRepository.findUserByNameAndIsDelete(name, 0);
         if (user != null && userRepository.findUserByIdAndNameAndIsDelete(id, name, 0) == null)
@@ -74,8 +110,8 @@ public class UserController {
 
 
         int row = userRepository.update(id, name, password, UserType.getByIndex(type), email, phone);
-        System.out.println("------------------row:" + id + ":" + name);
-        System.out.println("------------------row:" + row);
+        //System.out.println("------------------row:" + id + ":" + name);
+        //System.out.println("------------------row:" + row);
         if (row == 1)
             return new ReturnWithoutData("成功", "100");
         else {
@@ -177,45 +213,6 @@ public class UserController {
 
     }
 
-    private void createTitle(HSSFWorkbook workbook, HSSFSheet sheet) {
-        HSSFRow row = sheet.createRow(0);
-        //设置列宽，setColumnWidth的第二个参数要乘以256，这个参数的单位是1/256个字符宽度
-        sheet.setColumnWidth(0, 12 * 256);
-        sheet.setColumnWidth(1, 30 * 256);
-
-        sheet.setColumnWidth(3, 30 * 256);
-        sheet.setColumnWidth(4, 30 * 256);
-
-        //设置为居中加粗
-        HSSFCellStyle style = workbook.createCellStyle();
-        HSSFFont font = workbook.createFont();
-        font.setBold(true);
-        style.setAlignment(HorizontalAlignment.CENTER);
-        style.setFont(font);
-
-        HSSFCell cell;
-        cell = row.createCell(0);
-        cell.setCellValue("序号");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(1);
-        cell.setCellValue("名称");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(2);
-        cell.setCellValue("类型");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(3);
-        cell.setCellValue("邮箱");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(4);
-        cell.setCellValue("手机");
-        cell.setCellStyle(style);
-
-
-    }
 
     @RequestMapping("user/getExcel")
     public void getExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -226,8 +223,9 @@ public class UserController {
         //编码
         response.setCharacterEncoding("UTF-8");
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("用户数据表");
-        createTitle(workbook, sheet);
+        HSSFSheet sheet = workbook.createSheet("用户数据");
+        Common.createTitle(workbook, sheet,new String[]{"序号","名称","类型","邮箱","手机"});
+        //createTitle(workbook, sheet);
 
         List<User> users = userRepository.findAll();
 

@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -258,7 +258,7 @@
         var answerContainer;
         $('#questionType').on('change', function (e) {
             index = 0;
-            console.log(answerContainer);
+            //console.log(answerContainer);
             if (answerContainer) {
                 $('#qForm .answer-group').hide();
                 //answerContainer.destroy();
@@ -266,8 +266,8 @@
             }
             $('#qForm .option-group').remove();
             $('#btn_new_option').hide();
-            console.log($(this).val());
-            console.log($(this).find("option:selected").text());
+            //console.log($(this).val());
+            //console.log($(this).find("option:selected").text());
             if ($(this).find("option:selected").text() == '单选题') {
                 $('#btn_new_option').show();
                 qType = 1;
@@ -299,7 +299,7 @@
                 $(this).find('.control-label').text("选项" + (i + 1) + ":");
                 $(this).find('.option-name').attr("name", "option" + (i + 1));
 
-                console.log(i + ":" + e)
+                //console.log(i + ":" + e)
 
             });
             index--;
@@ -334,7 +334,7 @@
         });
 
         $('.row-item').on('click', function (e) {
-            console.log('row');
+            //console.log('row');
 
             $.ajax({
                 type: 'GET',
@@ -389,7 +389,7 @@
                 url: '/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         name.setContent(data.data.question.name);
                         $('#q_title').val(data.data.question.title);
@@ -431,7 +431,7 @@
                         }
                         if (qType == 3) {
                             $('#btn_new_option').hide();
-                            console.log(answerContainer);
+                            //console.log(answerContainer);
 
                             if (!answerContainer) {
                                 var $answer = $('.template-answer').clone();
@@ -441,7 +441,7 @@
                                 answerContainer = UE.getEditor('answercontainer');
                             }
                             $('#qForm .answer-group').show();
-                            console.log(answerContainer);
+                            //console.log(answerContainer);
                             answerContainer.setContent(data.data.question.answer);
                         }
                     }
