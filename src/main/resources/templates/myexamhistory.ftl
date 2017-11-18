@@ -173,7 +173,9 @@
                 <h4 class="modal-name">试卷统计信息</h4>
             </div>
             <div class="modal-body">
+                <h3 class="title" style="text-align: center;"></h3>
                 <div style="width: 300px;height: 300px;margin: auto;">
+
                     <canvas class='chart-area' width='300' height='300'/>
                 </div>
             </div>
@@ -224,26 +226,19 @@
                                 '及格人数'
                             ]
                         };
-
                         //console.log(pieData);
                         var chart = new Chart(ctx, {
                             type: 'pie',
                             data: pieData,
                             options: {
                                 labels: {
-                                    generateLabels: function (e) {
-                                        console.log(e)
-                                        //console.log(i)
-
-                                    }
-
                                 }
-
                             }
                         });
-                        if (t == 2)
+                        if (t == 2) {
+                            $('#static-preview .title').html($(ele).html())
                             $('#static-preview').modal('show');
-
+                        }
                     },
                     error: function (e) {
 
@@ -252,6 +247,8 @@
             }
 
             $("[data-toggle='tooltip']").on('click', function (e) {
+
+
 
                 e.stopPropagation();
                 getData(this, 2)

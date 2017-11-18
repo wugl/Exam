@@ -179,7 +179,7 @@
                 url: "/user/update",
                 data: data,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         window.location.reload();
                     }

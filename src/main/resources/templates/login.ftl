@@ -196,7 +196,7 @@
                 url: '/login',
                 data: 'name=' + name + '&password=' + md5(password) + '&userType=' + type,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         _store.set('user', JSON.stringify(data.data));
                         if ($('#remeber').prop("checked")) {
@@ -240,7 +240,7 @@
             var type = 1;//只能注册为学生
             var isValidate = true;
             var errorMsg = '';
-            console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
+            //console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
 
             var phoneRe = /^1\d{10}$/;
             var mailRe = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -277,7 +277,7 @@
 
             }
 
-            console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
+            //console.log('name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + password + '&repassword=' + repassword + '&type=' + type);
 
 
             $("#regBtn").prop("disabled", true);
@@ -289,7 +289,7 @@
                 url: '/reg',
                 data: 'name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + md5(password) + '&type=' + type,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         _store.set('user', JSON.stringify(data.data));
 

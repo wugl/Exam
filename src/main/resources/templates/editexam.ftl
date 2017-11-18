@@ -438,7 +438,7 @@
                 url: url,
                 data: $('#eForm').serialize() + '&questions=' + qs,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     $('.btn-e-add-submit').prop("disabled", false);
                     if (data.code == '100') {
                         //window.location.reload();

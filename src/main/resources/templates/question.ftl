@@ -240,8 +240,6 @@
         var tmpl = $.templates("#optionTemplate");
         var qType = 1;
         $('#modal-edit').on('click', '#btn_new_option', function (e) {
-
-
             var html = tmpl.render({name: String.fromCharCode((65 + index)), type: qType, value: ""});//1,单选，2，多选
             //console.log(html);
             index++;
@@ -251,10 +249,7 @@
                 radioClass: 'iradio_minimal-blue',
                 increaseArea: '20%' // optional
             });
-
-
         });
-
         var answerContainer;
         $('#questionType').on('change', function (e) {
             index = 0;
@@ -262,7 +257,7 @@
             if (answerContainer) {
                 $('#qForm .answer-group').hide();
                 //answerContainer.destroy();
-                console.log(answerContainer);
+                //console.log(answerContainer);
             }
             $('#qForm .option-group').remove();
             $('#btn_new_option').hide();
@@ -298,16 +293,11 @@
             $('#modal-edit .option-group').each(function (i, e) {
                 $(this).find('.control-label').text("选项" + (i + 1) + ":");
                 $(this).find('.option-name').attr("name", "option" + (i + 1));
-
                 //console.log(i + ":" + e)
-
             });
             index--;
-
         });
-
         var type;//1,新增题目2,编辑题目
-
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
@@ -329,19 +319,16 @@
             name.setContent('');
             $('#q_score').val('');
             $('#modal-edit').modal('show');
-
-
         });
 
         $('.row-item').on('click', function (e) {
             //console.log('row');
-
             $.ajax({
                 type: 'GET',
                 url: '/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         $('#modal-preview .modal-body .name').html('（' + data.data.question.score + '分）' + data.data.question.name);
                         $('#modal-preview .modal-body .title').html(data.data.question.title);
@@ -375,7 +362,7 @@
 
         });
         $('.q_edit').on('click', function (e) {
-            console.log('edit');
+            //console.log('edit');
             type = 2;
             //console.log(this.dataset.id);
             e.stopPropagation();
@@ -409,7 +396,6 @@
                             $('#qForm .answer-group').hide();
                             var answers = data.data.question.answer.split('|');
                             $.each(data.data.options, function (i, obj) {
-
                                 var html = tmpl.render({
                                     name: String.fromCharCode((65 + i)),
                                     type: qType,
@@ -431,6 +417,7 @@
                         }
                         if (qType == 3) {
                             $('#btn_new_option').hide();
+                            $('#qForm .answer-group').show();
                             //console.log(answerContainer);
 
                             if (!answerContainer) {
@@ -439,10 +426,15 @@
                                 var myhtml = $answer.html();
                                 $('#btn_new_option').after(myhtml);
                                 answerContainer = UE.getEditor('answercontainer');
-                            }
-                            $('#qForm .answer-group').show();
+
+                                answerContainer.addListener("ready",function(){
+                                    answerContainer.setContent(data.data.question.answer);
+                                })
+                            }else{
                             //console.log(answerContainer);
+                            //console.log(answerContainer.getContent());
                             answerContainer.setContent(data.data.question.answer);
+                            }
                         }
                     }
                     else {
@@ -520,14 +512,14 @@
                     optionAnswer += $(this).val() + '|';
 
             });
-            console.log(optionsContent);
-            console.log(optionAnswer);
-            console.log(type);
+            //console.log(optionsContent);
+            //console.log(optionAnswer);
+            //console.log(type);
 
             var url, data;
             var fname = name.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
             var fcomment = comment.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
-            var fanswer = answerContainer.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26");
+            var fanswer = answerContainer?answerContainer.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26"):'';
 
             if (type == 1) {
                 url = '/question/add';
@@ -542,7 +534,7 @@
                         '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
             }
             // $('#qt_id').val('111');
-            console.log(data);
+            //console.log(data);
             //return;
             $('.btn-q-add-submit').prop("disabled", true);
             $.ajax({
@@ -550,7 +542,7 @@
                 url: url,
                 data: data,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     $('.btn-q-add-submit').prop("disabled", false);
                     if (data.code == '100') {
                         window.location.reload();

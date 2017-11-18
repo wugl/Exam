@@ -197,7 +197,7 @@
                     isValidate = false;
 
             });
-            console.log(isValidate);
+            //console.log(isValidate);
             if (!isValidate && totalTime>0) {
                 $("#msg-error").hide(10);
                 $("#msg-error").show(100);
@@ -215,7 +215,7 @@
                     answers[qId] += ('|' + qValue);
                 }
             });
-            console.log(answers);
+            //console.log(answers);
 
 
             $('.btn-e-submit').prop("disabled", true);
@@ -225,8 +225,8 @@
                 data: 'answer=' + JSON.stringify(answers) + '&examId=' + exam.id,
                 success: function (data) {
                     $('.btn-e-submit').prop("disabled", false);
-                    console.log(data);
-                    console.log(data.msg);
+                    //console.log(data);
+                    //console.log(data.msg);
                     data = JSON.parse(data);
                     if (data.code == '100') {
                         $("#msg-error").hide(100);

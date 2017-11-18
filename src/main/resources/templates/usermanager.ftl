@@ -225,8 +225,8 @@
 
         });
         $('.u_remove').on('click', function (e) {
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.name);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
             $('#modal-ensure .modal-body p').html("确认删除<span style='color:red;'>" + this.dataset.name + "</span>?");
             $('#modal-ensure .modal-body .info').text("");
@@ -238,7 +238,7 @@
                 $('#modal-edit .modal-body .info').text("请填写姓名和密码");
                 return;
             }
-            console.log(type);
+            //console.log(type);
             var url;
             if (type == 1)
                 url = '/user/add';
@@ -253,7 +253,7 @@
                 url: url,
                 data: data,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data.code == '100') {
                         window.location.reload();
                     }

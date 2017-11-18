@@ -154,8 +154,8 @@
         });
         $('.qt_edit').on('click', function (e) {
             type = 2;
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.name);
             $('#modal-edit .modal-name').text("编辑题型");
             $('#qt_name').val(this.dataset.name);
             $('#qt_id').val(this.dataset.id);
@@ -164,8 +164,8 @@
 
         });
         $('.qt_remove').on('click', function (e) {
-            console.log(this.dataset.id);
-            console.log(this.dataset.name);
+            //console.log(this.dataset.id);
+            //console.log(this.dataset.name);
             $("#modal-ensure input[name='id']").val(this.dataset.id);
             $('#modal-ensure .modal-body p').html("确认删除<span style='color:red;'>" + this.dataset.name + "</span>?");
             $('#modal-ensure').modal('show');
@@ -175,7 +175,7 @@
                 $('#modal-edit .modal-body .info').text("请填写完整");
                 return;
             }
-            console.log(type);
+            //console.log(type);
             var url;
             if (type == 1)
                 url = '/questionType/add';
@@ -188,7 +188,7 @@
                 url: url,
                 data: $('#qtForm').serialize(),
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     $('.btn-qt-add-submit').prop("disabled", false);
                     if (data.code == '100') {
                         window.location.reload();

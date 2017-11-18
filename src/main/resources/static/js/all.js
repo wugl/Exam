@@ -92,7 +92,7 @@ $(function () {
     $('#logout').on('click', function (e) {
 
         $.post('/logout', function (data) {
-            console.log(data)
+            //console.log(data)
             if (data.code == '100') {
                 _store.set('user', '');
                 window.location.href = "/";
