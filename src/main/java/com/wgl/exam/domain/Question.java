@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,33 @@ public class Question implements Serializable {
     @Column(name = "type_id")
     private Long typeId;
 
-    private @CreatedDate
-    LocalDateTime createdDate;
+    @Column(name = "tag_id")
+    private Long tagId;
+
+//    private @CreatedDate
+//    LocalDateTime createdDate;
 
     @Transient
     private String type;
+
+    @Transient
+    private String tag;
+
+    public Long getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(Long tagId) {
+        this.tagId = tagId;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     @Transient
     private String studentAnswer;
@@ -58,7 +80,6 @@ public class Question implements Serializable {
 
     @Column(name = "answer")
     private String answer;
-    //private long answer;
 
     @Column(name = "is_delete")
     private Integer isDelete;
@@ -97,14 +118,17 @@ public class Question implements Serializable {
         this.isDelete = 0;
     }
 
-    public Question(String title, String name, String comment, Long typeId, String answer) {
+    public Question(String title, String name, Float score, String comment, Long typeId,Long tagId, String answer) {
         this.title = title;
         this.name = name;
+        this.score = score;
         this.comment = comment;
         this.typeId = typeId;
+        this.tagId = tagId;
         this.answer = answer;
         this.isDelete = 0;
     }
+
 
     public String getComment() {
         return comment;
@@ -145,17 +169,7 @@ public class Question implements Serializable {
     }
 
 
-    public Question(String name, String answer, Long typeId, Integer isDelete) {
-        this.name = name;
-        this.answer = answer;
-        this.typeId = typeId;
 
-        this.isDelete = isDelete;
-    }
-
-    public Question(String name, String answer, Long typeId) {
-        this(name, answer, typeId, 0);
-    }
 
     public void setId(Long id) {
         this.id = id;

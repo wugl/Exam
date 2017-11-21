@@ -19,7 +19,7 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/js/adminlte.min.js"></script>
-<script src="/icheck/icheck.min.js"></script>
+<script src="https://cdn.bootcss.com/iCheck/1.0.2/icheck.min.js"></script>
 
 <!-- DataTables -->
 <script src="/js/jquery.dataTables.min.js"></script>

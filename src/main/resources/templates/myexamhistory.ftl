@@ -13,13 +13,14 @@
 
     .tooltip-inner {
 
-        background-color: #00c0ef;
+        background-color: #E2E2E2;
+        /*#00c0ef;*/
 
     }
 
     .tooltip.right .tooltip-arrow {
 
-        border-right-color: #00c0ef;
+        border-right-color: #E2E2E2;;
     }
 
     .tooltip.in {
@@ -73,7 +74,7 @@
                     </thead>
                     <tbody>
 
-                    <#if exams?exists>
+                    <#if exams??>
                         <#list exams as key>
                         <tr class="row-item  <#if key.studentScore<key.passScore>failed</#if> " data-id="${key.id}">
                             <td>${key.id}</td>
@@ -92,7 +93,14 @@
                             <td>${key.totalScore}</td>
                             <td>${key.passScore}</td>
 
-                            <th>${key.answerName}</th>
+                            <th>
+                                <div data-id="${key.id}" data-answer="${key.answerId}"
+                                     data-toggle="tooltip" data-placement="right"
+                                     title="<canvas class='chart-area' width='200' height='200'/>"
+                                     data-html="true"
+                                > ${key.answerName}</div>
+                            <#--${key.answerName}-->
+                            </th>
 
                             <td>${key.answerDate?string('yyyy-MM-dd HH:mm')}</td>
                             <td>${key.studentScore}
@@ -163,7 +171,7 @@
     <!-- /.modal-dialog -->
 </div>
 
-<#if type==2>
+<#--<#if type==2>-->
 <div class="modal  fade" id="static-preview">
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -174,7 +182,7 @@
             </div>
             <div class="modal-body">
                 <h3 class="title" style="text-align: center;"></h3>
-                <div style="width: 300px;height: 300px;margin: auto;">
+                <div style="width: 300px;height: 300px;margin: auto;" class="content">
 
                     <canvas class='chart-area' width='300' height='300'/>
                 </div>
@@ -188,82 +196,110 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-</#if>
+<#--</#if>-->
 
 <#include "inc/footer1.ftl"/>
 
 <script type="text/javascript">
     $(function () {
         var type =${type};
-        if (type == 2) {
 
-            function getData(ele, t) {
-                var id = ele.dataset.id;
-                var ctx
-                if (t == 2)
-                    ctx = $('#static-preview .chart-area')[0].getContext("2d");
-                else
-                    ctx = $(ele).parent().find('.chart-area')[0].getContext("2d");
+        //if (type == 2) {
 
-                //console.log(ctx);
-                //console.log(tooltip);
-                $.ajax({
-                    method: 'GET',
-                    url: "/exam/statics",
-                    data: 'examId=' + id,
-                    success: function (data) {
-                        //console.log(data);
-                        var pieData = {
-                            datasets: [{
-                                data: [data.data.failNum, data.data.totalNum - data.data.failNum],
-                                backgroundColor: [
-                                    "#F7464A",
-                                    "#46BFBD"
-                                ]
-                            }],
-                            labels: [
-                                '不及格人数',
-                                '及格人数'
-                            ]
-                        };
-                        //console.log(pieData);
-                        var chart = new Chart(ctx, {
-                            type: 'pie',
-                            data: pieData,
-                            options: {
-                                labels: {
+        function getData(ele, t) {
+            var id = ele.dataset.id;
+            var answer = ele.dataset.answer;
+            //console.log(answer);
+            var url = "/exam/statics";
+            var data = 'examId=' + id;
+            if (answer) {
+                url = "/exam/studentstatics";
+                data = 'examId=' + id + '&studentId=' + answer;
+            }
+            var ctx
+            if (t == 2) {
+                $('#static-preview .content').html("<canvas class='chart-area' width='300' height='300'/>");
+                ctx = $('#static-preview .chart-area')[0].getContext("2d");
+            }
+            else
+                ctx = $(ele).parent().find('.chart-area')[0].getContext("2d");
+
+            //console.log(ctx);
+            //console.log(tooltip);
+            $.ajax({
+                        method: 'GET',
+                        url: url,
+                        data: data,
+                        success: function (data) {
+                            //console.log(data);
+                            var config;
+                            if (answer) {
+                                config = {
+                                    type: 'radar',
+                                    data: {
+                                        datasets: [{
+                                            data: data.data.scores,
+                                            label: '综合评估',
+                                            backgroundColor: '#00c0ef',
+                                            borderColor: '#00c0ef',
+                                            pointBackgroundColor: '#F7464A'
+                                        }],
+                                        labels: data.data.tags
+
+                                    }
+                                };
+                                $('#static-preview .modal-name').html('学生综合评估');
+                            } else {
+                                $('#static-preview .modal-name').html('试卷统计信息');
+                                config = {
+                                    type: 'pie',
+                                    data: {
+                                        datasets: [{
+                                            data: [data.data.failNum, data.data.totalNum - data.data.failNum],
+                                            backgroundColor: [
+                                                "#F7464A",
+                                                "#46BFBD"
+                                            ]
+                                        }],
+                                        labels:
+                                                [
+                                                    '不及格人数',
+                                                    '及格人数'
+                                                ]
+                                    }
                                 }
                             }
-                        });
-                        if (t == 2) {
-                            $('#static-preview .title').html($(ele).html())
-                            $('#static-preview').modal('show');
+                            //console.log(pieData);
+                            var chart = new Chart(ctx, config);
+
+                            if (t == 2) {
+                                $('#static-preview .title').html($(ele).html())
+                                $('#static-preview').modal('show');
+                            }
+                        },
+                        error: function (e) {
+
                         }
-                    },
-                    error: function (e) {
-
                     }
-                })
-            }
-
-            $("[data-toggle='tooltip']").on('click', function (e) {
-
-
-
-                e.stopPropagation();
-                getData(this, 2)
-
-
-            });
-            if (!window.isMobile())
-                var tooltip = $("[data-toggle='tooltip']")
-
-                        .on('inserted.bs.tooltip', function (e) {
-                            //console.log(e);
-                            getData(this, 1);
-
-                        }).tooltip();
+            )
         }
+
+        $("[data-toggle='tooltip']").on('click', function (e) {
+
+
+            e.stopPropagation();
+            getData(this, 2)
+
+
+        });
+        if (!window.isMobile())
+            var tooltip = $("[data-toggle='tooltip']")
+
+                    .on('inserted.bs.tooltip', function (e) {
+                        //console.log(e);
+                        getData(this, 1);
+
+                    }).tooltip();
 
 
         var exams = ${examsJson};

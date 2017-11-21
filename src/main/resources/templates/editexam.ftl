@@ -6,6 +6,7 @@
         width: 30px;
         cursor: pointer;
     }
+
 </style>
 
 <div class="content-wrapper">
@@ -121,6 +122,7 @@
                         <th>id</th>
 
                         <th>类型</th>
+                        <th>维度</th>
                         <th>标题</th>
                         <th></th>
 
@@ -132,6 +134,7 @@
                         <th>选择</th>
                         <th>id</th>
                         <th>类型</th>
+                        <th>维度</th>
                         <th>标题</th>
                         <th></th>
 
@@ -186,6 +189,7 @@
                 },
                 {"data": "id"},
                 {"data": "type"},
+                {"data": "tag"},
                 {"data": "title"},
                 {
                     "className": 'details-control',
@@ -236,6 +240,7 @@
                 "columns": [
                     {"data": "id", title: "id"},
                     {"data": "type", title: "类型"},
+                    {"data": "tag", title: "维度"},
                     {"data": "title", title: "标题"},
                     {
                         "className": 'details-control',
@@ -376,6 +381,7 @@
                 currentTotalScore += e.score;
 
             });
+            console.log($('#eForm').serialize());
 
 
             if ($('#e_name').val() == '' || $('#e_exam_date').val() == '') {
@@ -392,7 +398,9 @@
             } else if (currentTotalScore != $('#e_total_score').val()) {
                 isValidate = false;
                 errorMsg = '总分值不对';
-            } else if ($('#e_total_score').val() < $('#e_pass_score').val()) {
+            } else if (parseFloat($('#e_total_score').val()) < parseFloat($('#e_pass_score').val())) {
+                console.log($('#e_total_score').val());
+                console.log($('#e_pass_score').val());
                 isValidate = false;
                 errorMsg = '总分值要大于通过分数';
             }

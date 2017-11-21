@@ -21,8 +21,8 @@ public interface QuestionRepository  extends JpaRepository<Question, Long> {
 
 
     @Modifying(clearAutomatically = true)
-    @Query("update Question q set q.name = :name,q.score=:score,q.answer =:answer,typeId=:typeId,q.title=:title,q.comment=:comment where q.id = :id")
-    int update(@Param("id") Long id, @Param("typeId") Long typeId, @Param("name") String name,@Param("answer") String answer,@Param("score") Float score, @Param("title") String title, @Param("comment") String comment);
+    @Query("update Question q set q.name = :name,q.score=:score,q.answer =:answer,q.typeId=:typeId, q.tagId = :tagId, q.title=:title,q.comment=:comment where q.id = :id")
+    int update(@Param("id") Long id, @Param("typeId") Long typeId,@Param("tagId") Long tagId, @Param("name") String name,@Param("answer") String answer,@Param("score") Float score, @Param("title") String title, @Param("comment") String comment);
 
     @Modifying(clearAutomatically = true)
     @Query("update Question q set q.isDelete = 1 where q.id = :id")

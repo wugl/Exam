@@ -2,10 +2,7 @@ package com.wgl.exam.controller;
 
 
 import com.google.gson.Gson;
-import com.wgl.exam.Repository.OptionRepository;
-import com.wgl.exam.Repository.QuestionRepository;
-import com.wgl.exam.Repository.QuestionTypeRepository;
-import com.wgl.exam.Repository.UserRepository;
+import com.wgl.exam.Repository.*;
 import com.wgl.exam.WebSecurityConfig;
 import com.wgl.exam.bean.ReturnWithData;
 import com.wgl.exam.bean.ReturnWithoutData;
@@ -39,6 +36,9 @@ public class QuestionController {
     @Autowired
     OptionRepository optionRepository;
 
+    @Autowired
+    TagRepository tagRepository;
+
     @RequestMapping("")
     public String index(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.TEACHER.getIndex())
@@ -48,7 +48,14 @@ public class QuestionController {
         map.put("title", "题目管理");
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         map.put("questionTypes", questionTypeRepository.findAll());
-        map.put("questions", questionRepository.findAll());
+        map.put("tags", tagRepository.findAll());
+        List<Question> questions = questionRepository.findAll();
+        for(Question item:questions){
+            item.setTag(tagRepository.findByIdAndIsDelete(item.getTagId(),0).getName());
+           // item.setType(questionTypeRepository.findByIdAndIsDelete(item.getTypeId(),0).getName());
+        }
+
+        map.put("questions", questions);
         if (questionRepository.findAll().size() > 0)
             System.out.println(new Gson().toJson(questionRepository.findAll().get(0)));
         return "question";
@@ -62,10 +69,10 @@ public class QuestionController {
         List<Question> questions = questionRepository.findAll();
         Map<String, Object> map = new HashMap<>();
         List<Object> data = new ArrayList<>();
-        Map<String,Object> row;
 
         for (Question q : questions) {
             q.setType(questionTypeRepository.findByIdAndIsDelete(q.getTypeId(),0).getName());
+            q.setTag(tagRepository.findByIdAndIsDelete(q.getTagId(),0).getName());
 //            row = new HashMap<>();
 //            row.put("id",q.getId() );
 //
@@ -102,6 +109,7 @@ public class QuestionController {
         List<Option> options = question.getOptions();
         Map<String, Object> data = new HashMap<>();
         question.setType(questionTypeRepository.findByIdAndIsDelete(question.getTypeId(),0).getName());
+        question.setTag(tagRepository.findByIdAndIsDelete(question.getTagId(),0).getName());
         data.put("question", question);
         data.put("options", options);
 
@@ -114,10 +122,10 @@ public class QuestionController {
 
     @PostMapping(value = "add")
     @ResponseBody
-    public ReturnWithData add(@RequestParam("name") String name, @RequestParam("type") Long type, @RequestParam("score") Float score, @RequestParam("title") String title, @RequestParam("answer") String answer, @RequestParam("comment") String comment, @RequestParam(name = "optionsContent", required = false) String optionsContent) {
+    public ReturnWithData add(@RequestParam("name") String name, @RequestParam("type") Long type,@RequestParam("tag") Long tag, @RequestParam("score") Float score, @RequestParam("title") String title, @RequestParam("answer") String answer, @RequestParam("comment") String comment, @RequestParam(name = "optionsContent", required = false) String optionsContent) {
 
 
-        Question question = new Question(title, name, score, comment, type, answer);
+        Question question = new Question(title, name, score, comment, type,tag, answer);
         //System.out.println(comment);
         Question q = questionRepository.save(question);
         //System.out.println(q.getId());
@@ -151,9 +159,9 @@ public class QuestionController {
     @PostMapping(value = "update")
     @ResponseBody
     @Transactional
-    public ReturnWithoutData update(@RequestParam("id") Long id, @RequestParam("type") Long typeId, @RequestParam("score") Float score, @RequestParam("name") String name, @RequestParam("answer") String answer, @RequestParam("title") String title, @RequestParam("comment") String comment, @RequestParam(name = "optionsContent", required = false) String optionsContent) {
+    public ReturnWithoutData update(@RequestParam("id") Long id, @RequestParam("type") Long typeId,@RequestParam("tag") Long tag, @RequestParam("score") Float score, @RequestParam("name") String name, @RequestParam("answer") String answer, @RequestParam("title") String title, @RequestParam("comment") String comment, @RequestParam(name = "optionsContent", required = false) String optionsContent) {
 
-        int row = questionRepository.update(id, typeId, name, answer, score, title, comment);
+        int row = questionRepository.update(id, typeId,tag, name, answer, score, title, comment);
         System.out.println("------------------row:" + id + ":" + name);
         System.out.println("------------------row:" + row);
         if (row == 1) {

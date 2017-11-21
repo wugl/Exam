@@ -47,6 +47,9 @@ public class ExamController {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Autowired
+    TagRepository tagRepository;
+
     @GetMapping("exam")
     public String index(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
         if (type != UserType.TEACHER.getIndex())
@@ -84,7 +87,7 @@ public class ExamController {
         response.setCharacterEncoding("UTF-8");
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("学生成绩");
-        Common.createTitle(workbook, sheet,new String[]{"序号","名称","考试日期","考试时长","总分数","及格分数","答题人","答题日期","得分","是否及格"});
+        Common.createTitle(workbook, sheet, new String[]{"序号", "名称", "考试日期", "考试时长", "总分数", "及格分数", "答题人", "答题日期", "得分", "是否及格"});
 
         List<QuestionType> questionTypes = questionTypeRepository.findAll();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -132,13 +135,13 @@ public class ExamController {
 
             cell = row.createCell(9);
             cell.setCellStyle(style);
-            cell.setCellValue(entity.getStudentScore()<entity.getPassScore()?"否":"是");
+            cell.setCellValue(entity.getStudentScore() < entity.getPassScore() ? "否" : "是");
 
             rowNum++;
         }
         workbook.write(response.getOutputStream());
 
-      //  return "exam";
+        //  return "exam";
 
     }
 
@@ -225,22 +228,54 @@ public class ExamController {
 
     @GetMapping("/exam/statics")
     @ResponseBody
-    public ReturnWithData getExamStatics(@RequestParam("examId") Long examId){
+    public ReturnWithData getExamStatics(@RequestParam("examId") Long examId) {
 
-        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByExamIdAndIsDelete(examId,0);
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByExamIdAndIsDelete(examId, 0);
 
         List<Exam> exams = getExam(studentAnswers);
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("totalNum",exams.size());
+        Map<String, Object> result = new HashMap<>();
+        result.put("totalNum", exams.size());
         int failNum = 0;
-        for(Exam e:exams){
-            if(e.getPassScore()>e.getStudentScore())
+        for (Exam e : exams) {
+            if (e.getPassScore() > e.getStudentScore())
                 failNum++;
         }
-        result.put("failNum",failNum);
+        result.put("failNum", failNum);
 
-        return new ReturnWithData("成功","100",result);
+        return new ReturnWithData("成功", "100", result);
+    }
+
+    @GetMapping("/exam/studentstatics")
+    @ResponseBody
+    public ReturnWithData getExamStudentStatics(@RequestParam("examId") Long examId, @RequestParam("studentId") Long studentId) {
+
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndExamIdAndIsDelete(studentId, examId, 0);
+
+        Exam exam = getExam(studentAnswers).get(0);
+
+        Map<String, Object> result = new HashMap<>();
+        List<Tag> tags = tagRepository.findAll();
+        String[] ts = new String[tags.size()];
+        Float[] ss = new Float[tags.size()];
+        Tag item;
+        for (int i=0;i<tags.size();i++) {
+            item = tags.get(i);
+            ts[i] = item.getName();
+
+            float score=0f;
+            for (Question q : exam.getQuestions()) {
+                if (q.getTag().equals(item.getName()) && q.getAnswer().equals(q.getStudentAnswer()))
+                    score+=q.getScore();
+            }
+            ss[i] = score;
+
+        }
+        //result.put("failNum", failNum);
+        result.put("tags", ts);
+        result.put("scores",ss);
+
+        return new ReturnWithData("成功", "100", result);
     }
 
     @GetMapping("myexamhistory")
@@ -268,7 +303,7 @@ public class ExamController {
 
     @GetMapping("examhistory")
     public String examHistory(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
-        if (type != UserType.TEACHER.getIndex())
+        if (type == UserType.STUDENT.getIndex())
 
             return "redirect:/";
 
@@ -330,6 +365,7 @@ public class ExamController {
                 }
                 for (Question q : exam.getQuestions()) {
                     q.setType(questionTypeRepository.findByIdAndIsDelete(q.getTypeId(), 0).getName());
+                    q.setTag(tagRepository.findByIdAndIsDelete(q.getTagId(), 0).getName());
                 }
 
                 for (Question q : exam.getQuestions()) {
@@ -412,6 +448,7 @@ public class ExamController {
 
         for (Question q : questions) {
             q.setType(questionTypeRepository.findByIdAndIsDelete(q.getTypeId(), 0).getName());
+            q.setTag(tagRepository.findByIdAndIsDelete(q.getTagId(), 0).getName());
         }
 
         map.put("questions", new Gson().toJson(exam.getQuestions()));

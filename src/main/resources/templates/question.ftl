@@ -31,6 +31,7 @@
                     <tr>
                         <th style="width: 30px;">id</th>
                         <th>类型</th>
+                        <th>维度</th>
                         <th>标题</th>
                         <th>操作</th>
                     </tr>
@@ -50,6 +51,7 @@
                                 </#if>
 
                             </td>
+                            <td>${key.tag}</td>
                             <td>${key.title}</td>
                             <td>
                                 <a class="btn-sm q_edit" data-id="${key.id}" data-type="${key.typeId}"><i
@@ -68,6 +70,7 @@
                     <tr>
                         <th>id</th>
                         <th>类型</th>
+                        <th>维度</th>
                         <th>标题</th>
                         <th>操作</th>
                     </tr>
@@ -140,6 +143,17 @@
                         <select class="form-control" name="questionType" id="questionType">
                         <#if questionTypes?exists>
                             <#list questionTypes as key>
+                                <option value="${key.id}">${key.name}</option>
+                            </#list>
+                        </#if>
+
+                        </select>
+                    </div>
+                    <div class="form-group ">
+                        <label for="tag" class="control-label">维度:</label>
+                        <select class="form-control" name="tag" id="tag">
+                        <#if tags?exists>
+                            <#list tags as key>
                                 <option value="${key.id}">${key.name}</option>
                             </#list>
                         </#if>
@@ -383,6 +397,7 @@
                         $('#q_id').val(data.data.question.id);
                         $('#q_score').val(data.data.question.score);
                         $('#questionType').val(data.data.question.typeId);
+                        $('#tag').val(data.data.question.tagId);
                         comment.setContent(data.data.question.comment);
                         //console.log(data.data.question.answer);
 
@@ -524,14 +539,14 @@
             if (type == 1) {
                 url = '/question/add';
                 //data = data.replace(/\&/g,"%26");
-                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val()
+                data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val()+ '&tag=' + $('#tag').val()
                         + '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
             }
 
             if (type == 2) {
                 url = "/question/update";
                 data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val() +
-                        '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
+                        '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val()+ '&tag=' + $('#tag').val();
             }
             // $('#qt_id').val('111');
             //console.log(data);
