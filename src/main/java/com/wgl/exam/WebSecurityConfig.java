@@ -2,8 +2,13 @@ package com.wgl.exam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -24,6 +29,29 @@ public class WebSecurityConfig  extends WebMvcConfigurerAdapter {
     public final static String SESSION_KEY_USER_TYPE = "user_type";
 
     Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+
+        registry.addMapping("/**")
+                .allowedHeaders("Access-Control-Allow-Origin")
+                .allowCredentials(false).maxAge(3600);
+    }
+
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer() {
+        return new EmbeddedServletContainerCustomizer(){
+            @Override
+            public void customize(ConfigurableEmbeddedServletContainer container) {
+//				container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
+                container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500"));
+                container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404"));
+
+
+                container.setSessionTimeout(1800);//单位为S
+            }
+        };
+    }
 
     @Bean
     public SecurityInterceptor getSecurityInterceptor() {
@@ -58,7 +86,7 @@ public class WebSecurityConfig  extends WebMvcConfigurerAdapter {
             }
 
             // 跳转登录
-            String url = "/login";
+            String url = request.getContextPath()+ "/login";
             response.sendRedirect(url);
             return false;
         }

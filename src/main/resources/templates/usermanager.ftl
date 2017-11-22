@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">Here</li>
         </ol>
     </section>
@@ -21,7 +21,7 @@
         <div class="box">
             <div class="box-header">
                 <a class="btn btn-info pull-left margin u_new"><i class="fa fa-plus"></i>新增</a>
-                <a href="/user/getExcel" class="btn btn-info  margin"><i
+                <a href="${request.contextPath}/user/getExcel" class="btn btn-info  margin"><i
                         class="fa fa-fw fa-file-excel-o"></i>导出excel</a>
             </div>
             <!-- /.box-header -->
@@ -185,7 +185,7 @@
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
-                "url": " dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             }
         });
@@ -241,9 +241,9 @@
             //console.log(type);
             var url;
             if (type == 1)
-                url = '/user/add';
+                url = '${request.contextPath}/user/add';
             if (type == 2)
-                url = "/user/update";
+                url = "${request.contextPath}/user/update";
             // $('#qt_id').val('111');
             //console.log($('#uForm').serialize());
             var data = 'name='+$('#u_name').val().trim()+'&id='+ $('#u_id').val()+'&type='+$('#u_type').val()+'&password='+md5($('#u_password').val().trim())+'&email='+$('#u_email').val()+'&phone='+$('#u_phone').val();
@@ -266,7 +266,7 @@
         $('.btn-u-del-submit').on('click', function (e) {
             $.ajax({
                 type: 'POST',
-                url: '/user/del',
+                url: '${request.contextPath}/user/del',
                 data: $('#uDelForm').serialize(),
                 success: function (data) {
                     if (data.code == '100') {

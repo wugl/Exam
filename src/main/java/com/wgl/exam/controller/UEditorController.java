@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.baidu.ueditor.ActionEnter;
 
-@WebServlet(name = "UEditorServlet", urlPatterns = "/ueditor")
+@WebServlet(name = "UEditorServlet", urlPatterns = "/UEditor")
 public class UEditorController extends HttpServlet {
 
     public void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException{
@@ -24,9 +24,13 @@ public class UEditorController extends HttpServlet {
         PrintWriter out = response.getWriter();
         ServletContext application=this.getServletContext();
         String rootPath = application.getRealPath( "/" );
+        //System.out.println("-----------------------------------------");
+        //System.out.println(rootPath);
 
         String action = request.getParameter("action");
+        //System.out.println(action);
         String result = new ActionEnter( request, rootPath).exec();
+        //System.out.println(result);
         //,UEditorController.class.getClassLoader().getResource("config.json").getPath()
         if( action!=null &&
                 (action.equals("listfile") || action.equals("listimage") ) ){

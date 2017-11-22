@@ -91,11 +91,11 @@ $(function () {
 
     $('#logout').on('click', function (e) {
 
-        $.post('/logout', function (data) {
+        $.post(window.contentPath+'/logout', function (data) {
             //console.log(data)
             if (data.code == '100') {
                 _store.set('user', '');
-                window.location.href = "/";
+                window.location.href = window.contentPath+"/";
             }
         })
 
@@ -109,7 +109,7 @@ $(function () {
     $('.sidebar-menu>li').removeClass("active");
     //console.log(location.href);
 
-    var pathUrl = location.href.split('/')[3].replace(/#/g, "");
+    var pathUrl = location.pathname.replace(/#/g, "");
     //console.log(pathUrl);
     if (pathUrl != '')
         $('.sidebar-menu>li').each(function () {
@@ -119,7 +119,7 @@ $(function () {
             // if($(this).find('a')) {
             var href = $(this).find('a').attr('href');
             //console.log(href);
-            if (href && href.substr(1)==pathUrl) {
+            if (href && href==pathUrl) {
                 $(that).addClass('active');
             }
             // }

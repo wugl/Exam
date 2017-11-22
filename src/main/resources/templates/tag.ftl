@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active"> ${title!""}</li>
         </ol>
     </section>
@@ -134,7 +134,7 @@
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
-                "url": " dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             }
         });
@@ -178,9 +178,9 @@
             //console.log(type);
             var url;
             if (type == 1)
-                url = '/tag/add';
+                url = '${request.contextPath}/tag/add';
             if (type == 2)
-                url = "/tag/update";
+                url = "${request.contextPath}/tag/update";
            // $('#qt_id').val('111');
             $('.btn-qt-add-submit').prop("disabled", true);
             $.ajax({
@@ -207,7 +207,7 @@
             $('.btn-qt-del-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: '/tag/del',
+                url: '${request.contextPath}/tag/del',
                 data: $('#qtDelForm').serialize(),
                 success: function (data) {
                     $('.btn-qt-del-submit').prop("disabled", false);

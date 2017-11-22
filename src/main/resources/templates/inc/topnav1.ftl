@@ -27,7 +27,7 @@
                     <!-- Menu Toggle Button -->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <!-- The user image in the navbar-->
-                        <img src="/img/avatar04.png" class="user-image" alt="User Image">
+                        <img src="${request.contextPath}/img/avatar04.png" class="user-image" alt="User Image">
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
                         <span class="hidden-xs">
                             <#--${user.type}-->
@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu">
                         <!-- The user image in the menu -->
                         <li class="user-header">
-                            <img src="/img/avatar04.png" class="img-circle" alt="User Image">
+                            <img src="${request.contextPath}/img/avatar04.png" class="img-circle" alt="User Image">
 
                             <p>
                                 ${user.name}
@@ -53,7 +53,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="/userdetail" class="btn btn-default btn-flat" id="profile">用户信息</a>
+                                <a href="${request.contextPath}/userdetail" class="btn btn-default btn-flat" id="profile">用户信息</a>
                             </div>
                             <div class="pull-right">
                                 <a href="##" class="btn btn-default btn-flat" id="logout">注销</a>

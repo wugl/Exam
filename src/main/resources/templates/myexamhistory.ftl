@@ -38,7 +38,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -48,7 +48,7 @@
         <div class="box">
             <div class="box-header">
             <#--<a class="btn btn-info pull-left margin qt_new"><i class="fa fa-plus"></i>新增</a>-->
-                <a href="/exam/getExcel" class="btn btn-info  margin"><i
+                <a href="${request.contextPath}/exam/getExcel" class="btn btn-info  margin"><i
                         class="fa fa-fw fa-file-excel-o"></i>导出excel</a>
             </div>
             <!-- /.box-header -->
@@ -210,10 +210,10 @@
             var id = ele.dataset.id;
             var answer = ele.dataset.answer;
             //console.log(answer);
-            var url = "/exam/statics";
+            var url = "${request.contextPath}/exam/statics";
             var data = 'examId=' + id;
             if (answer) {
-                url = "/exam/studentstatics";
+                url = "${request.contextPath}/exam/studentstatics";
                 data = 'examId=' + id + '&studentId=' + answer;
             }
             var ctx
@@ -306,7 +306,7 @@
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
-                "url": " /dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             }
         });

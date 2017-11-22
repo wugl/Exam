@@ -193,7 +193,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/login',
+                url: '${request.contextPath}/login',
                 data: 'name=' + name + '&password=' + md5(password) + '&userType=' + type,
                 success: function (data) {
                     //console.log(data);
@@ -204,12 +204,12 @@
                         } else {
                             _store.set('userName', '');
                         }
-                        var redirect_url = '/';
+                        var redirect_url = '${request.contextPath}/';
                         $("#loginForm .msg-error").hide(100);
                         $("#loginForm .msg-success").show(100);
                         $("#loginForm .msg-success-p").html(data.msg);
                         window.setTimeout(function () {
-                            location.href = '/';
+                            location.href = '${request.contextPath}/';
                         }, 2000);
 
                         // location.href = redirect_url;
@@ -286,7 +286,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/reg',
+                url: '${request.contextPath}/reg',
                 data: 'name=' + name + '&email=' + email + '&phone=' + phone + '&password=' + md5(password) + '&type=' + type,
                 success: function (data) {
                     //console.log(data);
@@ -298,7 +298,7 @@
                         $("#regForm .msg-success").show(100);
                         $("#regForm .msg-success-p").html(data.msg);
                         window.setTimeout(function () {
-                            location.href = '/';
+                            location.href = '${request.contextPath}/';
                         }, 2000);
 
                         // location.href = redirect_url;

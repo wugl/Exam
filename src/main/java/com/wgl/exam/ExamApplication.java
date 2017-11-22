@@ -10,10 +10,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,9 +26,16 @@ import java.util.Date;
 @SpringBootApplication
 @EnableAutoConfiguration
 @ServletComponentScan
-public class ExamApplication extends WebMvcConfigurerAdapter implements CommandLineRunner {
+public class ExamApplication   extends SpringBootServletInitializer implements CommandLineRunner{
 
-    @Value("${spring.profiles.active}")
+	@Override
+	protected SpringApplicationBuilder configure(
+			SpringApplicationBuilder application) {
+		return application.sources(ExamApplication.class);
+	}
+
+
+	@Value("${spring.profiles.active}")
     private String profile;
 
 	@Autowired
@@ -54,28 +63,9 @@ public class ExamApplication extends WebMvcConfigurerAdapter implements CommandL
 		SpringApplication.run(ExamApplication.class, args);
 	}
 
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-
-		registry.addMapping("/**")
-				.allowedHeaders("Access-Control-Allow-Origin")
-				.allowCredentials(false).maxAge(3600);
-	}
-
-	@Bean
-	public EmbeddedServletContainerCustomizer containerCustomizer() {
-		return new EmbeddedServletContainerCustomizer(){
-			@Override
-			public void customize(ConfigurableEmbeddedServletContainer container) {
-//				container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
-				container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500"));
-				container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404"));
 
 
-				container.setSessionTimeout(1800);//单位为S
-			}
-		};
-	}
+
 	@Override
 	public void run(String... strings) throws Exception {
 	    //if(profile.equals("prod")) return;

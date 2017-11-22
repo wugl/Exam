@@ -19,7 +19,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
-            <li><a href="/exam">试卷管理</a></li>
+            <li><a href="${request.contextPath}/exam">试卷管理</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -171,12 +171,12 @@
         }).DataTable({
             "stateSave": true,
             "language": {
-                "url": " /dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             },
 //            "processing": true,
 //            "serverSide": true,
-            "ajax": "/question/getAll",
+            "ajax": "${request.contextPath}/question/getAll",
             "columns": [
                 {
                     "data": "id",
@@ -230,7 +230,7 @@
             if (secondTable) secondTable.destroy();
             secondTable = $('#addedQuestion').DataTable({
                 "language": {
-                    "url": " /dataTables.Chinese.lang.json"
+                    "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                     // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
                 },
                 "data": selectedData,
@@ -419,12 +419,12 @@
 
 
             if (type == 1) {
-                url = '/exam/add';
+                url = '${request.contextPath}/exam/add';
 
             }
 
             if (type == 2) {
-                url = "/exam/update";
+                url = "${request.contextPath}/exam/update";
 
             }
             // $('#qt_id').val('111');

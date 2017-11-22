@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -176,7 +176,7 @@
             //return;
             $.ajax({
                 type: 'POST',
-                url: "/user/update",
+                url: "${request.contextPath}/user/update",
                 data: data,
                 success: function (data) {
                     //console.log(data);

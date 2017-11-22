@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -315,7 +315,7 @@
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
-                "url": " dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             }
         });
@@ -339,7 +339,7 @@
             //console.log('row');
             $.ajax({
                 type: 'GET',
-                url: '/question/getById',
+                url: '${request.contextPath}/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
                     //console.log(data);
@@ -387,7 +387,7 @@
 //            $('#questionType').val(this.dataset.type);
             $.ajax({
                 type: 'GET',
-                url: '/question/getById',
+                url: '${request.contextPath}/question/getById',
                 data: 'id=' + this.dataset.id,
                 success: function (data) {
                     //console.log(data);
@@ -537,14 +537,14 @@
             var fanswer = answerContainer?answerContainer.getContent().replace(/\+/g, "%2B").replace(/\&/g, "%26"):'';
 
             if (type == 1) {
-                url = '/question/add';
+                url = '${request.contextPath}/question/add';
                 //data = data.replace(/\&/g,"%26");
                 data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val()+ '&tag=' + $('#tag').val()
                         + '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val();
             }
 
             if (type == 2) {
-                url = "/question/update";
+                url = "${request.contextPath}/question/update";
                 data = 'title=' + $('#q_title').val() + '&comment=' + fcomment + '&name=' + fname + '&type=' + $('#questionType').val() + '&id=' + $('#q_id').val() +
                         '&optionsContent=' + optionsContent + '&answer=' + (qType == 3 ? fanswer : optionAnswer) + '&score=' + $('#q_score').val()+ '&tag=' + $('#tag').val();
             }
@@ -577,7 +577,7 @@
             $('.btn-q-del-submit').prop("disabled", true);
             $.ajax({
                 type: 'POST',
-                url: '/question/del',
+                url: '${request.contextPath}/question/del',
                 data: $('#qDelForm').serialize(),
                 success: function (data) {
                     $('.btn-q-del-submit').prop("disabled", false);

@@ -7,7 +7,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="/img/avatar04.png" class="img-circle" alt="User Image">
+                <img src="${request.contextPath}/img/avatar04.png" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info" style="line-height: 35px;">
                 <p>${user.name}</p>
@@ -21,23 +21,23 @@
             <li class="header"></li>
             <!-- Optionally, you can add icons to the links -->
         <#if user.type=='STUDENT'>
-            <li class="active"><a href="/myexam"><i class="fa fa-circle-o text-aqua"></i></i> <span>我的考试</span></a>
+            <li class="active"><a href="${request.contextPath}/myexam"><i class="fa fa-circle-o text-aqua"></i></i> <span>我的考试</span></a>
             </li>
-            <li class="active"><a href="/myexamhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li class="active"><a href="${request.contextPath}/myexamhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
             </li>
         </#if>
         <#if user.type=='MANAGER'>
-            <li class="active"><a href="/usermanager"><i class="fa fa-circle-o text-aqua"></i></i> <span>用户管理</span></a>
+            <li class="active"><a href="${request.contextPath}/usermanager"><i class="fa fa-circle-o text-aqua"></i></i> <span>用户管理</span></a>
             </li>
-            <li class="active"><a href="/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
             </li>
         </#if>
         <#if user.type=='TEACHER'>
             <#--<li><a href="/questionType"><i class="fa fa-circle-o text-aqua"></i> <span>题型管理</span></a></li>-->
-            <li><a href="/tag"><i class="fa fa-circle-o text-aqua"></i> <span>维度管理</span></a></li>
-            <li><a href="/question"><i class="fa fa-circle-o text-aqua"></i> <span>题目管理</span></a></li>
-            <li><a href="/exam"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
-            <li class="active"><a href="/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li><a href="${request.contextPath}/tag"><i class="fa fa-circle-o text-aqua"></i> <span>维度管理</span></a></li>
+            <li><a href="${request.contextPath}/question"><i class="fa fa-circle-o text-aqua"></i> <span>题目管理</span></a></li>
+            <li><a href="${request.contextPath}/exam"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
+            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
             </li>
         </#if>
             <#--<li class="treeview">-->

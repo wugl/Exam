@@ -9,7 +9,7 @@
             404 Error Page
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <#--<li><a href="#">Examples</a></li>-->
             <li class="active">404 error</li>
         </ol>
@@ -24,7 +24,7 @@
                 <h3><i class="fa fa-warning text-yellow"></i> 页面没有找到！</h3>
 
                 <p>
-                     <a href="/">返回首页</a>
+                     <a href="${request.contextPath}/">返回首页</a>
                 </p>
 
             </div>

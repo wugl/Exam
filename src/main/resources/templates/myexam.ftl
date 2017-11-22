@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -48,7 +48,7 @@
                     <td>
 
 
-                    <a class="btn-sm q_edit" data-id="${key.id}" target="_blank" href="/startexam?examId=${key.id}"><span class="glyphicon glyphicon-pencil"></span> 开始答题</a>
+                    <a class="btn-sm q_edit" data-id="${key.id}" target="_blank" href="${request.contextPath}/startexam?examId=${key.id}"><span class="glyphicon glyphicon-pencil"></span> 开始答题</a>
                         <#--<a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"-->
                            <#--data-title="${key.title}""><i-->
                             <#--class="fa fa-remove"></i></a>-->
@@ -86,7 +86,7 @@
         var table = $('#example1').DataTable({
             "stateSave": true,
             "language": {
-                "url": " /dataTables.Chinese.lang.json"
+                "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                 // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
             }
         })

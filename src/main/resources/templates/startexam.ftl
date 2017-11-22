@@ -220,7 +220,7 @@
 
             $('.btn-e-submit').prop("disabled", true);
             $.ajax({
-                url: '/examsubmit',
+                url: '${request.contextPath}/examsubmit',
                 method: 'POST',
                 data: 'answer=' + JSON.stringify(answers) + '&examId=' + exam.id,
                 success: function (data) {
@@ -234,7 +234,7 @@
                         $("#msg-success-p").html(data.msg);
 
                         setTimeout(function(){
-                            location.href='/';
+                            location.href='${request.contextPath}/';
                         },2000);
                     } else {
                         $("#msg-success").hide(10);

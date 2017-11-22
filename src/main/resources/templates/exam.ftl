@@ -11,7 +11,7 @@
             <#--<small>Optional description</small>-->
         </h1>
         <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+            <li><a href="${request.contextPath}/"><i class="fa fa-home"></i> 首页</a></li>
         <#--<li><a href="/exam">试卷管理</a></li>-->
             <li class="active">${title!""}</li>
         </ol>
@@ -22,7 +22,7 @@
 
         <div class="box">
             <div class="box-header">
-                <a class="btn btn-info pull-left margin e_new" href="/exam/new"><i class="fa fa-plus"></i>新增</a>
+                <a class="btn btn-info pull-left margin e_new" href="${request.contextPath}/exam/new"><i class="fa fa-plus"></i>新增</a>
             <#--<a href="/questionType/getExcel" class="btn btn-info  margin"><i class="fa fa-fw fa-file-excel-o"></i>导出excel</a>-->
             </div>
             <!-- /.box-header -->
@@ -61,7 +61,7 @@
                             ${key.passScore}
                             </td>
                             <td>
-                                <a class="btn-sm e_edit" data-id="${key.id}" href="/exam/edit?id=${key.id}"><i
+                                <a class="btn-sm e_edit" data-id="${key.id}" href="${request.contextPath}/exam/edit?id=${key.id}"><i
                                         class="fa fa-edit"></i></a>
                                 <a class="btn-sm e_remove" data-id="${key.id}" data-name="${key.name}"><i
                                         class="fa fa-remove"></i></a>
@@ -155,7 +155,7 @@
             var table = $('#example1').DataTable({
                 "stateSave": true,
                 "language": {
-                    "url": " dataTables.Chinese.lang.json"
+                    "url": "${request.contextPath}/dataTables.Chinese.lang.json"
                     // "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json"
                 }
             });
@@ -165,7 +165,7 @@
 
                 $.ajax({
                     type: 'GET',
-                    url: '/exam/getById',
+                    url: '${request.contextPath}/exam/getById',
                     data: 'id=' + this.dataset.id,
                     success: function (data) {
                         //console.log(data);
@@ -220,7 +220,7 @@
                 $('.btn-q-del-submit').prop("disabled", true);
                 $.ajax({
                     type: 'POST',
-                    url: '/exam/del',
+                    url: '${request.contextPath}/exam/del',
                     data: $('#eDelForm').serialize(),
                     success: function (data) {
                         $('.btn-q-del-submit').prop("disabled", false);
