@@ -17,6 +17,8 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
     @Query("select e from Exam e where e.isDelete=0")
     List<Exam> findAll();
 
+    List<Exam> findByExamDateBetweenAndIsDelete(Date start,Date end,int isDelete);
+
     @Modifying(clearAutomatically = true)
     @Query("update Exam e set e.isDelete = 1 where e.id = :id")
     int del(@Param("id") Long id);
@@ -29,4 +31,6 @@ public interface ExamRepository extends JpaRepository<Exam, Long> {
 
 
     Exam findExamByIdAndIsDelete(Long id, int isDelete);
+
+
 }

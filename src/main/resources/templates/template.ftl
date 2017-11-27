@@ -19,6 +19,16 @@
     <!-- Main content -->
     <section class="content container-fluid">
 
+        <div class="box">
+            <div class="box-header">
+                <#--<a class="btn btn-info pull-left margin qt_new"><i class="fa fa-plus"></i>新增</a>-->
+            <#--<a href="/questionType/getExcel" class="btn btn-info  margin"><i class="fa fa-fw fa-file-excel-o"></i>导出excel</a>-->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            </div>
+        </div>
+
 
     </section>
     <!-- /.content -->

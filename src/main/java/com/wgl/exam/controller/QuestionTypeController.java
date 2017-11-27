@@ -77,8 +77,8 @@ public class QuestionTypeController {
 
 
         int row = questionTypeRepository.update(id, name);
-        System.out.println("------------------row:" + id + ":" + name);
-        System.out.println("------------------row:" + row);
+        //System.out.println("------------------row:" + id + ":" + name);
+        //System.out.println("------------------row:" + row);
         if (row == 1)
             return new ReturnWithoutData("成功", "100");
         else {

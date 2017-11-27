@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +50,7 @@ public class ExamController {
 
     @Autowired
     TagRepository tagRepository;
+
 
     @GetMapping("exam")
     public String index(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
@@ -207,7 +209,7 @@ public class ExamController {
         if (type != UserType.STUDENT.getIndex())
 
             return new Gson().toJson(new ReturnWithoutData("不是学生用户", "101"));
-        System.out.println(answer);
+        //System.out.println(answer);
         Map<String, String> result = new Gson().fromJson(answer, Map.class);
         if (studentAnswerRepository.findByStudentIdAndExamIdAndIsDelete(id, examId, 0).size() > 0) {
             return new Gson().toJson(new ReturnWithoutData("您已提交，不要再次提交！", "101"));
@@ -217,8 +219,8 @@ public class ExamController {
 
         for (Map.Entry<String, String> entry : result.entrySet()) {
 
-            System.out.println(entry.getKey().getClass().toString());
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            //System.out.println(entry.getKey().getClass().toString());
+            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             studentAnswerRepository.save(new StudentAnswer(examId, id, Long.parseLong(entry.getKey()), entry.getValue()));
 
         }
@@ -226,7 +228,7 @@ public class ExamController {
         return new Gson().toJson(new ReturnWithoutData("提交成功！", "100"));
     }
 
-    @GetMapping("/exam/statics")
+    @GetMapping("/exam/statistics")
     @ResponseBody
     public ReturnWithData getExamStatics(@RequestParam("examId") Long examId) {
 
@@ -246,7 +248,72 @@ public class ExamController {
         return new ReturnWithData("成功", "100", result);
     }
 
-    @GetMapping("/exam/studentstatics")
+    @GetMapping("statisticsByYear")
+    public String getByYear(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id) {
+        map.put("title", "数据统计");
+        map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+
+        return "yearstatistics";
+    }
+
+    @GetMapping("exam/yearStatistics")
+    @ResponseBody
+    public ReturnWithData getYearStatics(@RequestParam("start") int start, @RequestParam("end") int end) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<Exam> exams = null;
+        int size = end - start;
+        if (size < 0) {
+            return new ReturnWithData("结束日期要大于起始日期", "101", null);
+        }
+        // List<Tag> tags = tagRepository.findAll();
+        try {
+            //exams = examRepository.findByExamDateBetweenAndIsDelete(sdf.parse(String.valueOf(start) + "-01-01"), sdf.parse(String.valueOf(start + 1) + "-01-01"), 0);
+
+            Float[] data = new Float[size + 1];
+            Integer[] years = new Integer[size + 1];
+
+
+            for (int i = 0; i < size + 1; i++) {
+                years[i] = start + i;
+                exams = examRepository.findByExamDateBetweenAndIsDelete(sdf.parse(String.valueOf(start + i) + "-01-01"), sdf.parse(String.valueOf(start + i + 1) + "-01-01"), 0);
+                //data[j][i] = getMean(exams, tags.size());
+                List<Exam> totalExam = new ArrayList<>();
+                for (Exam item : exams) {
+                    // System.out.println(new Gson().toJson(item));
+                    List<StudentAnswer> studentAnswers = studentAnswerRepository.findByExamIdAndIsDelete(item.getId(), 0);
+
+                    totalExam.addAll(getExam(studentAnswers));
+
+
+                }
+                Float totalScore = 0f;
+                if (totalExam.size() > 0) {
+                    for (int j = 0; j < totalExam.size(); j++) {
+                        totalScore += totalExam.get(j).getStudentScore();
+
+                    }
+                    data[i] = totalScore / totalExam.size();
+                } else {
+                    data[i] = 0f;
+                }
+                // System.out.println(data[i]);
+            }
+            Map<String, Object> result = new HashMap<>();
+
+            result.put("years", years);
+            result.put("data", data);
+            //System.out.println(new Gson().toJson(data));
+
+            return new ReturnWithData("成功", "100", result);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new ReturnWithData("失败", "101", null);
+        }
+    }
+
+
+    @GetMapping("exam/studentStatistics")
     @ResponseBody
     public ReturnWithData getExamStudentStatics(@RequestParam("examId") Long examId, @RequestParam("studentId") Long studentId) {
 
@@ -259,21 +326,21 @@ public class ExamController {
         String[] ts = new String[tags.size()];
         Float[] ss = new Float[tags.size()];
         Tag item;
-        for (int i=0;i<tags.size();i++) {
+        for (int i = 0; i < tags.size(); i++) {
             item = tags.get(i);
             ts[i] = item.getName();
 
-            float score=0f;
+            float score = 0f;
             for (Question q : exam.getQuestions()) {
                 if (q.getTag().equals(item.getName()) && q.getAnswer().equals(q.getStudentAnswer()))
-                    score+=q.getScore();
+                    score += q.getScore();
             }
             ss[i] = score;
 
         }
         //result.put("failNum", failNum);
         result.put("tags", ts);
-        result.put("scores",ss);
+        result.put("scores", ss);
 
         return new ReturnWithData("成功", "100", result);
     }
@@ -288,17 +355,14 @@ public class ExamController {
         map.put("type", 1);
         User user = userRepository.findUserByIdAndIsDelete(id, 0);
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
-        System.out.println(new Gson().toJson(user));
+        //System.out.println(new Gson().toJson(user));
         List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndIsDelete(id, 0);
         List<Exam> exams = getExam(studentAnswers);
-
 
         map.put("exams", exams);
         map.put("examsJson", new Gson().toJson(exams));
 
-
         return "myexamhistory";
-
     }
 
     @GetMapping("examhistory")
@@ -352,7 +416,7 @@ public class ExamController {
                 exam = new Exam(temp.getName(), temp.getTotalScore(), temp.getPassScore(), temp.getTotalTime(), temp.getExamDate());
                 exam.setId(temp.getId());
                 exam.setQuestions(temp.getQuestions());
-                System.out.println("------" + exam.toString());
+                //System.out.println("------" + exam.toString());
                 exam.setAnswerDate(e.getAnswerDate());
                 exam.setAnswerName(userRepository.findUserByIdAndIsDelete(e.getStudentId(), 0).getName());
                 exam.setAnswerId(e.getStudentId());
@@ -415,9 +479,8 @@ public class ExamController {
     public ReturnWithData addPost(@RequestParam("name") String name, @RequestParam("questions") String questions, @RequestParam("examDate") String date, @RequestParam("totalTime") Integer time, @RequestParam("totalScore") Float totalScore, @RequestParam("passScore") Float passScore) {
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
         //System.out.println(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
             Exam exam = new Exam(name, totalScore, passScore, time, sdf.parse(date));
@@ -452,8 +515,8 @@ public class ExamController {
         }
 
         map.put("questions", new Gson().toJson(exam.getQuestions()));
-        System.out.println(new Gson().toJson(exam.getQuestions()));
-        System.out.println(examRepository.findExamByIdAndIsDelete(examId, 0).getName());
+        //System.out.println(new Gson().toJson(exam.getQuestions()));
+        //System.out.println(examRepository.findExamByIdAndIsDelete(examId, 0).getName());
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         map.put("title", "编辑试卷");
 

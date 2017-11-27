@@ -31,6 +31,8 @@
             </li>
             <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
             </li>
+            <li class="active"><a href="${request.contextPath}/statisticsByYear"><i class="fa fa-circle-o text-aqua"></i></i> <span>数据统计</span></a>
+            </li>
         </#if>
         <#if user.type=='TEACHER'>
             <#--<li><a href="/questionType"><i class="fa fa-circle-o text-aqua"></i> <span>题型管理</span></a></li>-->

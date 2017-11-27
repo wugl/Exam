@@ -24,7 +24,7 @@ public class IndexController {
     public String manager(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_NAME) String name, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id) {
         User user = userRepository.findUserByIdAndIsDelete(id,0);
         map.put("user",user);
-        map.put("hello", name);
+        map.put("name", name);
         map.put("title", "首页");
         return "hello";
     }

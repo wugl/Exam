@@ -162,8 +162,8 @@ public class QuestionController {
     public ReturnWithoutData update(@RequestParam("id") Long id, @RequestParam("type") Long typeId,@RequestParam("tag") Long tag, @RequestParam("score") Float score, @RequestParam("name") String name, @RequestParam("answer") String answer, @RequestParam("title") String title, @RequestParam("comment") String comment, @RequestParam(name = "optionsContent", required = false) String optionsContent) {
 
         int row = questionRepository.update(id, typeId,tag, name, answer, score, title, comment);
-        System.out.println("------------------row:" + id + ":" + name);
-        System.out.println("------------------row:" + row);
+        //System.out.println("------------------row:" + id + ":" + name);
+        //System.out.println("------------------row:" + row);
         if (row == 1) {
 
             optionRepository.del(id);

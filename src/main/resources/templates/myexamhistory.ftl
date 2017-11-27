@@ -76,7 +76,7 @@
 
                     <#if exams??>
                         <#list exams as key>
-                        <tr class="row-item  <#if key.studentScore<key.passScore>failed</#if> " data-id="${key.id}">
+                        <tr class="row-item  <#if key.studentScore<key.passScore>failed</#if> " data-id="${key.id}" data-student="${key.answerId}">
                             <td>${key.id}</td>
                             <td>
                                 <div data-id="${key.id}" <#if type==2>
@@ -210,10 +210,10 @@
             var id = ele.dataset.id;
             var answer = ele.dataset.answer;
             //console.log(answer);
-            var url = "${request.contextPath}/exam/statics";
+            var url = "${request.contextPath}/exam/statistics";
             var data = 'examId=' + id;
             if (answer) {
-                url = "${request.contextPath}/exam/studentstatics";
+                url = "${request.contextPath}/exam/studentStatistics";
                 data = 'examId=' + id + '&studentId=' + answer;
             }
             var ctx
@@ -315,16 +315,17 @@
         $('.row-item').on('click', function (e) {
             e.preventDefault();
             var id = this.dataset.id;
+            var studentId = this.dataset.student;
             //console.log('row');
             var exam;
             $.each(exams, function (i, e) {
                 //console.log(e);
-                if (e.id == id) {
+                if (e.id == id && e.answerId == studentId) {
+                    exam = e;
                 }
-                exam = e;
-
             });
-
+            //console.log(id);
+            //console.log(exam);
 
             $('#modal-preview .modal-body .name').html(exam.name);
             $('#modal-preview .modal-body .sub').html("考试时间：" + new Date(exam.examDate).Format("yyyy-MM-dd hh:mm") + "，考试时长：" + exam.totalTime + '分钟，总分：' + exam.totalScore + "，及格：" + exam.passScore);

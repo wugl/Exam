@@ -40,7 +40,7 @@ public class UserController {
     @ResponseBody
     public ReturnWithData add(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("type") Integer type) {
 
-        System.out.println(name);
+        //System.out.println(name);
 
         if (userRepository.findUserByNameAndIsDelete(name, 0) != null)
 
@@ -157,7 +157,7 @@ public class UserController {
                 type = UserType.MANAGER;
                 break;
         }
-        logger.error(name + ":" + password + ":" + userType);
+        //logger.error(name + ":" + password + ":" + userType);
 
         User user = userRepository.findUserByNameAndPasswordAndTypeAndIsDelete(name, password, type, 0);
 
@@ -199,7 +199,7 @@ public class UserController {
 
     @GetMapping("usermanager")
     public String userManger(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) Integer type) {
-        System.out.println(type + "-------------manager:" + UserType.MANAGER.getIndex());
+        //System.out.println(type + "-------------manager:" + UserType.MANAGER.getIndex());
         if (type != UserType.MANAGER.getIndex())
 
             return "redirect:/";

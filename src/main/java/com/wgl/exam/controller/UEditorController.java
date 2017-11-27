@@ -35,7 +35,9 @@ public class UEditorController extends HttpServlet {
         if( action!=null &&
                 (action.equals("listfile") || action.equals("listimage") ) ){
             rootPath = rootPath.replace("\\", "/");
-            result = result.replaceAll(rootPath, "/");
+            //rootPath=request.getContextPath()+rootPath;
+            //System.out.println(rootPath);
+            result = result.replaceAll(rootPath, request.getContextPath()+"/");
         }
         out.write( result );
     }
