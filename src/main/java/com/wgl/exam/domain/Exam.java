@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 
@@ -32,9 +33,19 @@ public class Exam implements Serializable {
     @Transient
     private String answerName;
 
+    @Transient
+    private Map<String,Object> statistics;
 
     @Transient
     private Long answerId;
+
+    public Map<String, Object> getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Map<String, Object> statistics) {
+        this.statistics = statistics;
+    }
 
     public Long getAnswerId() {
         return answerId;
@@ -53,7 +64,7 @@ public class Exam implements Serializable {
     }
 
     @Transient
-    private Date answerDate = new Date();
+    private Date answerDate ;
     public Date getAnswerDate() {
         return answerDate;
     }

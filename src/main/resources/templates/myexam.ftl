@@ -18,60 +18,70 @@
 
     <!-- Main content -->
     <section class="content container-fluid">
+        <div class="box">
+            <div class="box-header">
+            <#--<a class="btn btn-info pull-left margin qt_new"><i class="fa fa-plus"></i>新增</a>-->
+                <#--<a href="${request.contextPath}/exam/getExcel" class="btn btn-info  margin"><i-->
+                        <#--class="fa fa-fw fa-file-excel-o"></i>导出excel</a>-->
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped  table-hover " cellspacing="0"
+                       width="100%">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>考试日期</th>
+                        <th>考试时长</th>
+                        <th>总分数</th>
+                        <th>及格分数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-        <table id="example1" class="table table-bordered table-striped  table-hover " cellspacing="0"
-               width="100%">
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>名称</th>
-                <th>考试日期</th>
-                <th>考试时长</th>
-                <th>总分数</th>
-                <th>及格分数</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <#if exams?exists>
-                <#list exams as key>
-                <tr class="row-item" data-id="${key.id}">
-                    <td>${key.id}</td>
-                    <td>
-                    ${key.name}
-                    </td>
-                    <td>${key.examDate?string('yyyy-MM-dd HH:mm')}</td>
-                    <td>${key.totalTime}</td>
-                    <td>${key.totalScore}</td>
-                    <td>${key.passScore}</td>
-                    <td>
+                    <#if exams?exists>
+                        <#list exams as key>
+                        <tr class="row-item" data-id="${key.id}">
+                            <td>${key.id}</td>
+                            <td>
+                            ${key.name}
+                            </td>
+                            <td>${key.examDate?string('yyyy-MM-dd HH:mm')}</td>
+                            <td>${key.totalTime}</td>
+                            <td>${key.totalScore}</td>
+                            <td>${key.passScore}</td>
+                            <td>
 
 
-                    <a class="btn-sm q_edit" data-id="${key.id}" target="_blank" href="${request.contextPath}/startexam?examId=${key.id}"><span class="glyphicon glyphicon-pencil"></span> 开始答题</a>
-                        <#--<a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"-->
-                           <#--data-title="${key.title}""><i-->
+                                <a class="btn-sm q_edit" data-id="${key.id}" target="_blank"
+                                   href="${request.contextPath}/startexam?examId=${key.id}"><span
+                                        class="glyphicon glyphicon-pencil"></span> 开始答题</a>
+                            <#--<a class="btn-sm q_remove" data-id="${key.id}" data-type="${key.typeId}"-->
+                            <#--data-title="${key.title}""><i-->
                             <#--class="fa fa-remove"></i></a>-->
-                    </td>
-                </tr>
-                </#list>
-            </#if>
+                            </td>
+                        </tr>
+                        </#list>
+                    </#if>
 
 
-            </tbody>
-            <tfoot>
-            <tr>
-                <th>id</th>
-                <th>名称</th>
-                <th>考试日期</th>
-                <th>考试时长</th>
-                <th>总分数</th>
-                <th>及格分数</th>
-                <th>操作</th>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>id</th>
+                        <th>名称</th>
+                        <th>考试日期</th>
+                        <th>考试时长</th>
+                        <th>总分数</th>
+                        <th>及格分数</th>
+                        <th>操作</th>
 
-            </tr>
-            </tfoot>
-        </table>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>

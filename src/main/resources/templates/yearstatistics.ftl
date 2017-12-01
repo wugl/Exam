@@ -80,7 +80,9 @@
         for (var i = -4; i < 1; i++) {
 
             $('#start_year').append('<option value="' + (thisYear + i) + '">' + (thisYear + i) + '</option>');
+            $('#end_year').append('<option value="' + (thisYear + i) + '">' + (thisYear + i) + '</option>');
         }
+        startYear = thisYear-4;
         $('#start_year').on('change', function () {
             //console.log(this.value);
             startYear = this.value;

@@ -174,6 +174,74 @@ public class ExamController {
 
     }
 
+    /**
+     * 微信接口
+     *
+     * @param id
+     * @return
+     */
+
+    @GetMapping("api/myexamList")
+    @ResponseBody
+    public ReturnWithData getStudentExamList(@RequestParam("id") Long id, @RequestHeader(value = "userName") String userName) {
+
+        User user = userRepository.findUserByIdAndNameAndIsDelete(id, userName, 0);
+        if (user == null) {
+            return new ReturnWithData("用户不存在", "101", null);
+        }
+
+        List<Exam> exams = examRepository.findAll();
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndIsDelete(id, 0);
+        List<Exam> es = new ArrayList<>();
+        for (Exam item : exams) {
+            boolean isValidate = true;
+            if (item.getExamDate().before(new Date())) {
+                isValidate = false;
+            }
+            for (StudentAnswer e : studentAnswers) {
+                if (e.getExamId().equals(item.getId())) isValidate = false;
+            }
+            if (isValidate) {
+                item.setQuestions(new ArrayList<>());
+                es.add(item);
+            }
+        }
+        //Map<String, Object> map = new HashMap<>();
+        //map.put("exams", es);
+        return new ReturnWithData("成功", "100", es);
+
+    }
+
+    @GetMapping("api/startexam")
+    @ResponseBody
+    public ReturnWithData startExam(@RequestParam("id") Long id, @RequestParam("examId") Long examId, @RequestHeader(value = "userName") String userName) {
+        User user = userRepository.findUserByIdAndNameAndIsDelete(id, userName, 0);
+        if (user == null) {
+            return new ReturnWithData("用户不存在", "101", null);
+        }
+
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndIsDelete(id, 0);
+        for (StudentAnswer sa : studentAnswers) {
+            if (sa.getExamId().equals(examId)) {
+                return new ReturnWithData("已提交答案", "101", null);
+            }
+        }
+
+
+        //map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
+        Exam exam = examRepository.findExamByIdAndIsDelete(examId, 0);
+
+        for (Question item : exam.getQuestions()) {
+            item.setAnswer("");
+            item.setComment("");
+            item.setType(questionTypeRepository.findByIdAndIsDelete(item.getTypeId(), 0).getName());
+        }
+
+
+        return new ReturnWithData("成功", "100", exam);
+
+    }
+
     @GetMapping("startexam")
     public String studentStartExam(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type, @RequestParam("examId") Long examId) {
         if (type != UserType.STUDENT.getIndex())
@@ -203,16 +271,38 @@ public class ExamController {
 
     }
 
+    @PostMapping("api/examsubmit")
+    @ResponseBody
+    public ReturnWithoutData studentSubmitApi(@RequestParam("id") Long id, @RequestParam("answer") String answer, @RequestParam("examId") Long examId, @RequestHeader(value = "userName") String userName) {
+        User user = userRepository.findUserByIdAndNameAndIsDelete(id, userName, 0);
+        if (user == null) {
+            return new ReturnWithData("用户不存在", "101", null);
+        }
+        Map<String, String> result = new Gson().fromJson(answer, Map.class);
+        if (studentAnswerRepository.findByStudentIdAndExamIdAndIsDelete(id, examId, 0).size() > 0) {
+            return new ReturnWithoutData("您已提交，不要再次提交！", "101");
+        }
+        //System.out.println(result.size());
+        for (Map.Entry<String, String> entry : result.entrySet()) {
+            //System.out.println(entry.getKey().getClass().toString());
+            //System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            studentAnswerRepository.save(new StudentAnswer(examId, id, Long.parseLong(entry.getKey()), entry.getValue()));
+
+        }
+
+        return new ReturnWithoutData("提交成功！", "100");
+    }
+
     @PostMapping("examsubmit")
     @ResponseBody
-    public String studentSubmit(@SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type, @RequestParam("answer") String answer, @RequestParam("examId") Long examId) {
+    public ReturnWithoutData studentSubmit(@SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type, @RequestParam("answer") String answer, @RequestParam("examId") Long examId) {
         if (type != UserType.STUDENT.getIndex())
 
-            return new Gson().toJson(new ReturnWithoutData("不是学生用户", "101"));
+            return new ReturnWithoutData("不是学生用户", "101");
         //System.out.println(answer);
         Map<String, String> result = new Gson().fromJson(answer, Map.class);
         if (studentAnswerRepository.findByStudentIdAndExamIdAndIsDelete(id, examId, 0).size() > 0) {
-            return new Gson().toJson(new ReturnWithoutData("您已提交，不要再次提交！", "101"));
+            return new ReturnWithoutData("您已提交，不要再次提交！", "101");
         }
 
         //System.out.println(result.size());
@@ -225,7 +315,7 @@ public class ExamController {
 
         }
 
-        return new Gson().toJson(new ReturnWithoutData("提交成功！", "100"));
+        return new ReturnWithoutData("提交成功！", "100");
     }
 
     @GetMapping("/exam/statistics")
@@ -249,7 +339,11 @@ public class ExamController {
     }
 
     @GetMapping("statisticsByYear")
-    public String getByYear(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id) {
+    public String getByYear(Map<String, Object> map, @SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_ID) Long id,@SessionAttribute(WebSecurityConfig.SESSION_KEY_USER_TYPE) int type) {
+        if (type != UserType.MANAGER.getIndex())
+
+            return "";
+
         map.put("title", "数据统计");
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
 
@@ -266,7 +360,7 @@ public class ExamController {
         if (size < 0) {
             return new ReturnWithData("结束日期要大于起始日期", "101", null);
         }
-        // List<Tag> tags = tagRepository.findAll();
+        List<Tag> tags = tagRepository.findAll();
         try {
             //exams = examRepository.findByExamDateBetweenAndIsDelete(sdf.parse(String.valueOf(start) + "-01-01"), sdf.parse(String.valueOf(start + 1) + "-01-01"), 0);
 
@@ -288,9 +382,13 @@ public class ExamController {
 
                 }
                 Float totalScore = 0f;
+                //               Float[] scores = new Float[tags.size()];
                 if (totalExam.size() > 0) {
                     for (int j = 0; j < totalExam.size(); j++) {
                         totalScore += totalExam.get(j).getStudentScore();
+//                        for(int m =0;m<totalExam.get(j).getQuestions().size();m++){
+//
+//                        }
 
                     }
                     data[i] = totalScore / totalExam.size();
@@ -320,9 +418,17 @@ public class ExamController {
         List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndExamIdAndIsDelete(studentId, examId, 0);
 
         Exam exam = getExam(studentAnswers).get(0);
-
-        Map<String, Object> result = new HashMap<>();
         List<Tag> tags = tagRepository.findAll();
+
+        Map<String, Object> result = getTagsAndScore(exam, tags);
+        //result.put("failNum", failNum);
+
+
+        return new ReturnWithData("成功", "100", result);
+    }
+
+    private Map<String, Object> getTagsAndScore(Exam exam, List<Tag> tags) {
+        Map<String, Object> result = new HashMap<>();
         String[] ts = new String[tags.size()];
         Float[] ss = new Float[tags.size()];
         Tag item;
@@ -338,11 +444,42 @@ public class ExamController {
             ss[i] = score;
 
         }
-        //result.put("failNum", failNum);
         result.put("tags", ts);
         result.put("scores", ss);
+        return result;
+    }
 
-        return new ReturnWithData("成功", "100", result);
+    @GetMapping("api/myexamhistory")
+    @ResponseBody
+    public ReturnWithData studentExamHistory(@RequestParam("studentId") Long studentId, @RequestHeader(value = "userName") String userName) {
+        User user = userRepository.findUserByIdAndNameAndIsDelete(studentId, userName, 0);
+        if (user == null) {
+            return new ReturnWithData("用户不存在", "101", null);
+        }
+
+
+        //System.out.println(new Gson().toJson(user));
+        List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndIsDelete(studentId, 0);
+        List<Exam> exams = getExam(studentAnswers);
+
+//        map.put("exams", exams);
+//        map.put("examsJson", new Gson().toJson(exams));
+        //Map<String, Object> result;
+        setExamStatistics(exams);
+
+
+        return new ReturnWithData("成功", "100", exams);
+    }
+
+    private void setExamStatistics(List<Exam> exams) {
+
+        Map<String, Object> result;
+        List<Tag> tags = tagRepository.findAll();
+        for (Exam exam : exams) {
+
+            result = getTagsAndScore(exam, tags);
+            exam.setStatistics(result);
+        }
     }
 
     @GetMapping("myexamhistory")

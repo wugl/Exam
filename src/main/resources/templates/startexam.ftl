@@ -227,7 +227,7 @@
                     $('.btn-e-submit').prop("disabled", false);
                     //console.log(data);
                     //console.log(data.msg);
-                    data = JSON.parse(data);
+                   // data = JSON.parse(data);
                     if (data.code == '100') {
                         $("#msg-error").hide(100);
                         $("#msg-success").show(100);

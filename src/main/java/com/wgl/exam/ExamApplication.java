@@ -231,7 +231,7 @@ public class ExamApplication   extends SpringBootServletInitializer implements C
 //        qt = questionTypeRepository.save(questionType);
 
 
-		Exam exam = new Exam("期中测试卷",10f,5f,90,new Date());
+		Exam exam = new Exam("期中测试卷",10f,5f,90,new Date(System.currentTimeMillis()+1000000L));
 
 		Exam e = examRepository.save(exam);
 
