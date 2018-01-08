@@ -32,8 +32,8 @@
                     <tr>
                         <th style="width: 30px;">id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>总时间</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>通过分数</th>
                         <th>操作</th>
@@ -76,8 +76,8 @@
                     <tr>
                         <th>id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>总时间</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>通过分数</th>
                         <th>操作</th>
@@ -171,7 +171,7 @@
                         //console.log(data);
                         if (data.code == '100') {
                            $('#modal-preview .modal-body .name').html( data.data.name);
-                            $('#modal-preview .modal-body .sub').html("考试时间："+new Date(data.data.examDate).Format("yyyy-MM-dd hh:mm")+"，考试时长："+data.data.totalTime+'分钟，总分：' + data.data.totalScore + "，及格："+data.data.passScore);
+                            $('#modal-preview .modal-body .sub').html("测评时间："+new Date(data.data.examDate).Format("yyyy-MM-dd hh:mm")+"，测评时长："+data.data.totalTime+'分钟，总分：' + data.data.totalScore + "，及格："+data.data.passScore);
 //                            $('#modal-preview .modal-body .answer').html("答案：" + data.data.question.answer);
 //                            $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
 //                            var answers = data.data.question.answer.split('|');

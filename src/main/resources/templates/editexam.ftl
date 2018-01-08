@@ -19,7 +19,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
-            <li><a href="${request.contextPath}/exam">试卷管理</a></li>
+            <li><a href="${request.contextPath}/exam">测评管理</a></li>
             <li class="active">${title!""}</li>
         </ol>
     </section>
@@ -42,16 +42,16 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="e_exam_date" class="col-sm-2 control-label">考试日期:</label>
+                        <label for="e_exam_date" class="col-sm-2 control-label">测评日期:</label>
                         <div class="col-sm-10">
-                            <input type="text" name="examDate" class="form-control" placeholder="考试日期" id="e_exam_date"
+                            <input type="text" name="examDate" class="form-control" placeholder="测评日期" id="e_exam_date"
                                    value="<#if exam??>${exam.examDate?string('yyyy-MM-dd HH:mm')}</#if>">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="e_exam_time" class="col-sm-2 control-label">考试时长:</label>
+                        <label for="e_exam_time" class="col-sm-2 control-label">测评时长:</label>
                         <div class="col-sm-10">
-                            <input type="number" name="totalTime" class="form-control" placeholder="考试时长(分钟)"
+                            <input type="number" name="totalTime" class="form-control" placeholder="测评时长(分钟)"
                                    id="e_exam_time" value="<#if exam??>${exam.totalTime}</#if>">
                         </div>
                     </div>
@@ -386,7 +386,7 @@
 
             if ($('#e_name').val() == '' || $('#e_exam_date').val() == '') {
                 isValidate = false;
-                errorMsg = '请填写标题和考试日期';
+                errorMsg = '请填写标题和测评日期';
             }
             else if (!checkNum($('#e_exam_time').val()) || !checkNum($('#e_total_score').val()) || !checkNum($('#e_pass_score').val())) {
                 isValidate = false;

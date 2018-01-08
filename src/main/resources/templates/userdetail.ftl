@@ -95,18 +95,19 @@
                         <div class="col-sm-10">
                             <input type="text" name="name" class="form-control" placeholder="姓名" id="u_name">
                             <input type="hidden" name="id" class="form-control" placeholder="" id="u_id">
+                            <input type="hidden" name="type" class="form-control" placeholder="" id="u_type">
                         </div>
                     </div>
-                    <div class="form-group ">
-                        <label for="questionType" class="col-sm-2 control-label">类型:</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" name="type" id="u_type">
-                                <option value="1">学生</option>
-                                <option value="2">老师</option>
-                                <option value="3">管理员</option>
-                            </select>
-                        </div>
-                    </div>
+                    <#--<div class="form-group ">-->
+                        <#--<label for="questionType" class="col-sm-2 control-label">类型:</label>-->
+                        <#--<div class="col-sm-10">-->
+                            <#--<select class="form-control" name="type" id="u_type">-->
+                                <#--<option value="1">学生</option>-->
+                                <#--<option value="2">老师</option>-->
+                                <#--<option value="3">管理员</option>-->
+                            <#--</select>-->
+                        <#--</div>-->
+                    <#--</div>-->
                     <div class="form-group  ">
                         <label for="u_password" class="col-sm-2 control-label">密码:</label>
                         <div class="col-sm-10">

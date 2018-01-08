@@ -21,15 +21,15 @@
             <li class="header"></li>
             <!-- Optionally, you can add icons to the links -->
         <#if user.type=='STUDENT'>
-            <li class="active"><a href="${request.contextPath}/myexam"><i class="fa fa-circle-o text-aqua"></i></i> <span>我的考试</span></a>
+            <li class="active"><a href="${request.contextPath}/myexam"><i class="fa fa-circle-o text-aqua"></i></i> <span>我的测评</span></a>
             </li>
-            <li class="active"><a href="${request.contextPath}/myexamhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li class="active"><a href="${request.contextPath}/myexamhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>测评记录</span></a>
             </li>
         </#if>
         <#if user.type=='MANAGER'>
             <li class="active"><a href="${request.contextPath}/usermanager"><i class="fa fa-circle-o text-aqua"></i></i> <span>用户管理</span></a>
             </li>
-            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>测评记录</span></a>
             </li>
             <li class="active"><a href="${request.contextPath}/statisticsByYear"><i class="fa fa-circle-o text-aqua"></i></i> <span>数据统计</span></a>
             </li>
@@ -38,8 +38,8 @@
             <#--<li><a href="/questionType"><i class="fa fa-circle-o text-aqua"></i> <span>题型管理</span></a></li>-->
             <li><a href="${request.contextPath}/tag"><i class="fa fa-circle-o text-aqua"></i> <span>维度管理</span></a></li>
             <li><a href="${request.contextPath}/question"><i class="fa fa-circle-o text-aqua"></i> <span>题目管理</span></a></li>
-            <li><a href="${request.contextPath}/exam"><i class="fa fa-circle-o text-aqua"></i> <span>试卷管理</span></a></li>
-            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>考试记录</span></a>
+            <li><a href="${request.contextPath}/exam"><i class="fa fa-circle-o text-aqua"></i> <span>测评管理</span></a></li>
+            <li class="active"><a href="${request.contextPath}/examhistory"><i class="fa fa-circle-o text-aqua"></i></i> <span>测评记录</span></a>
             </li>
         </#if>
             <#--<li class="treeview">-->

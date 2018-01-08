@@ -59,8 +59,8 @@
                     <tr>
                         <th>id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>考试时长</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>及格分数</th>
 
@@ -121,8 +121,8 @@
                     <tr>
                         <th>id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>考试时长</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>及格分数</th>
 
@@ -328,7 +328,7 @@
             //console.log(exam);
 
             $('#modal-preview .modal-body .name').html(exam.name);
-            $('#modal-preview .modal-body .sub').html("考试时间：" + new Date(exam.examDate).Format("yyyy-MM-dd hh:mm") + "，考试时长：" + exam.totalTime + '分钟，总分：' + exam.totalScore + "，及格：" + exam.passScore);
+            $('#modal-preview .modal-body .sub').html("测评时间：" + new Date(exam.examDate).Format("yyyy-MM-dd hh:mm") + "，测评时长：" + exam.totalTime + '分钟，总分：' + exam.totalScore + "，及格：" + exam.passScore);
 //                            $('#modal-preview .modal-body .answer').html("答案：" + data.data.question.answer);
 //                            $('#modal-preview .modal-body .comment').html("点评：" + data.data.question.comment);
 //                            var answers = data.data.question.answer.split('|');

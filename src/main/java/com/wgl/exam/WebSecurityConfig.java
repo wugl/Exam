@@ -34,8 +34,17 @@ public class WebSecurityConfig  extends WebMvcConfigurerAdapter {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedHeaders("Access-Control-Allow-Origin")
+                .allowedOrigins("*")
+                .allowedMethods("PUT", "DELETE","GET","POST")
+                .allowedHeaders("*")
+                .exposedHeaders("access-control-allow-headers",
+                        "access-control-allow-methods",
+                        "access-control-allow-origin",
+                        "access-control-max-age",
+                        "X-Frame-Options")
                 .allowCredentials(false).maxAge(3600);
+//                .allowedHeaders("Access-Control-Allow-Origin")
+//                .allowCredentials(false).maxAge(3600);
     }
 
     @Bean

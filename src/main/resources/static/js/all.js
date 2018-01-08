@@ -91,25 +91,24 @@ $(function () {
 
     $('#logout').on('click', function (e) {
 
-        $.post(window.contentPath+'/logout', function (data) {
+        $.post(window.contentPath + '/logout', function (data) {
             //console.log(data)
             if (data.code == '100') {
                 _store.set('user', '');
-                window.location.href = window.contentPath+"/";
+                window.location.href = window.contentPath + "/";
             }
         })
 
     });
 
-    $('#profile').on('click', function (e) {
-        // console.log(e);
-
-    });
 
     $('.sidebar-menu>li').removeClass("active");
     //console.log(location.href);
 
     var pathUrl = location.pathname.replace(/#/g, "");
+    //console.log(pathUrl.split('/')[1]);
+    //console.log(pathUrl);
+    //console.log( window.contentPath);
     //console.log(pathUrl);
     if (pathUrl != '')
         $('.sidebar-menu>li').each(function () {
@@ -119,11 +118,17 @@ $(function () {
             // if($(this).find('a')) {
             var href = $(this).find('a').attr('href');
             //console.log(href);
-            if (href && href==pathUrl) {
-                $(that).addClass('active');
+            //console.log(href);
+            if(window.contentPath == ''){
+                if (href && ('/' + pathUrl.split('/')[1] ) == href) {
+                    $(that).addClass('active');
+                }
+            }
+            else {
+                if (href && (window.contentPath + '/' + pathUrl.split('/')[2]) == href) {
+                    $(that).addClass('active');
+                }
             }
             // }
         })
-
-
 })

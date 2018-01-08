@@ -58,7 +58,7 @@ public class ExamController {
 
             return "redirect:/";
 
-        map.put("title", "试卷管理");
+        map.put("title", "测评管理");
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         map.put("exams", examRepository.findAll());
 
@@ -89,7 +89,7 @@ public class ExamController {
         response.setCharacterEncoding("UTF-8");
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("学生成绩");
-        Common.createTitle(workbook, sheet, new String[]{"序号", "名称", "考试日期", "考试时长", "总分数", "及格分数", "答题人", "答题日期", "得分", "是否及格"});
+        Common.createTitle(workbook, sheet, new String[]{"序号", "名称", "测评日期", "测评时长", "总分数", "及格分数", "答题人", "答题日期", "得分", "是否及格"});
 
         List<QuestionType> questionTypes = questionTypeRepository.findAll();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -153,7 +153,7 @@ public class ExamController {
 
             return "redirect:/";
 
-        map.put("title", "试卷列表");
+        map.put("title", "测评列表");
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
         List<Exam> exams = examRepository.findAll();
         List<StudentAnswer> studentAnswers = studentAnswerRepository.findByStudentIdAndIsDelete(id, 0);
@@ -488,7 +488,7 @@ public class ExamController {
 
             return "redirect:/";
 
-        map.put("title", "考试记录");
+        map.put("title", "测评记录");
         map.put("type", 1);
         User user = userRepository.findUserByIdAndIsDelete(id, 0);
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
@@ -508,7 +508,7 @@ public class ExamController {
 
             return "redirect:/";
 
-        map.put("title", "考试记录");
+        map.put("title", "测评记录");
         map.put("type", 2);
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
 
@@ -605,7 +605,7 @@ public class ExamController {
 
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
 
-        map.put("title", "新增试卷");
+        map.put("title", "新增测评");
         map.put("type", "1");//1 new , 2 edit
         return "editexam";
 
@@ -655,7 +655,7 @@ public class ExamController {
         //System.out.println(new Gson().toJson(exam.getQuestions()));
         //System.out.println(examRepository.findExamByIdAndIsDelete(examId, 0).getName());
         map.put("user", userRepository.findUserByIdAndIsDelete(id, 0));
-        map.put("title", "编辑试卷");
+        map.put("title", "编辑测评");
 
         map.put("type", "2");//1 new , 2 edit
         return "editexam";

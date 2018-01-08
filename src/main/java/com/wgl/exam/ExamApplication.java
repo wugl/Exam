@@ -11,15 +11,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.web.servlet.ErrorPage;
+
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 
 import java.util.Date;
 
@@ -231,7 +226,7 @@ public class ExamApplication   extends SpringBootServletInitializer implements C
 //        qt = questionTypeRepository.save(questionType);
 
 
-		Exam exam = new Exam("期中测试卷",10f,5f,90,new Date(System.currentTimeMillis()+1000000L));
+		Exam exam = new Exam("测评1",10f,5f,90,new Date(System.currentTimeMillis()+1000000L));
 
 		Exam e = examRepository.save(exam);
 
@@ -245,7 +240,7 @@ public class ExamApplication   extends SpringBootServletInitializer implements C
 
 
 
-		exam = new Exam("期末测试卷",15f,10f,90,new Date(System.currentTimeMillis()+1000000000L));
+		exam = new Exam("测评2",15f,10f,90,new Date(System.currentTimeMillis()+1000000000L));
 		e = examRepository.save(exam);
 		eq = new ExamQuestion(e.getId(),question.getId());
 

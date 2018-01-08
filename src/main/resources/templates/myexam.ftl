@@ -31,8 +31,8 @@
                     <tr>
                         <th>id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>考试时长</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>及格分数</th>
                         <th>操作</th>
@@ -71,8 +71,8 @@
                     <tr>
                         <th>id</th>
                         <th>名称</th>
-                        <th>考试日期</th>
-                        <th>考试时长</th>
+                        <th>测评日期</th>
+                        <th>测评时长</th>
                         <th>总分数</th>
                         <th>及格分数</th>
                         <th>操作</th>

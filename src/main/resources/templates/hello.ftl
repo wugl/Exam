@@ -28,7 +28,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <h3>您好， ${name}，欢迎使用考试系统！</h3>
+                <h3>您好， ${name}，欢迎使用测评系统！</h3>
             </div>
         </div>
 
