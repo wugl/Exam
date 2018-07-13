@@ -38,7 +38,7 @@
                         <div class="col-xs-8">
                             <div class="checkbox icheck">
                                 <label>
-                                    <input type="checkbox" id="remeber"> 记住我
+                                    <input type="checkbox" id="remember"> 记住我
                                 </label>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                         <!-- /.col -->
                     </div>
                     <div class="msg-success alert alert-info alert-dismissable" style="display: none;">
-                        <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" id="ok-close-login" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-info"></i> 登录成功!</h4>
                         <p class="msg-success-p"></p>
                     </div>
                     <div class="msg-error alert alert-warning alert-dismissable" style="display: none;">
-                        <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" id="error-close-login" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
                         <p class="msg-error-p"></p>
                     </div>
@@ -114,12 +114,12 @@
                     </div>
 
                     <div class="msg-success alert alert-info alert-dismissable" style="display: none;">
-                        <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" id="ok-close-reg" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-info"></i> 注册成功!</h4>
                         <p class="msg-success-p"></p>
                     </div>
                     <div class="msg-error alert alert-warning alert-dismissable" style="display: none;">
-                        <button type="button" class="close" id="error-close" aria-hidden="true">&times;</button>
+                        <button type="button" class="close" id="error-close-reg" aria-hidden="true">&times;</button>
                         <h4><i class="icon fa fa-warning"></i> 出错了!</h4>
                         <p class="msg-error-p"></p>
                     </div>
@@ -146,11 +146,17 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
-        $("#ok-close").click(function () {
-            $("#msg-success").hide(100);
+        $("#ok-close-reg").click(function () {
+            $(this).parent().hide(100);
         });
-        $("#error-close").click(function () {
-            $("#msg-error").hide(100);
+        $("#error-close-reg").click(function () {
+            $(this).parent().hide(100);
+        });
+        $("#ok-close-login").click(function () {
+            $(this).parent().hide(100);
+        });
+        $("#error-close-login").click(function () {
+            $(this).parent().hide(100);
         });
         $('#loginBtn').on('click', function (e) {
             e.preventDefault();
